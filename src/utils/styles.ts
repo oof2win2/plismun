@@ -1,5 +1,5 @@
-import { createStyles, createTheme, Theme } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { createStyles, createTheme, Theme } from "@mui/material"
+import { makeStyles } from "@mui/styles"
 
 export const theme = createTheme({
   palette: {
@@ -20,7 +20,7 @@ export const theme = createTheme({
       color: "lightgray",
     },
   },
-});
+})
 
 /**
  * A collection of class names of styles for application to different elements
@@ -53,4 +53,4 @@ export const useStyles = makeStyles({
   columnHeader: {
     color: "#ffffff",
   },
-});
+})
