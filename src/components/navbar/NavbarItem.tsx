@@ -1,7 +1,6 @@
 import NextLink from "next/link"
 import { Link } from "@mui/material"
 import { useStyles } from "@utils/styles"
-import { Typography } from "@mui/material"
 
 type NavbarItemProps = {url: string, name: string}
 
