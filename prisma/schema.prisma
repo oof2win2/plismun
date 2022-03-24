@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  firstname      String
+  lastname       String
+  email          String
+  password       String
+  phone          String
+  birthdate      DateTime
+  nationality    String
+  gender         String?
+  schoolname     String
+  position       String?
+  dietary        String?
+  createdAt      DateTime
+  lastConference DateTime
+}
+
+model Delegate {
+  delegateId       Int     @id @default(autoincrement())
+  userId           Int
+  delegation       String
+  choice1committee String
+  choice1country   String
+  choice2committee String
+  choice2country   String
+  choice3committee String
+  choice3country   String
+  experience       String
+  motivation       String
+  finalCommittee   String?
+  finalCountry     String?
+  paymentStatus    String
+  email            String
+}
+
+model Delegation {
+  delegationId       Int    @id @default(autoincrement())
+  // the delegation leader's user ID
+  delegationLeaderId Int
+  name               String
+  country            String
+  estimatedDelegates Int
+  delegates          Int?
+}
+
+model Committee {
+  id            Int     @id @default(autoincrement())
+  committeeType String
+  displayname   String
+  difficulty    String
+  chair1        Int?
+  chair2        Int?
+  topic1        String?
+  topic2        String?
+  para1         String?
+  para2         String?
+}
+
+model CommitteeMember {
+  committeeId  Int    @id
+  userId       Int    @unique
+  countryCode  String
+  displayname  String
+  displayname2 String
+}

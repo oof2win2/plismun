@@ -1,0 +1,82 @@
+@startuml
+
+entity User {
+	id : Number {PK}
+	firstname : String
+	lastname : String
+	email : String
+	password : String
+	phone : String?
+	birthdate : Date
+	nationality : String?
+	gender : String?
+	schoolname : String?
+	position : String?
+	dietary : String?
+	createdAt : Date
+	lastConference : Date
+}
+
+entity Delegate {
+	delegateId : Int  {PK}
+	userId : Int
+	delegation : String?
+	choice1committee : CommitteeString
+	choice1country : Country
+	choice2committee : CommitteeString
+	choice2country : Country
+	choice3committee : CommitteeString
+	choice3country : Country
+	experience : Text 100 words
+	motivation : Text 100 words
+	finalCommittee : CommitteeString?
+	finalCountry : Country?
+	paymentStatus : String
+	email : String
+}
+
+entity Delegation {
+	delegationId : Int  {PK}
+	userId : Int
+	delegation : String?
+	choice1committee : CommitteeString
+	choice1country : Country
+	choice2committee : CommitteeString
+	choice2country : Country
+	choice3committee : CommitteeString
+	choice3country : Country
+	experience : Text 100 words
+	motivation : Text 100 words
+	finalCommittee : CommitteeString?
+	finalCountry : Country?
+	paymentStatus : String
+	email : String
+}
+
+entity Committee {
+	id : Int	{PK}
+	committeeType : String
+	displayname : String
+	difficulty : String
+	chair1 : Int?
+	chair2 : Int?
+	topic1 : String?
+	topic2 : String?
+	para1 : String?
+	para2 : String?
+}
+
+entity CommitteeMember {
+	committeeId : Int {PK}
+	userId : Int
+	countryCode : String
+	displayname : String
+	displayname2 : String
+}
+
+User -- Delegate : Applies to >
+Delegate -- Delegation : Joins >
+Delegate -- Committee : Chooses >
+Delegate -- CommitteeMember : Becomes >
+
+@enduml
