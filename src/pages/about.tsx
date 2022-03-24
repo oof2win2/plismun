@@ -7,3 +7,11 @@ export default function About() {
     </div>
   )
 }
+
+// this makes the page render only once on server startup, which is good for SEO + performance
+// makes TTFB faster since the page is just sent immediately after the request rather than rendering it
+export function getStaticProps() {
+	return {
+		props: {}
+	}
+}

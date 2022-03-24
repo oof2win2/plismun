@@ -1,10 +1,11 @@
-import { createStyles, createTheme, Theme } from "@mui/material"
-import { makeStyles } from "@mui/styles"
+import { createTheme, Typography } from "@mui/material"
+import { makeStyles, createStyles } from "@mui/styles"
+import { styled } from "@mui/system"
 
 export const theme = createTheme({
   palette: {
     background: {
-      default: "#111111",
+      default: "#ffffff",
       paper: "#1f1f1f",
     },
     primary: {
@@ -25,32 +26,36 @@ export const theme = createTheme({
 /**
  * A collection of class names of styles for application to different elements
  */
-export const useStyles = makeStyles({
-  root: {
-    // background: theme.palette.background.default,
-    backgroundColor: "pink",
-  },
-  p: {
-    color: "#ddd9d9",
-  },
-  pmono: {
-    color: "#ddd9d9",
-    fontFamily: "Roboto Mono",
-  },
-  navbarItem: {
-    color: "#000000",
-    fontFamily: "Roboto",
-    padding: "1rem",
-  },
-  navbarSection: {
-    // TODO: make this background color not be iffy sometimes
-    backgroundColor: "#ede6eb",
-  },
-  menuButton: {},
-  footerData: {
-    color: "#ffffff",
-  },
-  columnHeader: {
-    color: "#ffffff",
-  },
-})
+export const useStyles = makeStyles((theme) =>
+  createStyles({
+    root: {
+      // background: theme,
+    },
+    p: {
+      color: "#ddd9d9",
+    },
+    pmono: {
+      color: "#ddd9d9",
+      fontFamily: "Roboto Mono",
+    },
+    navbarItem: {
+      color: "#000000",
+      fontFamily: "Roboto",
+      padding: "1rem",
+    },
+    navbarSection: {
+      backgroundColor: "#ede6eb",
+    },
+    menuButton: {},
+    footerData: {
+      color: "#ffffff",
+    },
+    columnHeader: {
+      color: "#ffffff",
+    },
+  })
+)
+
+export const ParagraphTypography = styled(Typography)`
+  color: #000000;
+`

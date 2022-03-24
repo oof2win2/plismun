@@ -1,10 +1,7 @@
 import { Typography } from "@mui/material"
-import NavbarItem from "./NavbarItem"
-import NavbarSection from "./NavbarSection"
 
-const Navbar = () => {
+const Footer = () => {
   return (
-    // TODO: make it start from the middle of the page and go to the end horizontally
     <div style={{
 			paddingRight: "4em",
 			paddingTop: "1em",
@@ -23,13 +20,8 @@ const Navbar = () => {
 					fontSize: 32
 				}}
 			>PLISMUN 2023</Typography>
-      <NavbarSection>
-        <NavbarItem url="/" name="Home" />
-        <NavbarItem url="/about" name="About" />
-				<NavbarItem url="/login" name="Login/Sign up" />
-			</NavbarSection>
     </div>
   )
 }
 
-export default Navbar
+export default Footer
