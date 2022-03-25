@@ -1,5 +1,6 @@
-# config
+# data
 .env
+*.sqlite
 
 # dependencies
 /node_modules

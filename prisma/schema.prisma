@@ -11,40 +11,41 @@ datasource db {
 }
 
 model User {
-  id             Int      @id @default(autoincrement())
-  firstname      String
-  lastname       String
-  email          String
-  password       String
-  phone          String
-  birthdate      DateTime
-  nationality    String
-  gender         String?
-  schoolname     String
-  position       String?
-  dietary        String?
-  createdAt      DateTime
-  lastConference DateTime
+  id          Int      @id @default(autoincrement())
+  firstname   String
+  lastname    String
+  email       String
+  password    String
+  phone       String?
+  birthdate   DateTime
+  nationality String
+  gender      String?
+  schoolname  String?
+  position    String?
+  dietary     String?
+  createdAt   DateTime
 }
 
+// a single delegate as they apply
 model Delegate {
   delegateId       Int     @id @default(autoincrement())
   userId           Int
-  delegation       String
-  choice1committee String
+  delegationId     Int
+  choice1committee Int
   choice1country   String
-  choice2committee String
+  choice2committee Int
   choice2country   String
-  choice3committee String
+  choice3committee Int
   choice3country   String
   experience       String
   motivation       String
   finalCommittee   String?
   finalCountry     String?
   paymentStatus    String
-  email            String
 }
 
+// a "group" of people that have decided to join PLISMUN together
+// usually with clubs
 model Delegation {
   delegationId       Int    @id @default(autoincrement())
   // the delegation leader's user ID
@@ -52,26 +53,29 @@ model Delegation {
   name               String
   country            String
   estimatedDelegates Int
+  // this number is filled in closer to the conference
   delegates          Int?
 }
 
 model Committee {
-  id            Int     @id @default(autoincrement())
-  committeeType String
-  displayname   String
-  difficulty    String
-  chair1        Int?
-  chair2        Int?
-  topic1        String?
-  topic2        String?
-  para1         String?
-  para2         String?
+  id          Int     @id @default(autoincrement())
+  displayname String
+  difficulty  String
+  chair1      Int?
+  chair2      Int?
+  topic1      String?
+  topic2      String?
+  para1       String?
+  para2       String?
 }
 
+// the actual committee members that are in different committees
 model CommitteeMember {
-  committeeId  Int    @id
+  committeeId  Int
+  // the user that is the delegate in this committee for this country
   userId       Int    @unique
   countryCode  String
+  // display names of the countries related to the countryCode
   displayname  String
   displayname2 String
 }

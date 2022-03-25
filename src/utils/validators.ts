@@ -35,7 +35,7 @@ export const User = z.object({
   createdAt: z.date(),
   lastConference: z.date(),
 })
-export type User = z.infer<typeof User>
+export type UserType = z.infer<typeof User>
 
 // a single delegate is a user that has signed up for PLISMUN this year
 export const Delegate = z.object({
@@ -56,9 +56,8 @@ export const Delegate = z.object({
   finalCommittee: committeeType,
   finalCountry: countryCode,
   paymentStatus: z.enum(["pending", "paid", "rejected"]),
-  email: z.string().email(),
 })
-export type Delegate = z.infer<typeof Delegate>
+export type DelegateType = z.infer<typeof Delegate>
 
 // a delegation is a group of delegates that often come from one school
 export const Delegation = z.object({
@@ -69,7 +68,7 @@ export const Delegation = z.object({
   estimatedDelegates: z.number(),
   delegates: z.number().nullable(),
 })
-export type Delegation = z.infer<typeof Delegation>
+export type DelegationType = z.infer<typeof Delegation>
 
 export const Committee = z.object({
   id: z.number(),
@@ -83,7 +82,7 @@ export const Committee = z.object({
   para1: z.string(),
   para2: z.string(),
 })
-export type Commitee = z.infer<typeof Committee>
+export type CommiteeType = z.infer<typeof Committee>
 
 export const CommiteeMember = z.object({
   committeeId: z.number(),
@@ -92,4 +91,4 @@ export const CommiteeMember = z.object({
   displayname: z.string(),
   displayname2: z.string(),
 })
-export type CommiteeMember = z.infer<typeof CommiteeMember>
+export type CommiteeMemberType = z.infer<typeof CommiteeMember>
