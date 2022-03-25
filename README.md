@@ -10,7 +10,10 @@ Prerequisites: - [Node.js](https://nodejs.org/en/)
    `git clone https://github.com/oof2win2/plismun && cd plismun`
 2. Install dependencies
    `npm install -D`
-3. Seed the database
+3. Fill up your `.env` file according to `.env.example`
+4. Generate & push SQL to the database
+   `npx prisma db push`
+5. Seed the database
    `npm run prisma:seed`
-4. Run the development server
+6. Run the development server
    `npm run dev`
