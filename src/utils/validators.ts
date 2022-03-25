@@ -3,19 +3,6 @@
  */
 import { z } from "zod"
 
-export const committeeType = z.enum([
-  "sc",
-  "disec",
-  "hrc",
-  "unwomen",
-  "arab",
-  "who",
-  "copuos",
-  "paris",
-  "icj",
-])
-export type committeeType = z.infer<typeof committeeType>
-
 export const countryCode = z.string().regex(/^[A-Z]{2}$/)
 
 // a single user that has registered. don't need to be a delegate or anything
@@ -45,15 +32,15 @@ export const Delegate = z.object({
   userId: z.number(),
   // name of the delegation they are participating in
   delegation: z.string(),
-  choice1committee: committeeType,
+  choice1committee: z.string(),
   choice1country: countryCode,
-  choice2committee: committeeType,
+  choice2committee: z.string(),
   choice2country: countryCode,
-  choice3committee: committeeType,
+  choice3committee: z.string(),
   choice3country: countryCode,
   experience: z.string(),
   motivation: z.string(),
-  finalCommittee: committeeType,
+  finalCommittee: z.string(),
   finalCountry: countryCode,
   paymentStatus: z.enum(["pending", "paid", "rejected"]),
 })
@@ -72,15 +59,14 @@ export type DelegationType = z.infer<typeof Delegation>
 
 export const Committee = z.object({
   id: z.number(),
-  committeeType: committeeType,
   displayname: z.string(),
   difficulty: z.enum(["beginner", "intermediate", "advanced"]),
   chair1: z.number().nullable(),
   chair2: z.number().nullable(),
-  topic1: z.string(),
-  topic2: z.string(),
-  para1: z.string(),
-  para2: z.string(),
+  topic1: z.string().nullable(),
+  topic2: z.string().nullable(),
+  para1: z.string().nullable(),
+  para2: z.string().nullable(),
 })
 export type CommiteeType = z.infer<typeof Committee>
 

@@ -80,7 +80,11 @@ async function main() {
     await db.committee.create({
       data: {
         displayname: faker.company.companyName(),
-        difficulty: randomElementFromList(["begginer", "intermediate", "hard"]),
+        difficulty: randomElementFromList([
+          "beginner",
+          "intermediate",
+          "advanced",
+        ]),
       },
     })
     committeeBar.increment()
