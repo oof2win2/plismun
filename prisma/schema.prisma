@@ -11,19 +11,44 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  firstname   String
-  lastname    String
-  email       String
-  password    String
+  id       String @id @default(uuid())
+  email    String @unique
+  password String
+
+  isStaff Boolean @default(false)
+
+  firstname String
+  lastname  String
+
   phone       String?
   birthdate   DateTime
   nationality String
   gender      String?
   schoolname  String?
-  position    String?
   dietary     String?
-  createdAt   DateTime
+
+  position String?
+
+  createdAt DateTime @default(now())
+  // sessions  Session[]
+
+  @@map("users")
+}
+
+model Session {
+  // ID of the JWT
+  jti String @id @default(uuid())
+  // UNIX timestamp (seconds) of issuing
+  iat Int
+  // UNIX timestamp (seconds) of expiry
+  exp Int
+  // ID of the user it is issued to
+  aud String
+
+  // Serialized data that is NOT stored on the client
+  data String
+
+  // user User @relation(fields: [jti], references: [id], onDelete: Cascade)
 }
 
 // a single delegate as they apply

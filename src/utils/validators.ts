@@ -2,25 +2,36 @@
  * Zod validators for many data types
  */
 import { z } from "zod"
+import validator from "validator"
 
 export const countryCode = z.string().regex(/^[A-Z]{2}$/)
 
 // a single user that has registered. don't need to be a delegate or anything
 export const User = z.object({
-  id: z.number(),
-  firstname: z.string(),
-  lastname: z.string(),
+  id: z.string(),
   email: z.string().email(),
   password: z.string(),
-  phone: z.string(),
-  birthdate: z.date(),
+
+  isStaff: z.boolean().default(false),
+
+  firstname: z.string(),
+  lastname: z.string(),
+
+  phone: z.string().nullable(),
+  birthdate: z
+    .string()
+    .refine((date) => validator.isISO8601(date))
+    .transform((x) => new Date(x)),
   nationality: z.string(),
-  gender: z.enum(["male", "female", "other"]).nullable(),
-  schoolname: z.string(),
-  position: z.enum(["admin", "chair", "delegate"]).nullable(),
-  dietary: z.enum(["vegetarian", "vegan"]).nullable(),
-  createdAt: z.date(),
-  lastConference: z.date(),
+  gender: z.string().nullable(),
+  schoolname: z.string().nullable(),
+  position: z.string().nullable(),
+  dietary: z.string().nullable(),
+
+  createdAt: z
+    .string()
+    .refine((date) => validator.isISO8601(date))
+    .transform((x) => new Date(x)),
 })
 export type UserType = z.infer<typeof User>
 
@@ -78,3 +89,15 @@ export const CommiteeMember = z.object({
   displayname2: z.string(),
 })
 export type CommiteeMemberType = z.infer<typeof CommiteeMember>
+
+// JWT cookie session data
+export const SessionData = z.object({
+  jti: z.string(),
+  iat: z.number(),
+  exp: z.number(),
+  aud: z.string(),
+  data: z.object({
+    user: User,
+  }),
+})
+export type SessionDataType = z.infer<typeof SessionData>
