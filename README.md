@@ -17,3 +17,8 @@ Prerequisites: - [Node.js](https://nodejs.org/en/)
    `npm run prisma:seed`
 6. Run the development server
    `npm run dev`
+
+
+## TODO
+-	Improve all status codes and error handling
+-	Implement CSRF protection

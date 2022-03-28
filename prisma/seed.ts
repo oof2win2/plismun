@@ -60,7 +60,7 @@ async function main() {
         email: faker.internet.email(),
         firstname: faker.name.firstName(),
         lastname: faker.name.lastName(),
-        password: hashPassword(randomElementFromList(userPasswords)),
+        password: await hashPassword(randomElementFromList(userPasswords)),
         createdAt: new Date(),
         birthdate: new Date(),
         phone: Math.random() > 0.5 ? faker.phone.phoneNumber() : undefined,
