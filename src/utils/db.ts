@@ -16,12 +16,12 @@ export let db: PrismaClient
 
 if (IS_PROD) {
   db = new PrismaClient({
-    log: ["error", "warn", "query"],
+    // log: ["error", "warn", "query"],
   })
 } else {
   if (!global.__globalPrisma__) {
     global.__globalPrisma__ = new PrismaClient({
-      log: ["error", "warn", "query"],
+      // log: ["error", "warn", "query"],
     })
   }
 

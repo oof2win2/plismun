@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
+  id       Int    @id @default(autoincrement())
   email    String @unique
   password String
 
@@ -30,7 +30,6 @@ model User {
   position String?
 
   createdAt DateTime @default(now())
-  // sessions  Session[]
 
   @@map("users")
 }
@@ -43,7 +42,7 @@ model Session {
   // UNIX timestamp (seconds) of expiry
   exp Int
   // ID of the user it is issued to
-  aud String
+  aud Int
 
   // Serialized data that is NOT stored on the client
   data String
@@ -52,10 +51,10 @@ model Session {
 }
 
 // a single delegate as they apply
-model Delegate {
+model AppliedUser {
   delegateId       Int     @id @default(autoincrement())
-  userId           Int
-  delegationId     Int
+  userId           Int     @unique
+  delegationId     Int?
   choice1committee Int
   choice1country   String
   choice2committee Int
@@ -67,6 +66,7 @@ model Delegate {
   finalCommittee   String?
   finalCountry     String?
   paymentStatus    String
+  shirtSize        String?
 }
 
 // a "group" of people that have decided to join PLISMUN together
@@ -92,6 +92,13 @@ model Committee {
   topic2      String?
   para1       String?
   para2       String?
+}
+
+// the available countries in committees
+model CommitteeCountries {
+  id          Int    @id @default(autoincrement())
+  committeeId Int
+  countryCode String
 }
 
 // the actual committee members that are in different committees

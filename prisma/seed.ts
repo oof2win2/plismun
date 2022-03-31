@@ -1,6 +1,6 @@
 import "tsconfig-paths/register"
 
-import { Delegate, PrismaClient } from "@prisma/client"
+import { AppliedUser, PrismaClient } from "@prisma/client"
 import faker from "@faker-js/faker"
 import { SingleBar } from "cli-progress"
 import { randomElementFromList } from "@utils/utils"
@@ -134,7 +134,7 @@ async function main() {
   })
   delegateBar.start(amountsToGenerate.delegates, 0)
   const alreadyDelegating: Set<number> = new Set()
-  const allDelegates: Delegate[] = []
+  const allDelegates: AppliedUser[] = []
   for (let i = 0; i < amountsToGenerate.delegates; i++) {
     // make sure that a user can be a delegate only once
     // make sure that a user can only lead OR delegate, not both
@@ -152,7 +152,7 @@ async function main() {
       amountsToGenerate.committees - 1,
       3
     )
-    const delegate = await db.delegate.create({
+    const delegate = await db.appliedUser.create({
       data: {
         delegationId: faker.datatype.number({
           min: 0,

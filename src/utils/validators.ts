@@ -8,7 +8,7 @@ export const countryCode = z.string().regex(/^[A-Z]{2}$/)
 
 // a single user that has registered. don't need to be a delegate or anything
 export const User = z.object({
-  id: z.string(),
+  id: z.number(),
   email: z.string().email(),
   password: z.string(),
 

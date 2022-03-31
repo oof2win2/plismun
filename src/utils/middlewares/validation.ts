@@ -8,22 +8,32 @@ import { SafeParseError, z } from "zod"
 export function validate({
   body,
   query,
+  async = false,
 }: {
   body?: z.ZodTypeAny
   query?: z.ZodTypeAny
+  async?: boolean
 }) {
   // we have the schemas given as the parameter to this function
   // the function that we return is executed on each request by next-connect
-  return (req: NextApiRequest, res: NextApiResponse, next: NextHandler) => {
+  return async (
+    req: NextApiRequest,
+    res: NextApiResponse,
+    next: NextHandler
+  ) => {
     const errors: z.ZodError[] = []
     if (body) {
-      const parsed = body.safeParse(req.body)
+      const parsed = async
+        ? await body.safeParseAsync(req.body)
+        : body.safeParse(req.body)
       if (parsed.success === false) {
         errors.push(parsed.error)
       }
     }
     if (query) {
-      const parsed = query.safeParse(req.query)
+      const parsed = async
+        ? await query.safeParseAsync(req.query)
+        : query.safeParse(req.query)
       if (parsed.success === false) {
         errors.push(parsed.error)
       }

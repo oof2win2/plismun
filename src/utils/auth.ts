@@ -112,7 +112,7 @@ export async function saveSessionData(
   const cookie = await new jose.SignJWT(sessionData)
     .setExpirationTime(saved.exp)
     .setJti(saved.jti)
-    .setAudience(saved.aud)
+    .setAudience(saved.aud.toString())
     .setIssuedAt(saved.iat)
     .setProtectedHeader({ alg: "HS256" })
     .sign(JWT_SECRET)

@@ -22,3 +22,6 @@ Prerequisites: - [Node.js](https://nodejs.org/en/)
 ## TODO
 -	Improve all status codes and error handling
 -	Implement CSRF protection
+- Send an email to users to verify their accounts before the accounts are actually created to prevent spam
+- Email verification of applications
+- Check that a user applying to delegate is not applied to chair
