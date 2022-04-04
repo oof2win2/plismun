@@ -19,6 +19,8 @@ Prerequisites: - [Node.js](https://nodejs.org/en/)
    `npm run dev`
 
 
+Using base SCSS from [CloudCannon/vonge-jekyll-bookshop-template](https://github.com/CloudCannon/vonge-jekyll-bookshop-template)
+
 ## TODO
 -	Improve all status codes and error handling
 -	Implement CSRF protection
