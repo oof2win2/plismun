@@ -4,7 +4,6 @@ import { ApiRequest, PopulatedApiRequest } from "@utils/types"
 import { NextApiRequest, NextApiResponse } from "next"
 import nc from "next-connect"
 import { z } from "zod"
-import { committeeCountries, committees } from "@utils/statics"
 
 const handler = nc<ApiRequest, NextApiResponse>()
 
@@ -18,11 +17,12 @@ handler.get<PopulatedApiRequest, NextApiResponse>(authAPI, async (req, res) => {
       userId: req.user.id,
     },
   })
-  if (application)
-    res.status(200).json({
+  if (application) {
+    return res.status(200).json({
       statusCode: 200,
       data: application,
     })
+  }
   return res.status(404).json({
     statusCode: 404,
     message: "Not Found",
@@ -35,17 +35,11 @@ handler.get<PopulatedApiRequest, NextApiResponse>(authAPI, async (req, res) => {
 // committee choices need to be valid committee IDs
 const delegationApplySchema = z
   .object({
-    choice1committee: z
-      .number()
-      .refine((cId) => committees.find((c) => c.id === cId)),
+    choice1committee: z.number(),
     choice1country: z.string(),
-    choice2committee: z
-      .number()
-      .refine((cId) => committees.find((c) => c.id === cId)),
+    choice2committee: z.number(),
     choice2country: z.string(),
-    choice3committee: z
-      .number()
-      .refine((cId) => committees.find((c) => c.id === cId)),
+    choice3committee: z.number(),
     choice3country: z.string(),
     delegationId: z
       .number()
@@ -66,18 +60,58 @@ const delegationApplySchema = z
     // shirt size or null if no shirt desired
     shirtSize: z.enum(["XS", "S", "M", "L", "XL", "XXL"]).nullable(),
   })
-  .superRefine((body, ctx) => {
+  .superRefine(async (body, ctx) => {
+    const committees = await db.committee.findMany()
+
+    const committee1valid = committees.find(
+      (c) => c.id === body.choice1committee
+    )
+    if (!committee1valid) {
+      ctx.addIssue({
+        code: "invalid_enum_value",
+        options: committees.map((c) => c.id),
+        path: ["choice1committee"],
+        message: "The committee with the given ID was not found",
+      })
+    }
+    const committee2valid = committees.find(
+      (c) => c.id === body.choice2committee
+    )
+    if (!committee2valid) {
+      ctx.addIssue({
+        code: "invalid_enum_value",
+        options: committees.map((c) => c.id),
+        path: ["choice2committee"],
+        message: "The committee with the given ID was not found",
+      })
+    }
+    const committee3valid = committees.find(
+      (c) => c.id === body.choice3committee
+    )
+    if (!committee3valid) {
+      ctx.addIssue({
+        code: "invalid_enum_value",
+        options: committees.map((c) => c.id),
+        path: ["choice3committee"],
+        message: "The committee with the given ID was not found",
+      })
+    }
+
+    const committeeCountries = await db.committeeCountries.findMany()
     // check if each choice's country is valid in it's committee
     const choice1valid = committeeCountries.find(
       (c) =>
         c.committeeId === body.choice1committee &&
         c.countryCode === body.choice1country
     )
-    if (!choice1valid)
+    if (!choice1valid && committee1valid)
       ctx.addIssue({
-        code: "custom",
+        code: "invalid_enum_value",
         path: ["choice1country"],
         message: "Invalid country and committee combination",
+        options: committeeCountries
+          .filter((c) => c.committeeId === body.choice1committee)
+          .map((c) => c.countryCode),
       })
 
     const choice2valid = committeeCountries.find(
@@ -85,11 +119,14 @@ const delegationApplySchema = z
         c.committeeId === body.choice2committee &&
         c.countryCode === body.choice2country
     )
-    if (!choice2valid)
+    if (!choice2valid && committee2valid)
       ctx.addIssue({
-        code: "custom",
+        code: "invalid_enum_value",
         path: ["choice1country"],
         message: "Invalid country and committee combination",
+        options: committeeCountries
+          .filter((c) => c.committeeId === body.choice2committee)
+          .map((c) => c.countryCode),
       })
 
     const choice3valid = committeeCountries.find(
@@ -97,20 +134,24 @@ const delegationApplySchema = z
         c.committeeId === body.choice3committee &&
         c.countryCode === body.choice3country
     )
-    if (!choice3valid)
+    if (!choice3valid && committee3valid)
       ctx.addIssue({
-        code: "custom",
+        code: "invalid_enum_value",
         path: ["choice1country"],
         message: "Invalid country and committee combination",
+        options: committeeCountries
+          .filter((c) => c.committeeId === body.choice3committee)
+          .map((c) => c.countryCode),
       })
   })
 type delegationApplySchemaType = z.infer<typeof delegationApplySchema>
 
 handler.put(
+  authAPI,
   validate({
     body: delegationApplySchema,
+    async: true,
   }),
-  authAPI,
   async (req: ApiRequest, res) => {
     const {
       choice1committee,
@@ -172,5 +213,7 @@ handler.put(
     })
   }
 )
+
+// TODO: update your current application
 
 export default handler

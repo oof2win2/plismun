@@ -95,7 +95,7 @@ export const SessionData = z.object({
   jti: z.string(),
   iat: z.number(),
   exp: z.number(),
-  aud: z.string(),
+  aud: z.number(),
   data: z.object({
     user: User,
   }),

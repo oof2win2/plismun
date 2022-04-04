@@ -6,6 +6,7 @@ import type { ApiResponse } from "@utils/types"
 import { z } from "zod"
 import { User } from "@prisma/client"
 import { checkPassword } from "@utils/dbUtil"
+import { saveSessionData } from "@utils/auth"
 
 const LoginSchema = z.object({
   email: z.string().email(),
@@ -80,6 +81,9 @@ export default async function handler(
       ],
     })
   }
+
+  // save session data
+  await saveSessionData(req, res, user, { user: user }, null)
 
   return res.status(200).json({
     status: "success",

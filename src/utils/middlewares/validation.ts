@@ -21,13 +21,15 @@ export function validate({
     res: NextApiResponse,
     next: NextHandler
   ) => {
-    const errors: z.ZodError[] = []
+    const errors: z.ZodError["issues"][] = []
     if (body) {
       const parsed = async
         ? await body.safeParseAsync(req.body)
         : body.safeParse(req.body)
       if (parsed.success === false) {
-        errors.push(parsed.error)
+        errors.push(parsed.error.issues)
+      } else {
+        req.body = parsed.data
       }
     }
     if (query) {
@@ -35,7 +37,9 @@ export function validate({
         ? await query.safeParseAsync(req.query)
         : query.safeParse(req.query)
       if (parsed.success === false) {
-        errors.push(parsed.error)
+        errors.push(parsed.error.issues)
+      } else {
+        req.query = parsed.data
       }
     }
     if (errors.length) {
@@ -43,7 +47,7 @@ export function validate({
       return res.status(422).json({
         statusCode: 422,
         message: "Bad Request",
-        description: errors,
+        description: errors.flat(),
       })
     }
     // there were no errors validating, so we can continue with the request

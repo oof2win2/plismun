@@ -76,8 +76,9 @@ async function main() {
       "Generating committees [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}",
   })
   committeeBar.start(amountsToGenerate.committees, 0)
+  let startingCommitteeId: number | undefined = undefined
   for (let i = 0; i < amountsToGenerate.committees; i++) {
-    await db.committee.create({
+    const x = await db.committee.create({
       data: {
         displayname: faker.company.companyName(),
         difficulty: randomElementFromList([
@@ -87,9 +88,29 @@ async function main() {
         ]),
       },
     })
+    if (!startingCommitteeId) startingCommitteeId = x.id
     committeeBar.increment()
   }
   committeeBar.stop()
+
+  const committeeCountryBar = new SingleBar({
+    format:
+      "Generating committee countries [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}",
+  })
+  committeeCountryBar.start(amountsToGenerate.committees, 0)
+  const countries = faker.helpers.uniqueArray(faker.address.countryCode, 25)
+  for (let i = 0; i < amountsToGenerate.committees; i++) {
+    for (const country in countries) {
+      await db.committeeCountries.create({
+        data: {
+          committeeId: startingCommitteeId! + i,
+          countryCode: countries[country],
+        },
+      })
+    }
+    committeeCountryBar.increment()
+  }
+  committeeCountryBar.stop()
 
   const delegationBar = new SingleBar({
     format:
