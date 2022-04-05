@@ -1,0 +1,23 @@
+@import "./0-settings/A-variables.scss";
+@import "./0-settings/B-color-schema.scss";
+@import "./0-settings/C-mixins.scss";
+@import "./0-settings/B-color-schema.scss";
+
+@import "./1-tools/A_normalize.scss";
+@import "./1-tools/B_reset.scss";
+@import "./1-tools/C_shared.scss";
+@import "./1-tools/D_syntax-highlighting.scss";
+@import "./1-tools/E_grid.scss";
+@import "./1-tools/F_tiny-slider.scss";
+@import "./1-tools/G_animate.scss";
+
+@import "./2-base/base.scss";
+
+@import "./3-modules/footer.scss";
+@import "./3-modules/header.scss";
+@import "./3-modules/pagination.scss";
+@import "./3-modules/scrollbutton.scss";
+@import "./3-modules/sections.scss";
+@import "./3-modules/sociallist.scss";
+
+@import "./4-layout/layout.scss";

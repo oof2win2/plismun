@@ -15,15 +15,20 @@ export default class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
           />
-          {/* Ionicons, see https://ionic.io/ionicons/v4/usage */}
-          <link
-            href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css"
-            rel="stylesheet"
-          />
         </Head>
         <body>
           <Main />
           <NextScript />
+
+          {/* Ionicons, see https://ionic.io/ionicons/usage */}
+          <script
+            type="module"
+            src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+          />
+          <script
+            noModule
+            src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+          />
         </body>
       </Html>
     )
