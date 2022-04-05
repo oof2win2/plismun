@@ -97,8 +97,8 @@ async function main() {
     format:
       "Generating committee countries [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}",
   })
-  committeeCountryBar.start(amountsToGenerate.committees, 0)
   const countries = faker.helpers.uniqueArray(faker.address.countryCode, 25)
+  committeeCountryBar.start(amountsToGenerate.committees * countries.length, 0)
   for (let i = 0; i < amountsToGenerate.committees; i++) {
     for (const country in countries) {
       await db.committeeCountries.create({
@@ -107,8 +107,8 @@ async function main() {
           countryCode: countries[country],
         },
       })
+      committeeCountryBar.increment()
     }
-    committeeCountryBar.increment()
   }
   committeeCountryBar.stop()
 
