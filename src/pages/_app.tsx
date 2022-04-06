@@ -13,6 +13,7 @@ export default function MyApp(props: AppProps) {
     <div>
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <title>PLISMUN '23</title>
       </Head>
       <Navbar />
       <Component {...pageProps} />

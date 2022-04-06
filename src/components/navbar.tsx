@@ -55,11 +55,6 @@ const Navbar = () => {
         <div className="row">
           <div className="c-header__inner">
             <div className="logo">
-              {/* <img
-						alt="PLISMUN '23"
-						className="logo__image"
-						src="/images/logopublic.svg"
-					/> */}
               {/* nbsp here so it looks good guaranteed */}
               <h3>PLISMUN&nbsp;'23</h3>
             </div>
