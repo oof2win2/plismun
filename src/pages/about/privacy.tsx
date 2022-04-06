@@ -166,7 +166,7 @@ export default function About() {
           <p>
             If you would like to request or exercise one of these rights, you
             may contact us at{" "}
-            <a href="privacy@plismun.com">privacy@plismun.com</a>
+            <a href="mailto:privacy@plismun.com">privacy@plismun.com</a>
           </p>
 
           <h4>CHANGES TO THIS PRIVACY POLICY</h4>
