@@ -62,6 +62,89 @@ export default function About() {
               </li>
             </ul>
           </div>
+
+          <div className="c-contact-form" id="contact">
+            <div className="container">
+              <div className="row">
+                <div className="col col-12">
+                  <div className="c-contact-form__contact-head">
+                    <h2 className="c-contact-form__contact-title">
+                      Get in touch
+                    </h2>
+                    <p className="c-contact-form__contact-description">
+                      Any inquiries? Please fill out the form below and we will
+                      respond as soon as possible.
+                    </p>
+
+                    <form
+                      action=""
+                      className="c-contact-form__form"
+                      onSubmit={(e) => {
+                        // TODO: store the form data somewhere so it can be responded to
+                      }}
+                    >
+                      <div className="c-contact-form__form-group">
+                        <label
+                          className="c-contact-form__form-label screen-reader-text"
+                          htmlFor="form-name"
+                        >
+                          Your Name
+                        </label>
+                        <input
+                          className="c-contact-form__form-input"
+                          id="form-name"
+                          name="name"
+                          placeholder="Your name..."
+                          required={true}
+                          type="text"
+                        />
+                      </div>
+                      <div className="c-contact-form__form-group">
+                        <label
+                          className="c-contact-form__form-label screen-reader-text"
+                          htmlFor="form-email"
+                        >
+                          Your Email
+                        </label>
+                        <input
+                          className="c-contact-form__form-input"
+                          id="form-email"
+                          name="_replyto"
+                          placeholder="Your email..."
+                          required={true}
+                          type="email"
+                        />
+                      </div>
+                      <div className="c-contact-form__form-group">
+                        <label
+                          className="c-contact-form__form-label screen-reader-text"
+                          htmlFor="form-text"
+                        >
+                          Your Message
+                        </label>
+                        <textarea
+                          className="c-contact-form__form-input"
+                          id="form-text"
+                          name="text"
+                          placeholder="Your message..."
+                          required={true}
+                          rows={9}
+                        />
+                      </div>
+                      <div className="c-contact-form__form-group c-contact-form__form-group--button">
+                        <button
+                          className="c-button c-button--primary c-button--large"
+                          type="submit"
+                        >
+                          Send now
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
