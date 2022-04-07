@@ -37,7 +37,8 @@ export default ({ title, mainPage }: HeaderProps) => {
             flexDirection: "column",
             alignContent: "center",
             alignItems: "center",
-            paddingTop: "16rem",
+            paddingTop: "16vh",
+            verticalAlign: "sub",
           }}
           className="page animate"
         >

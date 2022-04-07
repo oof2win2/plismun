@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { useState } from "react"
 
 type Page = {
   type: "page"
@@ -41,12 +42,18 @@ const pages: (Page | Category)[] = [
     title: "Contact",
     href: "/contact",
   },
+  {
+    type: "page",
+    title: "Committees",
+    href: "/committees",
+  },
 ]
 
 // TODO: loop over the sites and add them in the correct order
 
 const Navbar = () => {
   const router = useRouter()
+  const [navIsOpen, setNavIsOpen] = useState(false)
 
   const currentPage = router.asPath
 
@@ -59,10 +66,13 @@ const Navbar = () => {
               {/* nbsp here so it looks good guaranteed */}
               <h3>PLISMUN&nbsp;'23</h3>
             </div>
-            <nav className="main-nav">
+            <nav className={`main-nav ${navIsOpen && "is-open"}`}>
               <div className="main-nav__box">
-                <div className="nav__icon-close">
-                  <i className="ion ion-md-close"></i>
+                <div
+                  className="nav__icon-close"
+                  onClick={() => setNavIsOpen(false)}
+                >
+                  <ion-icon name="close" />
                 </div>
 
                 <div className="nav__title">Menu</div>
@@ -193,6 +203,13 @@ const Navbar = () => {
                 </ul>
               </div>
             </nav>
+            <div className="nav-button" onClick={() => setNavIsOpen(true)}>
+              <ion-icon
+                className="nav__icon nav__icon-menu"
+                name="menu-outline"
+              />
+              <i className="nav__icon nav__icon-menu ion ion-md-menu"></i>
+            </div>
           </div>
         </div>
       </div>
