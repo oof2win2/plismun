@@ -1,37 +1,14 @@
 import React, { useEffect } from "react"
 import Image from "next/image"
 import { ParagraphTypography } from "@utils/styles"
+import Header from "@components/header"
 
 export default function Home() {
   return (
     <div className="c-page">
-      <section className="c-hero">
-        <div className="container">
-          <div className="bgWrap">
-            <Image
-              src="/images/school_img2.jpg"
-              layout="fill"
-              objectFit="cover"
-              className="backgroundImage"
-            />
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignContent: "center",
-              alignItems: "center",
-              paddingTop: "16rem",
-            }}
-            className="page animate"
-          >
-            <Image src="/logolarge.png" height={350} width={350} />
-            <h1 style={{ color: "white" }}>JANUARY 26TH - 29RD, 2023</h1>
-          </div>
-        </div>
-      </section>
+      <Header mainPage />
 
-      <div className="container" style={{ paddingTop: "16rem" }}>
+      <div className="container">
         <div className="page animate">
           <p>
             Park Lane International School Model United Nations, or PLISMUN for
