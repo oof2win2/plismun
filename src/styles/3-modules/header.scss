@@ -157,11 +157,13 @@
 .main-nav__box {
   display: flex;
   align-items: center;
+	// padding: 48px $base-spacing-unit 20px;
+	padding: 30px 10px;
 
   .nav__icon-close {
     position: absolute;
-    top: 20px;
-    right: 40px;
+    // top: 20px;
+    right: 35px;
     display: none;
     align-items: center;
     justify-content: center;
@@ -323,7 +325,7 @@
     display: none;
   }
 
-  @media only screen and (max-width: $desktop) {
+  @media only all and (max-width: $desktop) {
     margin-left: auto;
 
     .nav__icon-menu {

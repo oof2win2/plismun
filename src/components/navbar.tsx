@@ -66,7 +66,7 @@ const Navbar = () => {
               {/* nbsp here so it looks good guaranteed */}
               <h3>PLISMUN&nbsp;'23</h3>
             </div>
-            <nav className={`main-nav ${navIsOpen && "is-open"}`}>
+            <nav className={`main-nav${navIsOpen ? " is-open" : ""}`}>
               <div className="main-nav__box">
                 <div
                   className="nav__icon-close"
@@ -91,6 +91,7 @@ const Navbar = () => {
                                   ? " active-link"
                                   : "")
                               }
+                              onClick={() => setNavIsOpen(false)}
                             >
                               {page.title}
                             </a>
@@ -119,6 +120,7 @@ const Navbar = () => {
                                         ? " active-link"
                                         : "")
                                     }
+                                    onClick={() => setNavIsOpen(false)}
                                   >
                                     {pg.title}
                                   </a>
@@ -204,11 +206,8 @@ const Navbar = () => {
               </div>
             </nav>
             <div className="nav-button" onClick={() => setNavIsOpen(true)}>
-              <ion-icon
-                className="nav__icon nav__icon-menu"
-                name="menu-outline"
-              />
-              <i className="nav__icon nav__icon-menu ion ion-md-menu"></i>
+              <ion-icon class="nav_button nav__icon-menu" name="menu-outline" />
+              {/* <i className="nav__icon nav__icon-menu ion ion-md-menu"></i> */}
             </div>
           </div>
         </div>
