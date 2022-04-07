@@ -1,3 +1,4 @@
+import Header from "@components/header"
 import React from "react"
 
 export default function About() {
@@ -5,7 +6,7 @@ export default function About() {
     <div className="c-page">
       <div className="container">
         <div className="page animate">
-          <h1>ABOUT PLISMUN</h1>
+          <Header title="ABOUT PLISMUN" />
           <p>
             With pride, we present to you the fifth annual Model United Nations
             conference hosted by{" "}

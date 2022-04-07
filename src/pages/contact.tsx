@@ -1,3 +1,4 @@
+import Header from "@components/header"
 import React from "react"
 
 export default function About() {
@@ -5,7 +6,7 @@ export default function About() {
     <div className="c-page">
       <div className="container">
         <div className="page animate">
-          <h1>CONTACT US</h1>
+          <Header title="CONTACT US" />
 
           <div className="big__social">
             <ul className="social__list list-reset">

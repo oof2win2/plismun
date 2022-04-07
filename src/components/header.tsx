@@ -47,7 +47,7 @@ export default ({ title, mainPage }: HeaderProps) => {
               <h1 style={{ color: "white" }}>JANUARY 26TH - 29RD, 2023</h1>
             </>
           ) : (
-            <h1>{title}</h1>
+            <h1 style={{ color: "white" }}>{title}</h1>
           )}
         </div>
       </div>

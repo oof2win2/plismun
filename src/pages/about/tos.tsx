@@ -1,3 +1,4 @@
+import Header from "@components/header"
 import Link from "next/link"
 import React from "react"
 
@@ -6,7 +7,7 @@ export default function About() {
     <div className="c-page">
       <div className="container">
         <div className="page animate">
-          <h1>TERMS AND CONDITIONS</h1>
+          <Header title="TERMS AND CONDITIONS" />
 
           <p>
             In these Terms and Conditions, the PLISMUN Secretariat and Park Lane

@@ -1,3 +1,4 @@
+import Header from "@components/header"
 import Link from "next/link"
 import React from "react"
 
@@ -6,7 +7,7 @@ export default function About() {
     <div className="c-page">
       <div className="container">
         <div className="page animate">
-          <h1>PRIVACY POLICY</h1>
+          <Header title="PRIVACY POLICY" />
 
           <p>
             PLISMUN ('we' or 'us') collect, process and use personally
