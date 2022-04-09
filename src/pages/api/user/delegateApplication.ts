@@ -102,7 +102,7 @@ const delegationApplySchema = z
     const choice1valid = committeeCountries.find(
       (c) =>
         c.committeeId === body.choice1committee &&
-        c.countryCode === body.choice1country
+        c.country === body.choice1country
     )
     if (!choice1valid && committee1valid)
       ctx.addIssue({
@@ -111,13 +111,13 @@ const delegationApplySchema = z
         message: "Invalid country and committee combination",
         options: committeeCountries
           .filter((c) => c.committeeId === body.choice1committee)
-          .map((c) => c.countryCode),
+          .map((c) => c.country),
       })
 
     const choice2valid = committeeCountries.find(
       (c) =>
         c.committeeId === body.choice2committee &&
-        c.countryCode === body.choice2country
+        c.country === body.choice2country
     )
     if (!choice2valid && committee2valid)
       ctx.addIssue({
@@ -126,13 +126,13 @@ const delegationApplySchema = z
         message: "Invalid country and committee combination",
         options: committeeCountries
           .filter((c) => c.committeeId === body.choice2committee)
-          .map((c) => c.countryCode),
+          .map((c) => c.country),
       })
 
     const choice3valid = committeeCountries.find(
       (c) =>
         c.committeeId === body.choice3committee &&
-        c.countryCode === body.choice3country
+        c.country === body.choice3country
     )
     if (!choice3valid && committee3valid)
       ctx.addIssue({
@@ -141,7 +141,7 @@ const delegationApplySchema = z
         message: "Invalid country and committee combination",
         options: committeeCountries
           .filter((c) => c.committeeId === body.choice3committee)
-          .map((c) => c.countryCode),
+          .map((c) => c.country),
       })
   })
 type delegationApplySchemaType = z.infer<typeof delegationApplySchema>

@@ -14,10 +14,7 @@ type HeaderProps =
 
 export default ({ title, mainPage }: HeaderProps) => {
   return (
-    <section
-      // className="c-hero"
-      style={{ paddingBottom: mainPage ? "12vh" : "14vh" }}
-    >
+    <section style={{ paddingBottom: "12vh" }}>
       <div
         className="container"
         style={{

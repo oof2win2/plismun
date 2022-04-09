@@ -3,7 +3,7 @@ import { Committee, CommitteeCountries } from "@prisma/client"
 import { Committee as CommitteeSchema } from "@utils/validators"
 import { z } from "zod"
 import { db } from "@utils/db"
-import { GetStaticPaths, GetStaticProps, NextPage } from "next"
+import { GetStaticPaths, GetStaticProps } from "next"
 import React from "react"
 
 interface CommitteeProps {
