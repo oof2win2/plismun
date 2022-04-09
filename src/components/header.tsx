@@ -18,7 +18,7 @@ export default ({ title, mainPage }: HeaderProps) => {
       <div
         className="container"
         style={{
-          width: "100vw",
+          width: "0px",
           height: "40vh",
           paddingBottom: mainPage ? "70vh" : "40vh",
         }}

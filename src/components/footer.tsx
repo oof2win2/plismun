@@ -96,7 +96,7 @@ const Footer = () => {
             <div className="copyright">
               <p>
                 Made in 2022 with &lt;3 by{" "}
-                <a href="https://github.com/oof2win2">oof2win2</a>
+                <a href="https://github.com/oof2win2">Honza Kocourek</a>
               </p>
             </div>
           </div>
