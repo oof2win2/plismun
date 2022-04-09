@@ -84,6 +84,7 @@ model Delegation {
 
 model Committee {
   id          Int     @id @default(autoincrement())
+  description String
   displayname String
   difficulty  String
   chair1      Int?
@@ -98,16 +99,15 @@ model Committee {
 model CommitteeCountries {
   id          Int    @id @default(autoincrement())
   committeeId Int
-  countryCode String
+  country     String
+  difficulty  String
 }
 
 // the actual committee members that are in different committees
 model CommitteeMember {
-  committeeId  Int
+  committeeId Int
+  role        String // "chair" or "member"
   // the user that is the delegate in this committee for this country
-  userId       Int    @unique
-  countryCode  String
-  // display names of the countries related to the countryCode
-  displayname  String
-  displayname2 String
+  userId      Int    @unique
+  country     String
 }

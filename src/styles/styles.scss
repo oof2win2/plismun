@@ -24,21 +24,7 @@
 
 @import "./components/contact-form.scss";
 @import "./components/button.scss";
+@import "./components/project-card.scss";
+@import "./components/page-heading.scss";
 
-.bgWrap {
-	position: absolute;
-	left: 0;
-  height: 60vh;
-  width: 100vw;
-  overflow: hidden;
-  z-index: -1;
-}
-
-.bgText {
-	margin: 0;
-  font-size: 2rem;
-  line-height: 3rem;
-  text-align: center;
-  padding-top: 40vh;
-  text-shadow: 1px 1px 1px #3c5c5e;
-}
+@import "./other.scss";

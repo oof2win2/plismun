@@ -2,6 +2,7 @@ import React from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Image from "next/image"
+import Header from "@components/header"
 
 export default function Home() {
   const router = useRouter()
@@ -10,9 +11,7 @@ export default function Home() {
     <div className="c-page">
       <div className="container">
         <div className="page animate">
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Image src="/images/logolarge.png" width={350} height={350} />
-          </div>
+          <Header title="500 - Server error occured" />
           <h1>
             Sorry, but the server encountered an error whilst processing your
             request

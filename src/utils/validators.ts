@@ -84,9 +84,7 @@ export type CommiteeType = z.infer<typeof Committee>
 export const CommiteeMember = z.object({
   committeeId: z.number(),
   userId: z.number(),
-  countryCode: countryCode,
-  displayname: z.string(),
-  displayname2: z.string(),
+  country: z.string(),
 })
 export type CommiteeMemberType = z.infer<typeof CommiteeMember>
 

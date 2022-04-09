@@ -8,10 +8,10 @@ import { hashPassword } from "@utils/dbUtil"
 
 const amountsToGenerate = {
   committees: 10,
-  users: 500,
-  delegations: 50,
-  delegates: 250,
-  committeeMembers: 100,
+  users: 50,
+  delegations: 10,
+  delegates: 25,
+  committeeMembers: 10,
 }
 
 /**
@@ -78,6 +78,7 @@ async function main() {
   committeeBar.start(amountsToGenerate.committees, 0)
   let startingCommitteeId: number | undefined = undefined
   for (let i = 0; i < amountsToGenerate.committees; i++) {
+    const hasTopic2 = Math.random() > 0.5
     const x = await db.committee.create({
       data: {
         displayname: faker.company.companyName(),
@@ -86,6 +87,11 @@ async function main() {
           "intermediate",
           "advanced",
         ]),
+        description: faker.lorem.paragraph(),
+        topic1: faker.lorem.sentence(),
+        para1: faker.lorem.paragraph(),
+        topic2: hasTopic2 ? faker.lorem.sentence() : undefined,
+        para2: hasTopic2 ? faker.lorem.paragraph() : undefined,
       },
     })
     if (!startingCommitteeId) startingCommitteeId = x.id
@@ -97,14 +103,19 @@ async function main() {
     format:
       "Generating committee countries [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}",
   })
-  const countries = faker.helpers.uniqueArray(faker.address.countryCode, 25)
+  const countries = faker.helpers.uniqueArray(faker.address.country, 25)
   committeeCountryBar.start(amountsToGenerate.committees * countries.length, 0)
   for (let i = 0; i < amountsToGenerate.committees; i++) {
-    for (const country in countries) {
+    for (const country of countries) {
       await db.committeeCountries.create({
         data: {
           committeeId: startingCommitteeId! + i,
-          countryCode: countries[country],
+          country: country,
+          difficulty: randomElementFromList([
+            "beginner",
+            "intermediate",
+            "advanced",
+          ]),
         },
       })
       committeeCountryBar.increment()
@@ -228,16 +239,16 @@ async function main() {
     await db.committeeMember.create({
       data: {
         userId: user.userId,
+        role: "member",
         committeeId: committeeId,
-        countryCode: committeeCountry,
-        displayname: committeeCountry,
-        displayname2: committeeCountry,
+        country: committeeCountry,
       },
     })
     CommitteeMemberBar.increment()
   }
   CommitteeMemberBar.stop()
 }
+// TODO: generate chairs
 
 main()
   .catch((e) => {
