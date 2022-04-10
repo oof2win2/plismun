@@ -6,24 +6,7 @@ import { hashPassword } from "@/utils/dbUtil"
 import { saveSessionData } from "@/utils/auth"
 import validator from "validator"
 import { User } from "@prisma/client"
-
-const SignupSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-
-  firstname: z.string(),
-  lastname: z.string(),
-
-  phone: z.string().nullable(),
-  birthdate: z
-    .string()
-    .refine((date) => validator.isISO8601(date))
-    .transform((x) => new Date(x)),
-  nationality: z.string(),
-  gender: z.string().nullable(),
-  schoolname: z.string().nullable(),
-  dietary: z.string().nullable(),
-})
+import { SignupSchema } from "@/utils/validators"
 
 type CommitteeResponse = ApiResponse<User>
 
@@ -89,7 +72,7 @@ export default async function handler(
   })
 
   // save their user in the session
-  await saveSessionData(req, res, user, { user }, null)
+  await saveSessionData(res, user, { user }, null)
 
   return res.status(200).json({
     status: "success",

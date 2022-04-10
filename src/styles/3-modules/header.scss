@@ -51,13 +51,25 @@
   width: 100%;
   margin-left: 100px;
 
-  .social {
+  .user {
     margin-left: auto;
 
-    .social__link {
-      font-size: 18px;
-      vertical-align: middle;
+    .user__link {
+      display: block;
+			padding: 0;
+			margin-bottom: 24px;
+			font-size: 18px;
+			font-weight: 600;
     }
+
+		.user__item {
+			display: block;
+			margin: 0;
+
+			&:last-child {
+				margin-right: 0;
+			}
+		}
   }
 
   @media only screen and (max-width: $desktop) {
@@ -144,10 +156,10 @@
       }
     }
 
-    .social {
+    .user {
       margin-left: 28px;
 
-      .social__list {
+      .user__list {
         justify-content: flex-start;
       }
     }

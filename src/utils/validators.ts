@@ -99,3 +99,34 @@ export const SessionData = z.object({
   }),
 })
 export type SessionDataType = z.infer<typeof SessionData>
+
+export const SignupSchema = z
+  .object({
+    email: z.string().email(),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    passwordConfirm: z.string(),
+
+    firstname: z.string(),
+    lastname: z.string(),
+
+    phone: z.string().nullable(),
+    birthdate: z
+      .string()
+      .refine((date) => validator.isISO8601(date))
+      .transform((x) => new Date(x)),
+    nationality: z.string(),
+    gender: z.string().nullable(),
+    schoolname: z.string().nullable(),
+    dietary: z.string().nullable(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.passwordConfirm) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["passwordConfirm"],
+        message: "Passwords do not match",
+      })
+    }
+    return ctx
+  })
+export type SignupSchemaType = z.infer<typeof SignupSchema>

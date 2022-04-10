@@ -131,8 +131,13 @@ const Navbar = () => {
                         </li>
                       )
                     })}
+                </ul>
+              </div>
+
+              <div className="user">
+                <ul className="user__list list-reset">
                   {user ? (
-                    <li className="nav__item">
+                    <li className="user__item user__link">
                       <Link href="/user/logout">
                         <a
                           className={
@@ -148,7 +153,7 @@ const Navbar = () => {
                       </Link>
                     </li>
                   ) : (
-                    <li className="nav__item">
+                    <li className="user__item user__link">
                       <Link href="/user/login">
                         <a
                           className={
@@ -164,77 +169,6 @@ const Navbar = () => {
                       </Link>
                     </li>
                   )}
-                </ul>
-              </div>
-              <div className="social">
-                <ul className="social__list list-reset">
-                  <li className="social__item">
-                    <a
-                      aria-label="twitter icon"
-                      className="social__link"
-                      href="https://twitter.com/plismun"
-                      rel="noopener"
-                      target="_blank"
-                    >
-                      <ion-icon
-                        name="logo-twitter"
-                        style={{
-                          verticalAlign: "middle",
-                        }}
-                      />
-                    </a>
-                  </li>
-
-                  <li className="social__item">
-                    <a
-                      aria-label="instagram icon"
-                      className="social__link"
-                      href="https://instagram.com/plismun"
-                      rel="noopener"
-                      target="_blank"
-                    >
-                      <ion-icon
-                        name="logo-instagram"
-                        style={{
-                          verticalAlign: "middle",
-                        }}
-                      />
-                    </a>
-                  </li>
-
-                  <li className="social__item">
-                    <a
-                      aria-label="facebook icon"
-                      className="social__link"
-                      href="https://www.facebook.com/Plismunofficial/"
-                      rel="noopener"
-                      target="_blank"
-                    >
-                      <ion-icon
-                        name="logo-facebook"
-                        style={{
-                          verticalAlign: "middle",
-                        }}
-                      />
-                    </a>
-                  </li>
-
-                  <li className="social__item">
-                    <a
-                      aria-label="email icon"
-                      className="social__link"
-                      href="mailto:secretariat@plismun.com"
-                      rel="noopener"
-                      target="_blank"
-                    >
-                      <ion-icon
-                        name="mail"
-                        style={{
-                          verticalAlign: "middle",
-                        }}
-                      />
-                    </a>
-                  </li>
                 </ul>
               </div>
             </nav>

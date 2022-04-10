@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks"
 import { login } from "@/utils/redux/parts/user"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
+import Link from "next/link"
 
 export default function About() {
   const router = useRouter()
@@ -37,10 +38,6 @@ export default function About() {
         },
       })
       const data = await req.json()
-      if (data.status === "success") {
-        // data.data is the user object
-        dispatch(login(data.data))
-      }
 
       if (req.status !== 200) {
         const error = data.errors[0]
@@ -53,6 +50,10 @@ export default function About() {
             setError("An unknown error occured")
         }
       } else {
+        if (data.status === "success") {
+          // data.data is the user object
+          dispatch(login(data.data))
+        }
         setSuccess(true)
         setError(null)
         // go to homepage in 2s
@@ -72,6 +73,17 @@ export default function About() {
       <div className="container">
         <div className="page animate">
           <Header title="LOGIN" />
+
+          {!wasSuccess && (
+            <div className="row" style={{ justifyContent: "center" }}>
+              <p>
+                Don't have an account?{" "}
+                <Link href="/user/signup">
+                  <a>Sign up</a>
+                </Link>
+              </p>
+            </div>
+          )}
 
           <div className="row" style={{ justifyContent: "center" }}>
             {wasSuccess && (
