@@ -1,3 +1,4 @@
+import { useAppSelector } from "@/utils/redux/hooks"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -49,11 +50,10 @@ const pages: (Page | Category)[] = [
   },
 ]
 
-// TODO: loop over the sites and add them in the correct order
-
 const Navbar = () => {
   const router = useRouter()
   const [navIsOpen, setNavIsOpen] = useState(false)
+  const { user } = useAppSelector((state) => state.user)
 
   const currentPage = router.asPath
 
@@ -131,6 +131,39 @@ const Navbar = () => {
                         </li>
                       )
                     })}
+                  {user ? (
+                    <li className="nav__item">
+                      <Link href="/user/logout">
+                        <a
+                          className={
+                            "nav__link" +
+                            (currentPage === "/user/logout"
+                              ? " active-link"
+                              : "")
+                          }
+                          onClick={() => setNavIsOpen(false)}
+                        >
+                          Log out
+                        </a>
+                      </Link>
+                    </li>
+                  ) : (
+                    <li className="nav__item">
+                      <Link href="/user/login">
+                        <a
+                          className={
+                            "nav__link" +
+                            (currentPage === "/user/login"
+                              ? " active-link"
+                              : "")
+                          }
+                          onClick={() => setNavIsOpen(false)}
+                        >
+                          Log in
+                        </a>
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </div>
               <div className="social">

@@ -59,7 +59,6 @@ export async function getSessionData(
  * Save session data to the database and send it to the client as a cookie
  */
 export async function saveSessionData(
-  req: NextApiRequest,
   res: NextApiResponse,
   user: User,
   sessionData: SessionDataType["data"],
@@ -123,11 +122,21 @@ export async function saveSessionData(
     "Set-Cookie",
     `${ENV.COOKIE_NAME}=Bearer ${cookie}; HttpOnly; Max-Age=${
       saved.exp - saved.iat
-    }; Path=/`
+    }; Path=/; Secure`
   )
 
   return {
     cookie: `Bearer ${cookie}`,
     jti: saved.jti,
   }
+}
+
+/**
+ * Expire session data
+ */
+export async function clearSessionData(res: NextApiResponse) {
+  res.setHeader(
+    "Set-Cookie",
+    `${ENV.COOKIE_NAME}=1; HttpOnly; Max-Age=1; Path=/; Secure`
+  )
 }

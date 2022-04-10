@@ -61,8 +61,8 @@ export default async function handler(
       errors: [
         {
           statusCode: 404,
-          message: "User not found",
-          description: "The user was not found.",
+          message: "Email or password is wrong",
+          description: "Email or password is wrong",
         },
       ],
     })
@@ -75,15 +75,15 @@ export default async function handler(
       errors: [
         {
           statusCode: 400,
-          message: "Invalid password",
-          description: "The password is invalid.",
+          message: "Email or password is wrong",
+          description: "Email or password is wrong",
         },
       ],
     })
   }
 
   // save session data
-  await saveSessionData(req, res, user, { user: user }, null)
+  await saveSessionData(res, user, { user: user }, null)
 
   return res.status(200).json({
     status: "success",
