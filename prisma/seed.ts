@@ -3,8 +3,8 @@ import "tsconfig-paths/register"
 import { AppliedUser, PrismaClient } from "@prisma/client"
 import faker from "@faker-js/faker"
 import { SingleBar } from "cli-progress"
-import { randomElementFromList } from "@utils/utils"
-import { hashPassword } from "@utils/dbUtil"
+import { randomElementFromList } from "@/utils/utils"
+import { hashPassword } from "@/utils/dbUtil"
 
 const amountsToGenerate = {
   committees: 10,

@@ -1,8 +1,8 @@
-import Header from "@components/header"
+import Header from "@/components/header"
 import { Committee, CommitteeCountries } from "@prisma/client"
-import { Committee as CommitteeSchema } from "@utils/validators"
+import { Committee as CommitteeSchema } from "@/utils/validators"
 import { z } from "zod"
-import { db } from "@utils/db"
+import { db } from "@/utils/db"
 import { GetStaticPaths, GetStaticProps } from "next"
 import React from "react"
 

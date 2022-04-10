@@ -2,11 +2,11 @@
 // This means they will be logged in on the page without needing to do anything.
 // This endpoint should be hit only once, when the user first visits the site.
 
-import { db } from "@utils/db"
+import { db } from "@/utils/db"
 import { NextApiRequest, NextApiResponse } from "next"
-import type { ApiResponse } from "@utils/types"
+import type { ApiResponse } from "@/utils/types"
 import { User } from "@prisma/client"
-import { getSessionData } from "@utils/auth"
+import { getSessionData } from "@/utils/auth"
 
 type CommitteeResponse = ApiResponse<User>
 

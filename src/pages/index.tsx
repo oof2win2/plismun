@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import Image from "next/image"
-import { ParagraphTypography } from "@utils/styles"
-import Header from "@components/header"
+import { ParagraphTypography } from "@/utils/styles"
+import Header from "@/components/header"
 
 export default function Home() {
   return (

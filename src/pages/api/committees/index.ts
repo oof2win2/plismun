@@ -1,10 +1,10 @@
-import { db } from "@utils/db"
+import { db } from "@/utils/db"
 import { NextApiRequest, NextApiResponse } from "next"
-import type { ApiResponse } from "@utils/types"
-import { Committee, CommiteeType } from "@utils/validators"
+import type { ApiResponse } from "@/utils/types"
+import { Committee, CommiteeType } from "@/utils/validators"
 import { z } from "zod"
-import { authAPI, validate } from "@utils/middlewares"
-import { ApiRequest, PopulatedApiRequest } from "@utils/types"
+import { authAPI, validate } from "@/utils/middlewares"
+import { ApiRequest, PopulatedApiRequest } from "@/utils/types"
 import nc from "next-connect"
 
 const handler = nc<ApiRequest, NextApiResponse>()

@@ -2,7 +2,7 @@ import React from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Image from "next/image"
-import Header from "@components/header"
+import Header from "@/components/header"
 
 export default function Home() {
   const router = useRouter()

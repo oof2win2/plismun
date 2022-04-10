@@ -1,9 +1,9 @@
-import { db } from "@utils/db"
+import { db } from "@/utils/db"
 import { NextApiRequest, NextApiResponse } from "next"
-import type { ApiResponse } from "@utils/types"
+import type { ApiResponse } from "@/utils/types"
 import { z } from "zod"
-import { hashPassword } from "@utils/dbUtil"
-import { saveSessionData } from "@utils/auth"
+import { hashPassword } from "@/utils/dbUtil"
+import { saveSessionData } from "@/utils/auth"
 import validator from "validator"
 import { User } from "@prisma/client"
 

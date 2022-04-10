@@ -1,5 +1,5 @@
 import React from "react"
-import { ParagraphTypography } from "@utils/styles"
+import { ParagraphTypography } from "@/utils/styles"
 
 export default function LoginSignup() {
   return (

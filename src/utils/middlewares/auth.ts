@@ -1,5 +1,5 @@
-import { getSessionData } from "@utils/auth"
-import { ApiRequest } from "@utils/types"
+import { getSessionData } from "@/utils/auth"
+import { ApiRequest } from "@/utils/types"
 import { NextApiRequest, NextApiResponse } from "next"
 import { NextHandler } from "next-connect"
 
