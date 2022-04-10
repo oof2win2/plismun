@@ -14,19 +14,21 @@ type HeaderProps =
 
 export default ({ title, mainPage }: HeaderProps) => {
   return (
-    <section style={{ paddingBottom: "12vh" }}>
+    <section style={{ paddingBottom: "12vh", zIndex: -1 }}>
       <div
         className="container"
         style={{
           width: "0px",
           height: "40vh",
           paddingBottom: mainPage ? "70vh" : "40vh",
+          zIndex: -1,
         }}
       >
         <div
           className="bgWrap"
           style={{
             height: mainPage ? "70vh" : "40vh",
+            zIndex: -1,
           }}
         >
           <Image
@@ -53,6 +55,7 @@ export default ({ title, mainPage }: HeaderProps) => {
             width: "100vw",
             justifyContent: "center",
             maxWidth: "100vw",
+            zIndex: -1,
           }}
           className="page animate"
         >

@@ -12,7 +12,9 @@
     "prisma:push": "prisma db push"
   },
   "dependencies": {
-    "@emotion/react": "^11.8.2",
+    "@chakra-ui/icons": "^1.1.7",
+    "@chakra-ui/react": "^1.8.8",
+    "@emotion/react": "^11.9.0",
     "@emotion/server": "^11.4.0",
     "@emotion/styled": "^11.8.1",
     "@fontsource/roboto": "^4.5.3",
@@ -25,6 +27,7 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.0",
     "envalid": "^7.3.0",
+    "framer-motion": "^6.2.9",
     "jose": "^4.6.0",
     "next": "latest",
     "next-connect": "^0.12.2",
