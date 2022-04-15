@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import Link from "next/link"
 import Image from "next/image"
 import Header from "@/components/header"
+import { Heading } from "@chakra-ui/react"
 
 export default function Home() {
   const router = useRouter()
@@ -12,18 +13,18 @@ export default function Home() {
       <div className="container">
         <div className="page animate">
           <Header title="500 - Server error occured" />
-          <h1>
+          <Heading>
             Sorry, but the server encountered an error whilst processing your
             request
-          </h1>
-          <h2>
+          </Heading>
+          <Heading size="md">
             You can go to the{" "}
             <Link href="/">
               <a>homepage</a>
             </Link>{" "}
             , try going <a onClick={() => router.back()}>back</a>, or try{" "}
             <a onClick={() => router.reload()}>reloading</a>.
-          </h2>
+          </Heading>
         </div>
       </div>
     </div>

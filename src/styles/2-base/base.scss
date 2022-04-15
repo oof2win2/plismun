@@ -151,7 +151,6 @@ img,
       transition: $global-transition;
 
       &:hover {
-        color: $link-color-hover;
         border-color: transparent;
       }
     }
@@ -173,10 +172,6 @@ a {
   text-decoration: none;
   color: $link-color;
   transition: $global-transition;
-
-  &:hover {
-    color: $link-color-hover;
-  }
 }
 
 hr {

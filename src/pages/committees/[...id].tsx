@@ -5,6 +5,7 @@ import { z } from "zod"
 import { db } from "@/utils/db"
 import { GetStaticPaths, GetStaticProps } from "next"
 import React from "react"
+import { Heading, Text } from "@chakra-ui/react"
 
 interface CommitteeProps {
   committee: Committee
@@ -28,36 +29,45 @@ const CommitteePage = ({ committee, committeeCountries }: CommitteeProps) => {
 
       <div className="container">
         <div className="c-page-heading">
-          <h1 className="c-page-heading__title">{committee.displayname}</h1>
+          <Heading size="3xl" className="c-page-heading__title">
+            {committee.displayname}
+          </Heading>
 
-          <p className="c-page-heading__description">
+          <Text className="c-page-heading__description">
             ({committee.difficulty})
-          </p>
+          </Text>
         </div>
       </div>
 
       <div className="page animate">
-        <p>{committee.description}</p>
+        <Text>{committee.description}</Text>
+        <br />
 
-        <h3>Topic 1: {committee.topic1}</h3>
-        <p>{committee.para1}</p>
+        <Heading size="lg">Topic 1: {committee.topic1}</Heading>
+        <Text>{committee.para1}</Text>
+        <br />
 
         {committee.topic2 && (
           <>
-            <h3>Topic 2: {committee.topic2}</h3>
-            <p>{committee.para2}</p>
+            <Heading size="lg">Topic 2: {committee.topic2}</Heading>
+            <Text>{committee.para2}</Text>
           </>
         )}
+        <br />
 
-        <h3>Country matrix</h3>
-        <h4>Beginner ({beginnerCountries.length})</h4>
-        <p>{beginnerCountries.map((c) => c.country).join(", ")}</p>
+        <Heading size="lg">Country matrix</Heading>
+        <Heading size="md">Beginner ({beginnerCountries.length})</Heading>
+        <Text>{beginnerCountries.map((c) => c.country).join(", ")}</Text>
+        <br />
 
-        <h4>Intermediate ({intermediateCountries.length})</h4>
-        <p>{intermediateCountries.map((c) => c.country).join(", ")}</p>
+        <Heading size="md">
+          Intermediate ({intermediateCountries.length})
+        </Heading>
+        <Text>{intermediateCountries.map((c) => c.country).join(", ")}</Text>
+        <br />
 
-        <h4>Advanced ({advancedCountries.length})</h4>
-        <p>{advancedCountries.map((c) => c.country).join(", ")}</p>
+        <Heading size="md">Advanced ({advancedCountries.length})</Heading>
+        <Text>{advancedCountries.map((c) => c.country).join(", ")}</Text>
       </div>
     </div>
   )

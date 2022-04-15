@@ -89,8 +89,8 @@ const Navbar = () => {
                   {page.categoryName}
                 </MenuButton>
                 <MenuList>
-                  {page.pages.map((pg) => (
-                    <MenuItem>
+                  {page.pages.map((pg, i) => (
+                    <MenuItem key={i}>
                       <NextLink href={pg.href}>
                         <Button as="a" variant="ghost">
                           {pg.title}

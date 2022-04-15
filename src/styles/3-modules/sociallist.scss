@@ -5,6 +5,9 @@
 /* Social Links */
 .social {
   text-align: center;
+	ion-icon {
+		padding-bottom: 5px;
+	}
 
   .social__list {
     display: flex;

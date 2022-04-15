@@ -13,7 +13,7 @@ type HeaderProps =
 
 export default ({ title, mainPage }: HeaderProps) => {
   return (
-    <section style={{ zIndex: -1, paddingBottom: mainPage ? "14vh" : "24vh" }}>
+    <div style={{ zIndex: -1, paddingBottom: mainPage ? "14vh" : "24vh" }}>
       <div
         className="bgWrap"
         style={{
@@ -42,6 +42,6 @@ export default ({ title, mainPage }: HeaderProps) => {
           <Heading color="white">{title}</Heading>
         )}
       </Center>
-    </section>
+    </div>
   )
 }

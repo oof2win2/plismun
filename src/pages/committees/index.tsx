@@ -8,17 +8,14 @@ import React from "react"
 import ENV from "@/utils/env"
 import Link from "next/link"
 import Image from "next/image"
+import { Heading, Text } from "@chakra-ui/react"
 
 interface CommitteesProps {
   committees: Committee[]
-  // committeeCountries: CommitteeCountries[]
-  // chairs: CommitteeMember[]
 }
 
 interface SingleCommitteeProps {
   committee: Committee
-  // committeeCountries: CommitteeCountries[]
-  // chairs: CommitteeMember[]
 }
 
 const Committee = ({ committee }: SingleCommitteeProps) => {
@@ -32,10 +29,12 @@ const Committee = ({ committee }: SingleCommitteeProps) => {
         </Link>
         <div className="c-project-card__info">
           <div className="c-project-card__info-wrap">
-            <h3 className="c-project-card__title-shown">
+            <Heading size="lg" className="c-project-card__title-shown">
               {committee.displayname}
-            </h3>
-            <p className="c-project-card__subtitle">({committee.difficulty})</p>
+            </Heading>
+            <Text className="c-project-card__subtitle">
+              ({committee.difficulty})
+            </Text>
           </div>
         </div>
       </div>

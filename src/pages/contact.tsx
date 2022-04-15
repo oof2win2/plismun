@@ -1,4 +1,5 @@
 import Header from "@/components/header"
+import { Heading, Text } from "@chakra-ui/react"
 import React from "react"
 
 export default function About() {
@@ -20,7 +21,7 @@ export default function About() {
                 >
                   <ion-icon name="logo-twitter" />
                 </a>
-                <p style={{ fontSize: 16 }}>@plismun</p>
+                <Text>@plismun</Text>
               </li>
 
               <li className="social__item">
@@ -33,7 +34,7 @@ export default function About() {
                 >
                   <ion-icon name="logo-instagram" />
                 </a>
-                <p style={{ fontSize: 16 }}>@plismun</p>
+                <Text>@plismun</Text>
               </li>
 
               <li className="social__item">
@@ -46,7 +47,7 @@ export default function About() {
                 >
                   <ion-icon name="logo-facebook" />
                 </a>
-                <p style={{ fontSize: 16 }}>@Plismunofficial</p>
+                <Text>@Plismunofficial</Text>
               </li>
 
               <li className="social__item">
@@ -59,23 +60,28 @@ export default function About() {
                 >
                   <ion-icon name="mail" />
                 </a>
-                <p style={{ fontSize: 16 }}>secretariat@plismun.com</p>
+                <Text>secretariat@plismun.com</Text>
               </li>
             </ul>
           </div>
+
+          <br />
 
           <div className="c-contact-form" id="contact">
             <div className="container">
               <div className="row">
                 <div className="col col-12">
                   <div className="c-contact-form__contact-head">
-                    <h2 className="c-contact-form__contact-title">
+                    <Heading
+                      size="2xl"
+                      className="c-contact-form__contact-title"
+                    >
                       Get in touch
-                    </h2>
-                    <p className="c-contact-form__contact-description">
+                    </Heading>
+                    <Text className="c-contact-form__contact-description">
                       Any inquiries? Please fill out the form below and we will
                       respond as soon as possible.
-                    </p>
+                    </Text>
 
                     <form
                       action=""

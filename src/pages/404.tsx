@@ -1,8 +1,8 @@
 import React from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import Image from "next/image"
 import Header from "@/components/header"
+import { Heading } from "@chakra-ui/react"
 
 export default function Home() {
   const router = useRouter()
@@ -12,15 +12,17 @@ export default function Home() {
       <div className="container">
         <div className="page animate">
           <Header title="404 - Page not found" />
-          <h1>Sorry, but the page you are looking for was not found</h1>
-          <h2>
+          <Heading>
+            Sorry, but the page you are looking for was not found
+          </Heading>
+          <Heading size="md">
             You can go to the{" "}
             <Link href="/">
               <a>homepage</a>
             </Link>{" "}
             , try going <a onClick={() => router.back()}>back</a>, or try{" "}
             <a onClick={() => router.reload()}>reloading</a>.
-          </h2>
+          </Heading>
         </div>
       </div>
     </div>
