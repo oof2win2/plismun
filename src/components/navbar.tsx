@@ -77,9 +77,9 @@ const Navbar = () => {
       <Flex position={"absolute"} top="1rem" right="1rem" align="center">
         {/* Desktop */}
         <Flex display={["none", "none", "flex", "flex"]}>
-          {pages.map((page) =>
+          {pages.map((page, i) =>
             page.type === "category" ? (
-              <Menu>
+              <Menu key={i}>
                 <MenuButton
                   as={Button}
                   rightIcon={<ChevronDownIcon />}
@@ -101,7 +101,7 @@ const Navbar = () => {
                 </MenuList>
               </Menu>
             ) : (
-              <NextLink href={page.href}>
+              <NextLink href={page.href} key={i}>
                 <Button as="a" variant="ghost" my={5}>
                   {page.title}
                 </Button>
@@ -164,9 +164,9 @@ const Navbar = () => {
         </Flex>
 
         <Flex flexDir="column" align="center">
-          {pages.map((page) =>
+          {pages.map((page, i) =>
             page.type === "category" ? (
-              <Menu>
+              <Menu key={i}>
                 <MenuButton
                   as={Button}
                   rightIcon={<ChevronDownIcon />}
@@ -176,8 +176,8 @@ const Navbar = () => {
                   {page.categoryName}
                 </MenuButton>
                 <MenuList>
-                  {page.pages.map((pg) => (
-                    <MenuItem>
+                  {page.pages.map((pg, i) => (
+                    <MenuItem key={i}>
                       <NextLink href={pg.href}>
                         <Button
                           as="a"
@@ -194,7 +194,7 @@ const Navbar = () => {
                 </MenuList>
               </Menu>
             ) : (
-              <NextLink href={page.href}>
+              <NextLink href={page.href} key={i}>
                 <Button
                   as="a"
                   variant="ghost"

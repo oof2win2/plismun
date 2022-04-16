@@ -100,24 +100,42 @@ export const SessionData = z.object({
 })
 export type SessionDataType = z.infer<typeof SessionData>
 
+export const DietaryOptions = z.enum([
+  "None",
+  "Vegetarian",
+  "Vegan",
+  "Other (please specify below)",
+])
+
 export const SignupSchema = z
   .object({
     email: z.string().email(),
     password: z.string().min(8, "Password must be at least 8 characters"),
     passwordConfirm: z.string(),
 
-    firstname: z.string(),
-    lastname: z.string(),
+    firstname: z.string().min(1, "Please enter first name"),
+    lastname: z.string().min(1, "Please enter last name"),
 
-    phone: z.string().nullable(),
-    birthdate: z
+    phone: z
       .string()
-      .refine((date) => validator.isISO8601(date))
-      .transform((x) => new Date(x)),
-    nationality: z.string(),
-    gender: z.string().nullable(),
+      .nullable()
+      // validate if it is a mobile phone number if present
+      .refine(
+        (phone) => (phone ? validator.isMobilePhone(phone) : true),
+        "Invalid phone number"
+      )
+      .transform((phone) => phone || null),
+    birthdate: z.union([
+      z
+        .string()
+        .default(() => new Date().toISOString())
+        .transform((x) => new Date(x)),
+      z.date(),
+    ]),
+    nationality: z.string().refine((nat) => validator.isISO31661Alpha2(nat)),
     schoolname: z.string().nullable(),
-    dietary: z.string().nullable(),
+    dietary: DietaryOptions.nullable(),
+    otherInfo: z.string().max(400).nullable(),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.passwordConfirm) {

@@ -28,6 +28,8 @@ export default function About() {
             will never forget!
           </Text>
 
+          <br />
+
           <Heading size="xl">OUR MISSION</Heading>
           <Text>
             PLISMUN is proudly hosted by Park Lane International school and we
@@ -35,6 +37,9 @@ export default function About() {
             'preparing the young people of today for the unknown occupations of
             tomorrow.'
           </Text>
+
+          <br />
+
           <Text>
             With this in mind, we have set ourselves six key goals which we aim
             to achieve:

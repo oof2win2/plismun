@@ -13,7 +13,7 @@ type HeaderProps =
 
 export default ({ title, mainPage }: HeaderProps) => {
   return (
-    <div style={{ zIndex: -1, paddingBottom: mainPage ? "14vh" : "24vh" }}>
+    <div style={{ zIndex: -1, paddingBottom: mainPage ? "18vh" : "24vh" }}>
       <div
         className="bgWrap"
         style={{

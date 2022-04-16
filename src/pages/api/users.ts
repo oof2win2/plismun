@@ -5,20 +5,13 @@ import { User } from "@prisma/client"
 
 type UserResponse = ApiResponse<User[]>
 
-// export default async function handler(
-//   req: NextApiRequest,
-//   res: NextApiResponse<UserResponse>
-// ) {
-//   const users = await db.user.findMany()
-//   return res.send({
-//     status: "success",
-//     data: users,
-//   })
-// }
-
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<null>
+  res: NextApiResponse<UserResponse>
 ) {
-  res.end()
+  const users = await db.user.findMany()
+  return res.send({
+    status: "success",
+    data: users,
+  })
 }

@@ -18,6 +18,8 @@ export default function About() {
             Conditions.
           </Text>
 
+          <br />
+
           <Heading size="lg">1. PARTICIPANT DUTIES</Heading>
           <Text>By applying for a participating position, you agree to:</Text>
           <ol type="a">
@@ -107,6 +109,8 @@ export default function About() {
             </li>
           </ol>
 
+          <br />
+
           <Heading size="lg">3. PAYMENT</Heading>
           <ol type="a">
             <li>
@@ -121,6 +125,8 @@ export default function About() {
               </Text>
             </li>
           </ol>
+
+          <br />
 
           <Heading size="lg">4. CONTENT OWNERSHIP</Heading>
           <p>By applying to and participating in PLISMUN, you agree to:</p>
@@ -159,6 +165,8 @@ export default function About() {
             </ol>
           </ol>
 
+          <br />
+
           <Heading size="lg">5. DATA PRIVACY</Heading>
           <p>
             By using this website, as well as registering and applying to the
@@ -168,6 +176,8 @@ export default function About() {
             </Link>
             , including use of cookies for analytical purposes.
           </p>
+
+          <br />
 
           <Heading size="lg">6. LAW</Heading>
           <Text>

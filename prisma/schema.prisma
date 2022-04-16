@@ -31,6 +31,8 @@ model User {
 
   createdAt DateTime @default(now())
 
+  otherInfo String? // other info about the user
+
   @@map("users")
 }
 

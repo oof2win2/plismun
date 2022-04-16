@@ -199,39 +199,39 @@ hr {
   overflow-x: auto;
 }
 
-table {
-  font-size: 12px;
-  color: $text-color;
-  width: 100%;
-  border-width: 1px;
-  border-color: $text-color;
-  border-collapse: collapse;
-  color: var(--heading-font-color);
-}
+// table {
+//   font-size: 12px;
+//   color: $text-color;
+//   width: 100%;
+//   border-width: 1px;
+//   border-color: $text-color;
+//   border-collapse: collapse;
+//   color: var(--heading-font-color);
+// }
 
-table th {
-  padding: 10px;
-  font-size: 16px;
-  text-align: left;
-  border: 1px solid $text-color;
-  color: $white;
-  font-weight: 700;
-  background-color: $text-color;
-}
+// table th {
+//   padding: 10px;
+//   font-size: 16px;
+//   text-align: left;
+//   border: 1px solid $text-color;
+//   color: $white;
+//   font-weight: 700;
+//   background-color: $text-color;
+// }
 
-table tr {
-  background-color: $tr-color;
-  transition: all .3s ease;
-  &:nth-child(even) {
-    background-color: transparent;
-  }
-}
+// table tr {
+//   background-color: $tr-color;
+//   transition: all .3s ease;
+//   &:nth-child(even) {
+//     background-color: transparent;
+//   }
+// }
 
-table td {
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid $text-color;
-}
+// table td {
+//   padding: 10px;
+//   font-size: 14px;
+//   border: 1px solid $text-color;
+// }
 
 .lazy {
   opacity: 0;

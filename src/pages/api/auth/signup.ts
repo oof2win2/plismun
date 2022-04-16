@@ -64,9 +64,12 @@ export default async function handler(
     })
   }
 
+  const dataWithoutConfirm = Object.assign({}, parsed.data)
+  // @ts-ignore
+  delete dataWithoutConfirm.passwordConfirm
   const user = await db.user.create({
     data: {
-      ...parsed.data,
+      ...dataWithoutConfirm,
       password: hashedPassword,
     },
   })
