@@ -19,6 +19,7 @@ export default ({ title, mainPage }: HeaderProps) => {
         style={{
           zIndex: -1,
           height: mainPage ? "70vh" : "40vh",
+          width: "100%",
         }}
       >
         <Image

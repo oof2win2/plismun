@@ -1,0 +1,10 @@
+.chakra-container {
+	a {
+		font-weight: 500;
+		border-bottom: 1px solid $border-color;
+	
+		&:hover {
+			border-bottom-color: $link-color-hover;
+		}
+	}
+}

@@ -4,6 +4,7 @@ import { login } from "@/utils/redux/parts/user"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
+import { Center, Container, Heading, Text } from "@chakra-ui/react"
 
 export default function About() {
   const router = useRouter()
@@ -69,82 +70,79 @@ export default function About() {
   }
 
   return (
-    <div className="c-page">
-      <div className="container">
-        <div className="page animate">
-          <Header title="LOGIN" />
+    <Container maxW="90ch">
+      <Header title="LOGIN" />
 
-          {!wasSuccess && (
-            <div className="row" style={{ justifyContent: "center" }}>
-              <p>
-                Don't have an account?{" "}
-                <Link href="/user/signup">
-                  <a>Sign up</a>
-                </Link>
-              </p>
-            </div>
-          )}
+      {!wasSuccess && (
+        <Center>
+          <Text>
+            Don't have an account?{" "}
+            <Link href="/user/signup">
+              <a>Sign up</a>
+            </Link>
+          </Text>
+        </Center>
+      )}
 
-          <div className="row" style={{ justifyContent: "center" }}>
-            {wasSuccess && (
-              <h2>
-                Success logging in, you will be redirected to the homepage soon
-              </h2>
-            )}
-            {loading && <h2>Loading...</h2>}
-            {error && <h2>{error}</h2>}
-            {!wasSuccess && (
-              <div
-                className="col col-8"
-                style={{ display: "flex", justifyContent: "center" }}
-              >
-                {!loading && (
-                  <form className="c-contact-form__form" onSubmit={loginForm}>
-                    <div className="c-contact-form__form-group">
-                      <label
-                        className="c-contact-form__form-label screen-reader-text"
-                        htmlFor="form-name"
-                      >
-                        Your Name
-                      </label>
-                      <input
-                        className="c-contact-form__form-input"
-                        name="email"
-                        placeholder="Your email..."
-                        required={true}
-                        type="email"
-                      />
-                    </div>
-                    <div className="c-contact-form__form-group">
-                      <label
-                        className="c-contact-form__form-label screen-reader-text"
-                        htmlFor="form-email"
-                      >
-                        Your Email
-                      </label>
-                      <input
-                        className="c-contact-form__form-input"
-                        name="password"
-                        placeholder="Your password..."
-                        required={true}
-                        type="password"
-                      />
-                    </div>
-                    <div className="c-contact-form__form-group c-contact-form__form-group--button">
-                      <button
-                        className="c-button c-button--primary c-button--large"
-                        type="submit"
-                      >
-                        Log in
-                      </button>
-                    </div>
-                  </form>
-                )}
-              </div>
+      <Center>
+        {wasSuccess && (
+          <Heading>
+            Success logging in, you will be redirected to the homepage soon
+          </Heading>
+        )}
+        {loading && <h2>Loading...</h2>}
+        {error && <h2>{error}</h2>}
+        {!wasSuccess && (
+          // TODO: change this form to be like the signup form
+          <div
+            className="col col-8"
+            style={{ display: "flex", justifyContent: "center" }}
+          >
+            {!loading && (
+              <form className="c-contact-form__form" onSubmit={loginForm}>
+                <div className="c-contact-form__form-group">
+                  <label
+                    className="c-contact-form__form-label screen-reader-text"
+                    htmlFor="form-name"
+                  >
+                    Your Name
+                  </label>
+                  <input
+                    className="c-contact-form__form-input"
+                    name="email"
+                    placeholder="Your email..."
+                    required={true}
+                    type="email"
+                  />
+                </div>
+                <div className="c-contact-form__form-group">
+                  <label
+                    className="c-contact-form__form-label screen-reader-text"
+                    htmlFor="form-email"
+                  >
+                    Your Email
+                  </label>
+                  <input
+                    className="c-contact-form__form-input"
+                    name="password"
+                    placeholder="Your password..."
+                    required={true}
+                    type="password"
+                  />
+                </div>
+                <div className="c-contact-form__form-group c-contact-form__form-group--button">
+                  <button
+                    className="c-button c-button--primary c-button--large"
+                    type="submit"
+                  >
+                    Log in
+                  </button>
+                </div>
+              </form>
             )}
           </div>
-        </div>
-      </div>
-    </div>
+        )}
+      </Center>
+    </Container>
   )
 }

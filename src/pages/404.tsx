@@ -2,30 +2,31 @@ import React from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import Header from "@/components/header"
-import { Heading } from "@chakra-ui/react"
+import { Container, Heading, Text } from "@chakra-ui/react"
 
 export default function Home() {
   const router = useRouter()
 
   return (
-    <div className="c-page">
-      <div className="container">
-        <div className="page animate">
-          <Header title="404 - Page not found" />
-          <Heading>
-            Sorry, but the page you are looking for was not found
-          </Heading>
-          <Heading size="md">
-            You can go to the{" "}
-            <Link href="/">
-              <a>homepage</a>
-            </Link>{" "}
-            , try going <a onClick={() => router.back()}>back</a>, or try{" "}
-            <a onClick={() => router.reload()}>reloading</a>.
-          </Heading>
-        </div>
-      </div>
-    </div>
+    <Container maxW="90ch">
+      <Header title="" />
+      <Heading size="4xl">404 - Page not found</Heading>
+      <br />
+      <Heading>Sorry, but the page you are looking for was not found</Heading>
+      <Heading size="md">
+        You can go to the{" "}
+        <Link href="/">
+          <a>homepage</a>
+        </Link>{" "}
+        , try going <a onClick={() => router.back()}>back</a>, or try{" "}
+        <a onClick={() => router.reload()}>reloading</a>.
+      </Heading>
+      <br />
+      <Text>
+        Maybe a dog ate the contents of this page, just like my homework. Nobody
+        ever believes me, but I guess it could be because I don't have a dog
+      </Text>
+    </Container>
   )
 }
 

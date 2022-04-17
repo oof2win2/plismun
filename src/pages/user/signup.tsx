@@ -13,6 +13,7 @@ import {
 import {
   Button,
   Center,
+  Container,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -42,7 +43,9 @@ export default function Signup() {
   const [loading, setLoading] = useState(false)
   const [fetchError, setFetchError] = useState<string | null>(null)
   const [wasSuccess, setSuccess] = useState(false)
-  //
+  // this is to bypass the fact that the form is an uncontrolled form, i.e. the DOM is handling the form itself which is then just validated with JS
+  // otherwise it would render the date once only, which doesn't seem very intuitive
+  // see https://reactjs.org/docs/uncontrolled-components.html
   const [birthdate, setBirthdate] = useState(new Date())
 
   const {
@@ -101,255 +104,248 @@ export default function Signup() {
   }
 
   return (
-    <div className="c-page">
-      <div className="container">
-        <div className="page animate">
-          <Header title="SIGN UP" />
+    <Container maxW="90ch">
+      <Header title="SIGN UP" />
 
-          {!wasSuccess && (
-            <div className="row" style={{ justifyContent: "center" }}>
-              <Text>
-                Already have an account?{" "}
-                <Link href="/user/login">
-                  <a>Log in</a>
-                </Link>
-              </Text>
-            </div>
-          )}
-
-          <br />
-
-          <div className="row" style={{ justifyContent: "center" }}>
-            {wasSuccess && (
-              <>
-                <Heading>
-                  Success signing up, please verify your email address
-                </Heading>
-                <Text>
-                  Please check your spam folder if you don't get an email soon
-                </Text>
-              </>
-            )}
-            {loading && <Heading>Loading...</Heading>}
-            {!loading && fetchError && <Heading>{fetchError}</Heading>}
-            {!wasSuccess && (
-              <div
-                className="col col-8"
-                style={{ display: "flex", justifyContent: "center" }}
-              >
-                <form onSubmit={handleSubmit(signupForm)}>
-                  <FormControl>
-                    <Grid
-                      // make a grid that is 4x6 so that we can fit in the form nicely
-                      height="100%"
-                      templateRows="repeat(7, 0.1fr)"
-                      templateColumns="repeat(6, 1fr)"
-                      gap={4}
-                      style={{ paddingBottom: "4rem" }}
-                    >
-                      {/* First name */}
-                      <GridItem rowSpan={1} colSpan={3}>
-                        <FormLabel>First name</FormLabel>
-                        <Input
-                          {...register("firstname")}
-                          isInvalid={Boolean(errors.firstname)}
-                        />
-                        <FormHelperText>
-                          {errors.firstname?.message}&nbsp;
-                        </FormHelperText>
-                      </GridItem>
-
-                      {/* Last name */}
-                      <GridItem rowSpan={1} colSpan={3}>
-                        <FormLabel>Last name</FormLabel>
-                        <Input
-                          {...register("lastname")}
-                          isInvalid={Boolean(errors.lastname)}
-                        />
-                        <FormHelperText>
-                          {errors.lastname?.message}&nbsp;
-                        </FormHelperText>
-                      </GridItem>
-
-                      {/* Phone number */}
-                      <GridItem rowSpan={1} colSpan={3}>
-                        <FormLabel>Phone number</FormLabel>
-                        <Input
-                          {...register("phone")}
-                          isInvalid={Boolean(errors.phone)}
-                        />
-                        <FormHelperText>
-                          {errors.phone?.message}&nbsp;
-                        </FormHelperText>
-                      </GridItem>
-
-                      {/* School name */}
-                      <GridItem rowSpan={1} colSpan={3}>
-                        <FormLabel>School name</FormLabel>
-                        <Input
-                          {...register("schoolname")}
-                          isInvalid={Boolean(errors.schoolname)}
-                        />
-                        <FormHelperText>
-                          {errors.schoolname?.message}&nbsp;
-                        </FormHelperText>
-                      </GridItem>
-
-                      {/* Email */}
-                      <GridItem rowSpan={1} colSpan={3}>
-                        <FormLabel>Email</FormLabel>
-                        <Input
-                          {...register("email")}
-                          isInvalid={Boolean(errors.email)}
-                        />
-                        <FormHelperText>
-                          {errors.email?.message}&nbsp;
-                        </FormHelperText>
-                      </GridItem>
-
-                      {/* Password */}
-                      <GridItem rowSpan={1} colSpan={3}>
-                        <FormLabel>Password</FormLabel>
-                        <Input
-                          type="password"
-                          {...register("password")}
-                          isInvalid={Boolean(errors.password)}
-                        />
-                        <FormHelperText>
-                          {errors.password?.message}&nbsp;
-                        </FormHelperText>
-                      </GridItem>
-
-                      {/* Dietary */}
-                      <GridItem rowSpan={1} colSpan={3}>
-                        <FormLabel>Dietary</FormLabel>
-                        <AutoComplete
-                          openOnFocus
-                          disableFilter
-                          // when we get the value, map it to the country code
-                          onChange={(value) => setValue("dietary", value)}
-                        >
-                          <AutoCompleteInput variant="outline" />
-                          <AutoCompleteList>
-                            {DietaryOptions.options.map((dietName, i) => (
-                              <AutoCompleteItem value={dietName} key={i}>
-                                {dietName}
-                              </AutoCompleteItem>
-                            ))}
-                          </AutoCompleteList>
-                        </AutoComplete>
-                        <FormHelperText>
-                          {errors.dietary?.message}&nbsp;
-                        </FormHelperText>
-                      </GridItem>
-
-                      {/* Confirm password */}
-                      <GridItem rowSpan={1} colSpan={3}>
-                        <FormLabel>Confirm password</FormLabel>
-                        <Input
-                          type="password"
-                          {...register("passwordConfirm")}
-                          isInvalid={Boolean(errors.passwordConfirm)}
-                        />
-                        <FormHelperText>
-                          {errors.passwordConfirm?.message}&nbsp;
-                        </FormHelperText>
-                      </GridItem>
-
-                      {/* Birthdate */}
-                      <GridItem
-                        rowSpan={1}
-                        colSpan={2}
-                        css={`
-                          --rdp-cell-size: 2rem;
-                          --rdp-accent-color: var(--chakra-colors-blue-500);
-                          --rdp-background-color: var(--chakra-colors-blue-200);
-                        `}
-                      >
-                        <FormLabel>Birthdate</FormLabel>
-                        <Popover>
-                          <PopoverTrigger>
-                            <Input readOnly value={format(birthdate, "PP")} />
-                          </PopoverTrigger>
-                          <PopoverContent>
-                            <DayPicker
-                              mode="single"
-                              selected={getValues("birthdate")}
-                              onSelect={(date = new Date()) => {
-                                setValue("birthdate", date)
-                                setBirthdate(date)
-                              }}
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormHelperText>
-                          {errors.birthdate?.message}&nbsp;
-                        </FormHelperText>
-                      </GridItem>
-
-                      {/* Nationality */}
-                      <GridItem rowSpan={1} colSpan={4}>
-                        <FormLabel>Nationality</FormLabel>
-                        <AutoComplete
-                          openOnFocus
-                          // when we get the value, map it to the country code
-                          onChange={(value) =>
-                            setValue(
-                              "nationality",
-                              countryList.getCode(value) || "None"
-                            )
-                          }
-                        >
-                          <AutoCompleteInput variant="outline" />
-                          <AutoCompleteList>
-                            {countryList
-                              .getData()
-                              // sort the country names alphabetically
-                              .sort((a, b) => {
-                                const an = a.name,
-                                  bn = b.name
-                                if (an < bn) return -1
-                                if (an > bn) return 1
-                                return 0
-                              })
-                              .map((country, i) => (
-                                <AutoCompleteItem value={country.name} key={i}>
-                                  {country.name}
-                                </AutoCompleteItem>
-                              ))}
-                          </AutoCompleteList>
-                        </AutoComplete>
-                        <FormHelperText>
-                          {errors.nationality?.message}&nbsp;
-                        </FormHelperText>
-                      </GridItem>
-
-                      {/* Other info (big textbox) */}
-                      <GridItem rowSpan={2} colSpan={6}>
-                        <FormLabel>Other information</FormLabel>
-                        <Textarea {...register("otherInfo")} />
-                      </GridItem>
-
-                      <GridItem rowSpan={1} colSpan={3}></GridItem>
-                    </Grid>
-
-                    <Center>
-                      <Button
-                        colorScheme="cyan"
-                        variant="outline"
-                        size="lg"
-                        type="submit"
-                      >
-                        Sign up
-                      </Button>
-                    </Center>
-                  </FormControl>
-                </form>
-              </div>
-            )}
-          </div>
+      {!wasSuccess && (
+        <div className="row" style={{ justifyContent: "center" }}>
+          <Text>
+            Already have an account?{" "}
+            <Link href="/user/login">
+              <a>Log in</a>
+            </Link>
+          </Text>
         </div>
-      </div>
-    </div>
+      )}
+
+      <br />
+
+      <Center>
+        {wasSuccess && (
+          <>
+            <Heading>
+              Success signing up, please verify your email address
+            </Heading>
+            <Text>
+              Please check your spam folder if you don't get an email soon
+            </Text>
+          </>
+        )}
+        {loading && <Heading>Loading...</Heading>}
+        {!loading && fetchError && <Heading>{fetchError}</Heading>}
+        {!wasSuccess && (
+          <Center>
+            <form onSubmit={handleSubmit(signupForm)}>
+              <FormControl>
+                <Grid
+                  // make a grid that is 4x6 so that we can fit in the form nicely
+                  height="100%"
+                  templateRows="repeat(7, 0.1fr)"
+                  templateColumns="repeat(6, 1fr)"
+                  gap={4}
+                  style={{ paddingBottom: "4rem" }}
+                >
+                  {/* First name */}
+                  <GridItem rowSpan={1} colSpan={3}>
+                    <FormLabel>First name</FormLabel>
+                    <Input
+                      {...register("firstname")}
+                      isInvalid={Boolean(errors.firstname)}
+                    />
+                    <FormHelperText>
+                      {errors.firstname?.message}&nbsp;
+                    </FormHelperText>
+                  </GridItem>
+
+                  {/* Last name */}
+                  <GridItem rowSpan={1} colSpan={3}>
+                    <FormLabel>Last name</FormLabel>
+                    <Input
+                      {...register("lastname")}
+                      isInvalid={Boolean(errors.lastname)}
+                    />
+                    <FormHelperText>
+                      {errors.lastname?.message}&nbsp;
+                    </FormHelperText>
+                  </GridItem>
+
+                  {/* Phone number */}
+                  <GridItem rowSpan={1} colSpan={3}>
+                    <FormLabel>Phone number</FormLabel>
+                    <Input
+                      {...register("phone")}
+                      isInvalid={Boolean(errors.phone)}
+                    />
+                    <FormHelperText>
+                      {errors.phone?.message}&nbsp;
+                    </FormHelperText>
+                  </GridItem>
+
+                  {/* School name */}
+                  <GridItem rowSpan={1} colSpan={3}>
+                    <FormLabel>School name</FormLabel>
+                    <Input
+                      {...register("schoolname")}
+                      isInvalid={Boolean(errors.schoolname)}
+                    />
+                    <FormHelperText>
+                      {errors.schoolname?.message}&nbsp;
+                    </FormHelperText>
+                  </GridItem>
+
+                  {/* Email */}
+                  <GridItem rowSpan={1} colSpan={3}>
+                    <FormLabel>Email</FormLabel>
+                    <Input
+                      {...register("email")}
+                      isInvalid={Boolean(errors.email)}
+                    />
+                    <FormHelperText>
+                      {errors.email?.message}&nbsp;
+                    </FormHelperText>
+                  </GridItem>
+
+                  {/* Password */}
+                  <GridItem rowSpan={1} colSpan={3}>
+                    <FormLabel>Password</FormLabel>
+                    <Input
+                      type="password"
+                      {...register("password")}
+                      isInvalid={Boolean(errors.password)}
+                    />
+                    <FormHelperText>
+                      {errors.password?.message}&nbsp;
+                    </FormHelperText>
+                  </GridItem>
+
+                  {/* Dietary */}
+                  <GridItem rowSpan={1} colSpan={3}>
+                    <FormLabel>Dietary</FormLabel>
+                    <AutoComplete
+                      openOnFocus
+                      disableFilter
+                      // when we get the value, map it to the country code
+                      onChange={(value) => setValue("dietary", value)}
+                    >
+                      <AutoCompleteInput variant="outline" />
+                      <AutoCompleteList>
+                        {DietaryOptions.options.map((dietName, i) => (
+                          <AutoCompleteItem value={dietName} key={i}>
+                            {dietName}
+                          </AutoCompleteItem>
+                        ))}
+                      </AutoCompleteList>
+                    </AutoComplete>
+                    <FormHelperText>
+                      {errors.dietary?.message}&nbsp;
+                    </FormHelperText>
+                  </GridItem>
+
+                  {/* Confirm password */}
+                  <GridItem rowSpan={1} colSpan={3}>
+                    <FormLabel>Confirm password</FormLabel>
+                    <Input
+                      type="password"
+                      {...register("passwordConfirm")}
+                      isInvalid={Boolean(errors.passwordConfirm)}
+                    />
+                    <FormHelperText>
+                      {errors.passwordConfirm?.message}&nbsp;
+                    </FormHelperText>
+                  </GridItem>
+
+                  {/* Birthdate */}
+                  <GridItem
+                    rowSpan={1}
+                    colSpan={2}
+                    css={`
+                      --rdp-cell-size: 2rem;
+                      --rdp-accent-color: var(--chakra-colors-blue-500);
+                      --rdp-background-color: var(--chakra-colors-blue-200);
+                    `}
+                  >
+                    <FormLabel>Birthdate</FormLabel>
+                    <Popover>
+                      <PopoverTrigger>
+                        <Input readOnly value={format(birthdate, "PP")} />
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <DayPicker
+                          mode="single"
+                          selected={getValues("birthdate")}
+                          onSelect={(date = new Date()) => {
+                            setValue("birthdate", date)
+                            setBirthdate(date)
+                          }}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormHelperText>
+                      {errors.birthdate?.message}&nbsp;
+                    </FormHelperText>
+                  </GridItem>
+
+                  {/* Nationality */}
+                  <GridItem rowSpan={1} colSpan={4}>
+                    <FormLabel>Nationality</FormLabel>
+                    <AutoComplete
+                      openOnFocus
+                      // when we get the value, map it to the country code
+                      onChange={(value) =>
+                        setValue(
+                          "nationality",
+                          countryList.getCode(value) || "None"
+                        )
+                      }
+                    >
+                      <AutoCompleteInput variant="outline" />
+                      <AutoCompleteList>
+                        {countryList
+                          .getData()
+                          // sort the country names alphabetically
+                          .sort((a, b) => {
+                            const an = a.name,
+                              bn = b.name
+                            if (an < bn) return -1
+                            if (an > bn) return 1
+                            return 0
+                          })
+                          .map((country, i) => (
+                            <AutoCompleteItem value={country.name} key={i}>
+                              {country.name}
+                            </AutoCompleteItem>
+                          ))}
+                      </AutoCompleteList>
+                    </AutoComplete>
+                    <FormHelperText>
+                      {errors.nationality?.message}&nbsp;
+                    </FormHelperText>
+                  </GridItem>
+
+                  {/* Other info (big textbox) */}
+                  <GridItem rowSpan={2} colSpan={6}>
+                    <FormLabel>Other information</FormLabel>
+                    <Textarea {...register("otherInfo")} />
+                  </GridItem>
+
+                  <GridItem rowSpan={1} colSpan={3}></GridItem>
+                </Grid>
+
+                <Center>
+                  <Button
+                    colorScheme="cyan"
+                    variant="outline"
+                    size="lg"
+                    type="submit"
+                  >
+                    Sign up
+                  </Button>
+                </Center>
+              </FormControl>
+            </form>
+          </Center>
+        )}
+      </Center>
+    </Container>
   )
 }

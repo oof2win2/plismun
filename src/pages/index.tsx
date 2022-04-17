@@ -2,36 +2,31 @@ import React, { useEffect } from "react"
 import Image from "next/image"
 // import { ParagraphTypography } from "@/utils/styles"
 import Header from "@/components/header"
-import { Center, Text } from "@chakra-ui/react"
+import { Center, Container, Text } from "@chakra-ui/react"
 
 export default function Home() {
   return (
-    <div className="c-page">
+    <Container maxW="90ch">
       <Header mainPage />
-
-      <div className="container">
-        <div className="page animate">
-          <Text>
-            Park Lane International School Model United Nations, or PLISMUN for
-            short, is a conference where students aged 13 - 18 discuss topics of
-            global importance by representing countries in a simulation of
-            select committees of the United Nations. Delegations from schools
-            anywhere in the world are invited to participate.
-          </Text>
-          <br />
-          <Text>
-            The conference takes place in-person and is managed by a completely
-            student-led team. January 2023 will mark the sixth annual edition of
-            PLISMUN - and by no means the last!
-          </Text>
-          <br />
-          <Text>
-            9 committees in PLISMUN '23 means that first-time MUN debutants and
-            seasoned debating veterans alike will find their place.
-          </Text>
-        </div>
-      </div>
-    </div>
+      <Text>
+        Park Lane International School Model United Nations, or PLISMUN for
+        short, is a conference where students aged 13 - 18 discuss topics of
+        global importance by representing countries in a simulation of select
+        committees of the United Nations. Delegations from schools anywhere in
+        the world are invited to participate.
+      </Text>
+      <br />
+      <Text>
+        The conference takes place in-person and is managed by a completely
+        student-led team. January 2023 will mark the sixth annual edition of
+        PLISMUN - and by no means the last!
+      </Text>
+      <br />
+      <Text>
+        9 committees in PLISMUN '23 means that first-time MUN debutants and
+        seasoned debating veterans alike will find their place.
+      </Text>
+    </Container>
   )
 }
 

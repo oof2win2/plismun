@@ -3,31 +3,42 @@ import { useRouter } from "next/router"
 import Link from "next/link"
 import Image from "next/image"
 import Header from "@/components/header"
-import { Heading } from "@chakra-ui/react"
+import { Container, Heading, Text } from "@chakra-ui/react"
 
 export default function Home() {
   const router = useRouter()
 
   return (
-    <div className="c-page">
-      <div className="container">
-        <div className="page animate">
-          <Header title="500 - Server error occured" />
-          <Heading>
-            Sorry, but the server encountered an error whilst processing your
-            request
-          </Heading>
-          <Heading size="md">
-            You can go to the{" "}
-            <Link href="/">
-              <a>homepage</a>
-            </Link>{" "}
-            , try going <a onClick={() => router.back()}>back</a>, or try{" "}
-            <a onClick={() => router.reload()}>reloading</a>.
-          </Heading>
-        </div>
-      </div>
-    </div>
+    <Container maxW="90ch">
+      <Header title="" />
+
+      <Heading size="4xl" maxW="100vw">
+        Server error occured
+      </Heading>
+
+      <br />
+
+      <Heading>
+        Sorry, but the server encountered an error whilst processing your
+        request
+      </Heading>
+      <Heading size="md">
+        You can go to the{" "}
+        <Link href="/">
+          <a>homepage</a>
+        </Link>{" "}
+        , try going <a onClick={() => router.back()}>back</a>, or try{" "}
+        <a onClick={() => router.reload()}>reloading</a>.
+      </Heading>
+
+      <br />
+
+      <Text>
+        I guess the dog ran away with the homework before it was handed out. And
+        I <i>still</i> don't have a dog. Though bernese mountain dogs look{" "}
+        <i>so</i> adorable
+      </Text>
+    </Container>
   )
 }
 

@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks"
 import { logout } from "@/utils/redux/parts/user"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
+import { Center, Container, Heading } from "@chakra-ui/react"
 
 export default function About() {
   const router = useRouter()
@@ -53,28 +54,20 @@ export default function About() {
   }, [])
 
   return (
-    <div className="c-page">
-      <div className="container">
-        <div className="page animate">
-          <Header title="LOGOUT" />
+    <Container maxW="90ch">
+      <Header title="LOGOUT" />
 
-          <div className="row" style={{ justifyContent: "center" }}>
-            <div
-              className="col col-8"
-              style={{ display: "flex", justifyContent: "center" }}
-            >
-              {loading && <h2 style={{ width: "min-content" }}>Loading...</h2>}
-              {error && <h2 style={{ width: "min-content" }}>{error}</h2>}
-              {!loading && !error && (
-                <h2>
-                  Success logging out, you will be redirected to the homepage
-                  soon
-                </h2>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <Center maxW="90ch">
+        {loading && (
+          <Heading style={{ width: "min-content" }}>Loading...</Heading>
+        )}
+        {error && <Heading style={{ width: "min-content" }}>{error}</Heading>}
+        {!loading && !error && (
+          <Heading>
+            Success logging out, you will be redirected to the homepage soon
+          </Heading>
+        )}
+      </Center>
+    </Container>
   )
 }
