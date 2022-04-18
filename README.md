@@ -18,12 +18,20 @@ Prerequisites: - [Node.js](https://nodejs.org/en/)
 6. Run the development server
    `npm run dev`
 
-
 Using base SCSS from [CloudCannon/vonge-jekyll-bookshop-template](https://github.com/CloudCannon/vonge-jekyll-bookshop-template)
 
 ## TODO
--	Improve all status codes and error handling
--	Implement CSRF protection
+
+- [ ] use Formik for handling forms (potentially)
+- [ ] reduce amount of custom SCSS to minimum
+- [ ] Use chakra components to replace all complicated div structures etc.
+- [ ] Completely remove mui
+- [ ] Improve 404 and 500 pages to take up whole page
+- [ ] Add navbar pages for user stuff (login, logout, signup, apply)
+- [ ] Create modification of own account for users (phone number, email, etc.)
+- [ ] Implement signup emails
+- Improve all status codes and error handling
+- Implement CSRF protection
 - Send an email to users to verify their accounts before the accounts are actually created to prevent spam
 - Email verification of applications
 - Check that a user applying to delegate is not applied to chair
