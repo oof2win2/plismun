@@ -9,7 +9,7 @@ export default function Home() {
   const router = useRouter()
 
   return (
-    <Container maxW="90ch">
+    <Container maxW="110ch">
       <Header title="" />
 
       <Heading size="4xl" maxW="100vw">

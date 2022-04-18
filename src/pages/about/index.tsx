@@ -4,7 +4,7 @@ import React from "react"
 
 export default function About() {
   return (
-    <Container maxW="90ch">
+    <Container maxW="110ch">
       <Header title="ABOUT PLISMUN" />
       <Text>
         With pride, we present to you the fifth annual Model United Nations

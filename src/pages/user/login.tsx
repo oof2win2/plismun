@@ -68,7 +68,6 @@ export default function About() {
             setError("An unknown error occured")
         }
       } else {
-        console.log(data)
         if (data.status === "success") {
           // data.data is the user object
           dispatch(login(data.data))
@@ -88,7 +87,7 @@ export default function About() {
   }
 
   return (
-    <Container maxW="90ch">
+    <Container maxW="110ch">
       <Header title="LOGIN" />
 
       {!wasSuccess && (

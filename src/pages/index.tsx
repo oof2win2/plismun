@@ -6,7 +6,7 @@ import { Center, Container, Text } from "@chakra-ui/react"
 
 export default function Home() {
   return (
-    <Container maxW="90ch">
+    <Container maxW="110ch">
       <Header mainPage />
       <Text>
         Park Lane International School Model United Nations, or PLISMUN for

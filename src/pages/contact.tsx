@@ -4,7 +4,7 @@ import React from "react"
 
 export default function About() {
   return (
-    <Container maxW="90ch">
+    <Container maxW="110ch">
       <Header title="CONTACT US" />
 
       <div className="big__social">

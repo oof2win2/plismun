@@ -43,6 +43,8 @@ const Committee = ({ committee }: SingleCommitteeProps) => {
 }
 
 export default function ({ committees }: CommitteesProps) {
+  // TODO: convert this to chakra components
+
   return (
     <div className="c-page">
       <div className="container">
@@ -74,6 +76,6 @@ export async function getStaticProps() {
     // re-generate the page's data at most every 24h (60s*60m*24h) ONLY ON PROD
     // re-generates ONLY if a request comes in, it doesn't re-generate the page if no requests come in
     // on dev, regenerate every second so that it is up to date
-    revalidate: ENV.isDev ? 1 : 60 * 60 * 24,
+    revalidate: 60 * 60 * 24,
   }
 }

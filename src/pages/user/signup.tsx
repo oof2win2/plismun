@@ -104,7 +104,7 @@ export default function Signup() {
   }
 
   return (
-    <Container maxW="90ch">
+    <Container maxW="110ch">
       <Header title="SIGN UP" />
 
       {!wasSuccess && (
@@ -120,12 +120,13 @@ export default function Signup() {
 
       <br />
 
-      <Center>
+      <Center maxW="110ch">
         {wasSuccess && (
           <>
             <Heading>
               Success signing up, please verify your email address
             </Heading>
+
             <Text>
               Please check your spam folder if you don't get an email soon
             </Text>
@@ -134,7 +135,7 @@ export default function Signup() {
         {loading && <Heading>Loading...</Heading>}
         {!loading && fetchError && <Heading>{fetchError}</Heading>}
         {!wasSuccess && (
-          <Center>
+          <Center maxW="110ch">
             <form onSubmit={handleSubmit(signupForm)}>
               <FormControl>
                 <Grid
@@ -227,7 +228,10 @@ export default function Signup() {
                       // when we get the value, map it to the country code
                       onChange={(value) => setValue("dietary", value)}
                     >
-                      <AutoCompleteInput variant="outline" />
+                      <AutoCompleteInput
+                        variant="outline"
+                        isInvalid={Boolean(errors.dietary)}
+                      />
                       <AutoCompleteList>
                         {DietaryOptions.options.map((dietName, i) => (
                           <AutoCompleteItem value={dietName} key={i}>
@@ -267,7 +271,11 @@ export default function Signup() {
                     <FormLabel>Birthdate</FormLabel>
                     <Popover>
                       <PopoverTrigger>
-                        <Input readOnly value={format(birthdate, "PP")} />
+                        <Input
+                          readOnly
+                          value={format(birthdate, "PP")}
+                          isInvalid={Boolean(errors.birthdate)}
+                        />
                       </PopoverTrigger>
                       <PopoverContent>
                         <DayPicker
@@ -298,7 +306,10 @@ export default function Signup() {
                         )
                       }
                     >
-                      <AutoCompleteInput variant="outline" />
+                      <AutoCompleteInput
+                        variant="outline"
+                        isInvalid={Boolean(errors.nationality)}
+                      />
                       <AutoCompleteList>
                         {countryList
                           .getData()

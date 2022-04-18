@@ -54,10 +54,10 @@ export default function About() {
   }, [])
 
   return (
-    <Container maxW="90ch">
+    <Container maxW="110ch">
       <Header title="LOGOUT" />
 
-      <Center maxW="90ch">
+      <Center maxW="110ch">
         {loading && (
           <Heading style={{ width: "min-content" }}>Loading...</Heading>
         )}

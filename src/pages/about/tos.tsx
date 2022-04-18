@@ -5,7 +5,7 @@ import React from "react"
 
 export default function About() {
   return (
-    <Container maxW="90ch">
+    <Container maxW="110ch">
       <Header title="TERMS AND CONDITIONS" />
 
       <Text>
