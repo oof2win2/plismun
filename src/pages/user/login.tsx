@@ -4,7 +4,23 @@ import { login } from "@/utils/redux/parts/user"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import { Center, Container, Heading, Text } from "@chakra-ui/react"
+import {
+  Center,
+  Container,
+  FormControl,
+  Heading,
+  Text,
+  Grid,
+  GridItem,
+  Input,
+  Button,
+  FormLabel,
+  FormHelperText,
+  Flex,
+} from "@chakra-ui/react"
+import { LoginSchema } from "@/utils/validators"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 export default function About() {
   const router = useRouter()
@@ -20,20 +36,21 @@ export default function About() {
     if (user) router.push("/")
   }, [])
 
-  const loginForm = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault() // disable page reload
-    const form = event.target as HTMLFormElement
-    const formData = new FormData(form)
-    // get field data as JS variables
-    const email = formData.get("email")
-    const password = formData.get("password")
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<typeof LoginSchema._type>({
+    resolver: zodResolver(LoginSchema),
+  })
 
+  const loginForm = async (form: typeof LoginSchema._type) => {
     // submit a fetch query to login
     setLoading(true)
     try {
       const req = await fetch("/api/auth/login", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(form),
         headers: {
           "Content-Type": "application/json",
         },
@@ -51,6 +68,7 @@ export default function About() {
             setError("An unknown error occured")
         }
       } else {
+        console.log(data)
         if (data.status === "success") {
           // data.data is the user object
           dispatch(login(data.data))
@@ -84,64 +102,61 @@ export default function About() {
         </Center>
       )}
 
+      <br />
+
       <Center>
-        {wasSuccess && (
-          <Heading>
-            Success logging in, you will be redirected to the homepage soon
-          </Heading>
-        )}
-        {loading && <h2>Loading...</h2>}
-        {error && <h2>{error}</h2>}
-        {!wasSuccess && (
-          // TODO: change this form to be like the signup form
-          <div
-            className="col col-8"
-            style={{ display: "flex", justifyContent: "center" }}
-          >
-            {!loading && (
-              <form className="c-contact-form__form" onSubmit={loginForm}>
-                <div className="c-contact-form__form-group">
-                  <label
-                    className="c-contact-form__form-label screen-reader-text"
-                    htmlFor="form-name"
-                  >
-                    Your Name
-                  </label>
-                  <input
-                    className="c-contact-form__form-input"
-                    name="email"
-                    placeholder="Your email..."
-                    required={true}
-                    type="email"
-                  />
-                </div>
-                <div className="c-contact-form__form-group">
-                  <label
-                    className="c-contact-form__form-label screen-reader-text"
-                    htmlFor="form-email"
-                  >
-                    Your Email
-                  </label>
-                  <input
-                    className="c-contact-form__form-input"
-                    name="password"
-                    placeholder="Your password..."
-                    required={true}
-                    type="password"
-                  />
-                </div>
-                <div className="c-contact-form__form-group c-contact-form__form-group--button">
-                  <button
-                    className="c-button c-button--primary c-button--large"
+        <Flex direction="column" justifyContent="center">
+          {wasSuccess && (
+            <Heading>
+              Success logging in, you will be redirected to the homepage soon
+            </Heading>
+          )}
+          {loading && <Text>Loading...</Text>}
+          {error && <Text>{error}</Text>}
+
+          <br />
+
+          {!wasSuccess && (
+            <form onSubmit={handleSubmit(loginForm)}>
+              <FormControl>
+                <Grid
+                  height="100%"
+                  templateColumns="repeat(1, 1fr)"
+                  templateRows="repeat(2, 1fr)"
+                  width="30vw"
+                  gap={4}
+                >
+                  <GridItem rowSpan={1}>
+                    <FormLabel>Email</FormLabel>
+                    <Input {...register("email")} />
+                    <FormHelperText>
+                      {errors.email?.message}&nbsp;
+                    </FormHelperText>
+                  </GridItem>
+
+                  <GridItem rowSpan={1}>
+                    <FormLabel>Password</FormLabel>
+                    <Input type="password" {...register("password")} />
+                    <FormHelperText>
+                      {errors.password?.message}&nbsp;
+                    </FormHelperText>
+                  </GridItem>
+                </Grid>
+
+                <Center>
+                  <Button
+                    colorScheme="cyan"
+                    variant="outline"
+                    size="lg"
                     type="submit"
                   >
                     Log in
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        )}
+                  </Button>
+                </Center>
+              </FormControl>
+            </form>
+          )}
+        </Flex>
       </Center>
     </Container>
   )

@@ -148,3 +148,30 @@ export const SignupSchema = z
     return ctx
   })
 export type SignupSchemaType = z.infer<typeof SignupSchema>
+
+export const LoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+})
+
+export const DelegateApply = z.object({
+  userId: z.number(),
+
+  motivation: z
+    .string()
+    .max(800, "Your motivation is too long")
+    .min(10, "Please enter a short motivation"),
+  experience: z
+    .string()
+    .max(800, "Your experience is too long")
+    .min(10, "Please enter a short experience"),
+
+  delegationId: z.number().nullable(), // ID of delegation
+
+  choice1committee: z.number(),
+  choice1country: z.string(),
+  choice2committee: z.number(),
+  choice2country: z.string(),
+  choice3committee: z.number(),
+  choice3country: z.string(),
+})

@@ -108,14 +108,14 @@ export default function Signup() {
       <Header title="SIGN UP" />
 
       {!wasSuccess && (
-        <div className="row" style={{ justifyContent: "center" }}>
+        <Center>
           <Text>
             Already have an account?{" "}
             <Link href="/user/login">
               <a>Log in</a>
             </Link>
           </Text>
-        </div>
+        </Center>
       )}
 
       <br />

@@ -3,15 +3,10 @@
 import { db } from "@/utils/db"
 import { NextApiRequest, NextApiResponse } from "next"
 import type { ApiResponse } from "@/utils/types"
-import { z } from "zod"
+import { LoginSchema } from "@/utils/validators"
 import { User } from "@prisma/client"
 import { checkPassword } from "@/utils/dbUtil"
 import { saveSessionData } from "@/utils/auth"
-
-const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
-})
 
 type CommitteeResponse = ApiResponse<User>
 

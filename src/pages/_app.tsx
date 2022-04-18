@@ -7,9 +7,12 @@ import "../styles/styles.scss"
 import { wrapper } from "@/utils/redux/store"
 import { ChakraProvider } from "@chakra-ui/react"
 import { theme } from "@/utils/styles"
+import { PersistGate } from "redux-persist/integration/react"
+import { useStore } from "react-redux"
 
 function MyApp(props: AppProps) {
   const { Component, pageProps } = props
+  const store = useStore()
 
   return (
     <div>
@@ -17,11 +20,14 @@ function MyApp(props: AppProps) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <title>PLISMUN '23</title>
       </Head>
-      <ChakraProvider theme={theme}>
-        <Navbar />
-        <Component {...pageProps} />
-        <Footer />
-      </ChakraProvider>
+      {/* @ts-expect-error due to the fact that __PERSISTOR is not default and ts will complain */}
+      <PersistGate persistor={store.__PERSISTOR}>
+        <ChakraProvider theme={theme}>
+          <Navbar />
+          <Component {...pageProps} />
+          <Footer />
+        </ChakraProvider>
+      </PersistGate>
     </div>
   )
 }
