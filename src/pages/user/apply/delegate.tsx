@@ -1,4 +1,4 @@
-import React, { useReducer } from "react"
+import React, { useCallback, useEffect, useReducer, useState } from "react"
 import Header from "@/components/header"
 import { useAppSelector } from "@/utils/redux/hooks"
 import {
@@ -19,12 +19,12 @@ import {
 } from "@chakra-ui/react"
 import { Select, OptionBase } from "chakra-react-select"
 import { DelegateApply } from "@/utils/validators"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { useFormik } from "formik"
 import Link from "next/link"
 import { Committee, CommitteeCountries, Delegation } from "@prisma/client"
 import { GetStaticPropsResult } from "next"
 import { db } from "@/utils/db"
+import { useDebouncedCallback } from "use-debounce"
 
 interface DelegateAppProps {
   committees: Committee[]
@@ -47,29 +47,57 @@ export default function Signup({
   delegations,
 }: DelegateAppProps) {
   const { user } = useAppSelector((state) => state.user)
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    getValues,
-    setValue,
-  } = useForm<typeof DelegateApply._type>({
-    resolver: zodResolver(DelegateApply),
-    defaultValues: {
-      // fill in some values
-      delegationId: null,
-      userId: user?.id,
-    },
-  })
 
-  // we use the forceUpdate function so that after changing the values on the committee choices, they will change their disabled states
-  const [_, forceUpdate] = useReducer<(x: number) => number>(
-    (num) => num + 1,
-    0
+  const submitApplication = async (form: DelegateApply) => {
+    console.log({ form })
+  }
+
+  const { setFieldValue, values, handleSubmit, errors } =
+    useFormik<DelegateApply>({
+      initialValues: {
+        userId: user?.id ?? -1,
+        motivation: "",
+        experience: "",
+        delegationId: null,
+        //@ts-expect-error
+        choice1committee: null,
+        choice1country: "",
+        //@ts-expect-error
+        choice2committee: null,
+        choice2country: "",
+        //@ts-expect-error
+        choice3committee: null,
+        choice3country: "",
+      },
+      onSubmit: submitApplication,
+      validate: (values) => {
+        // this function should return errors it finds
+        const results = DelegateApply.safeParse(values)
+        // if success, return an empty object (no errors)
+        if (results.success) return {}
+        // here we need to map the errors to the form fields
+
+        // this is an object of fieldname:list of errors
+        // we can however only have one error at a time, so we need to change that
+        const errors = results.error.flatten().fieldErrors as Partial<
+          Record<keyof DelegateApply, string[]>
+        >
+
+        const newErrors = {}
+        for (const [field, error] of Object.entries(errors)) {
+          // @ts-expect-error
+          newErrors[field] = error[0]
+        }
+
+        return newErrors
+      },
+    })
+
+  // we have this debounced change handler so that the motivation+experience don't get changed on each keystroke, but only after the user stopped typing for 500ms
+  const debouncedHandleChange = useDebouncedCallback(
+    (field: string, value: any) => setFieldValue(field, value),
+    500
   )
-
-  const applyDelegate = (form: typeof DelegateApply._type) => {}
-
   // stuff that is shown when the user is not logged in
   if (!user) {
     return (
@@ -97,7 +125,7 @@ export default function Signup({
   const checkShouldBeDisabled = (committeeId: number, choiceId: number) => {
     const otherChoiceIds = ([1, 2, 3] as const).filter((id) => id !== choiceId)
     const otherChoicesAreSame = otherChoiceIds.map((id) => {
-      const selectedCommitteeId = getValues(`choice${id}committee`) as number
+      const selectedCommitteeId = values[`choice${id}committee`]
       return selectedCommitteeId === committeeId
     })
     if (otherChoicesAreSame.some((isSame) => isSame == true)) return true
@@ -105,21 +133,21 @@ export default function Signup({
   }
 
   const choice1committee =
-    getValues("choice1committee") !== undefined
+    values.choice1committee !== undefined
       ? committees.find(
-          (committee) => committee.id === getValues("choice1committee")
+          (committee) => committee.id === values.choice1committee
         ) || false
       : false
   const choice2committee =
-    getValues("choice2committee") !== undefined
+    values.choice2committee !== undefined
       ? committees.find(
-          (committee) => committee.id === getValues("choice2committee")
+          (committee) => committee.id === values.choice2committee
         ) || false
       : false
   const choice3committee =
-    getValues("choice3committee") !== undefined
+    values.choice3committee !== undefined
       ? committees.find(
-          (committee) => committee.id === getValues("choice3committee")
+          (committee) => committee.id === values.choice3committee
         ) || false
       : false
 
@@ -136,7 +164,7 @@ export default function Signup({
       <br />
 
       {/* application form */}
-      <form onSubmit={handleSubmit(applyDelegate)}>
+      <form onSubmit={handleSubmit}>
         <FormControl>
           {/* committee choices */}
           <Grid
@@ -162,16 +190,13 @@ export default function Signup({
                   placeholder="Select a committee"
                   closeMenuOnSelect
                   selectedOptionColor="green"
-                  onChange={(option) => {
-                    setValue("choice1committee", option?.value ?? -1)
-                    forceUpdate()
-                  }}
+                  onChange={(option) =>
+                    setFieldValue("choice1committee", option?.value ?? -1)
+                  }
                   isInvalid={Boolean(errors.choice1committee)}
                 />
                 {errors.choice1committee ? (
-                  <FormErrorMessage>
-                    {errors.choice1committee.message}
-                  </FormErrorMessage>
+                  <FormErrorMessage>{errors.choice1committee}</FormErrorMessage>
                 ) : (
                   <FormHelperText>
                     Select your first committee choice
@@ -195,16 +220,13 @@ export default function Signup({
                   placeholder="Select a committee"
                   closeMenuOnSelect
                   selectedOptionColor="green"
-                  onChange={(option) => {
-                    setValue("choice2committee", option?.value ?? -1)
-                    forceUpdate()
-                  }}
+                  onChange={(option) =>
+                    setFieldValue("choice2committee", option?.value ?? -1)
+                  }
                   isInvalid={Boolean(errors.choice2committee)}
                 />
                 {errors.choice2committee ? (
-                  <FormErrorMessage>
-                    {errors.choice2committee.message}
-                  </FormErrorMessage>
+                  <FormErrorMessage>{errors.choice2committee}</FormErrorMessage>
                 ) : (
                   <FormHelperText>
                     Select your second committee choice
@@ -228,16 +250,13 @@ export default function Signup({
                   placeholder="Select a committee"
                   closeMenuOnSelect
                   selectedOptionColor="green"
-                  onChange={(option) => {
-                    setValue("choice3committee", option?.value ?? -1)
-                    forceUpdate()
-                  }}
+                  onChange={(option) =>
+                    setFieldValue("choice3committee", option?.value ?? -1)
+                  }
                   isInvalid={Boolean(errors.choice3committee)}
                 />
                 {errors.choice3committee ? (
-                  <FormErrorMessage>
-                    {errors.choice3committee.message}
-                  </FormErrorMessage>
+                  <FormErrorMessage>{errors.choice3committee}</FormErrorMessage>
                 ) : (
                   <FormHelperText>
                     Select your third committee choice
@@ -259,23 +278,20 @@ export default function Signup({
                   options={countries
                     .filter(
                       (country) =>
-                        country.committeeId ===
-                        Number(getValues("choice1committee"))
+                        country.committeeId === Number(values.choice1committee)
                     )
                     .map((country) => ({
                       label: country.country,
                       value: country.country,
                     }))}
-                  isDisabled={getValues("choice1committee") === undefined}
+                  isDisabled={values.choice1committee === -1}
                   onChange={(option) =>
-                    setValue("choice1country", option?.value ?? "")
+                    setFieldValue("choice1country", option?.value ?? "")
                   }
                   isInvalid={Boolean(errors.choice1country)}
                 />
                 {errors.choice1country ? (
-                  <FormErrorMessage>
-                    {errors.choice1country.message}
-                  </FormErrorMessage>
+                  <FormErrorMessage>{errors.choice1country}</FormErrorMessage>
                 ) : (
                   <FormHelperText>
                     Select a country that you want to delegate as in the{" "}
@@ -297,23 +313,20 @@ export default function Signup({
                   options={countries
                     .filter(
                       (country) =>
-                        country.committeeId ===
-                        Number(getValues("choice2committee"))
+                        country.committeeId === Number(values.choice2committee)
                     )
                     .map((country) => ({
                       label: country.country,
                       value: country.country,
                     }))}
-                  isDisabled={getValues("choice2committee") === undefined}
+                  isDisabled={values.choice2committee === -1}
                   onChange={(option) =>
-                    setValue("choice2country", option?.value ?? "")
+                    setFieldValue("choice2country", option?.value ?? "")
                   }
                   isInvalid={Boolean(errors.choice2country)}
                 />
                 {errors.choice2country ? (
-                  <FormErrorMessage>
-                    {errors.choice2country.message}
-                  </FormErrorMessage>
+                  <FormErrorMessage>{errors.choice2country}</FormErrorMessage>
                 ) : (
                   <FormHelperText>
                     Select a country that you want to delegate as in the{" "}
@@ -335,23 +348,20 @@ export default function Signup({
                   options={countries
                     .filter(
                       (country) =>
-                        country.committeeId ===
-                        Number(getValues("choice3committee"))
+                        country.committeeId === Number(values.choice3committee)
                     )
                     .map((country) => ({
                       label: country.country,
                       value: country.country,
                     }))}
-                  isDisabled={getValues("choice3committee") === undefined}
+                  isDisabled={values.choice3committee === -1}
                   onChange={(option) =>
-                    setValue("choice3country", option?.value ?? "")
+                    setFieldValue("choice3country", option?.value ?? "")
                   }
                   isInvalid={Boolean(errors.choice3country)}
                 />
                 {errors.choice3country ? (
-                  <FormErrorMessage>
-                    {errors.choice3country.message}
-                  </FormErrorMessage>
+                  <FormErrorMessage>{errors.choice3country}</FormErrorMessage>
                 ) : (
                   <FormHelperText>
                     Select a country that you want to delegate as in the{" "}
@@ -367,24 +377,32 @@ export default function Signup({
 
           <br />
 
-          <FormControl isInvalid={Boolean(errors.delegationId)}>
+          <FormControl isInvalid={Boolean(errors.delegationId)} isRequired>
             <FormLabel>Delegation</FormLabel>
             <Select<CommitteeChoice, false>
-              options={delegations.map((delegation) => ({
+              options={[
+                {
+                  name: "None",
+                  delegationId: -1,
+                },
+                ...delegations,
+              ].map((delegation) => ({
                 label: delegation.name,
                 value: delegation.delegationId,
               }))}
               placeholder="Select a delegation"
               onChange={(option) =>
-                setValue("delegationId", option?.value ?? null)
+                setFieldValue("delegationId", option?.value ?? null)
               }
+              defaultValue={{
+                label: "None",
+                value: -1,
+              }}
               isInvalid={Boolean(errors.delegationId)}
             />
 
             {errors.delegationId ? (
-              <FormErrorMessage>
-                {errors.delegationId?.message}
-              </FormErrorMessage>
+              <FormErrorMessage>{errors.delegationId}</FormErrorMessage>
             ) : (
               <FormHelperText>
                 Select a delegation that you are part of if you are part of one.
@@ -400,11 +418,15 @@ export default function Signup({
           <FormControl isInvalid={Boolean(errors.motivation)} isRequired>
             <FormLabel>Motivation</FormLabel>
             <Textarea
-              {...register("motivation")}
+              // onChange={(e) => setMotivation(e.target.value)}
+              onChange={(e) =>
+                debouncedHandleChange("motivation", e.target.value)
+              }
               isInvalid={Boolean(errors.motivation)}
+              height="20em"
             />
             {errors.motivation ? (
-              <FormErrorMessage>{errors.motivation?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.motivation}</FormErrorMessage>
             ) : (
               <FormHelperText>
                 Fill in some motivation about why you would like to attend
@@ -418,11 +440,14 @@ export default function Signup({
           <FormControl isInvalid={Boolean(errors.experience)} isRequired>
             <FormLabel>Experience</FormLabel>
             <Textarea
-              {...register("experience")}
+              onChange={(e) =>
+                debouncedHandleChange("experience", e.target.value)
+              }
               isInvalid={Boolean(errors.experience)}
+              height="20em"
             />
             {errors.experience ? (
-              <FormErrorMessage>{errors.experience?.message}</FormErrorMessage>
+              <FormErrorMessage>{errors.experience}</FormErrorMessage>
             ) : (
               <FormHelperText>
                 Fill in some experience about your past experiences with

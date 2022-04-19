@@ -67,12 +67,18 @@ export const DelegateApply = z.object({
     .max(4000, "Your experience is too long")
     .min(10, "Please enter a short experience"),
 
-  delegationId: z.number().nullable(), // ID of delegation
+  // ID of delegation
+  // -1 is taken as no delegation
+  delegationId: z.preprocess(
+    (val) => (val === -1 ? null : val),
+    z.number().nullable()
+  ),
 
-  choice1committee: z.number(),
-  choice1country: z.string(),
-  choice2committee: z.number(),
-  choice2country: z.string(),
-  choice3committee: z.number(),
-  choice3country: z.string(),
+  choice1committee: z.number().min(0, "Please choose a committee"),
+  choice1country: z.string().min(2, "Please choose a country"),
+  choice2committee: z.number().min(0, "Please choose a committee"),
+  choice2country: z.string().min(2, "Please choose a country"),
+  choice3committee: z.number().min(0, "Please choose a committee"),
+  choice3country: z.string().min(2, "Please choose a country"),
 })
+export type DelegateApply = z.infer<typeof DelegateApply>
