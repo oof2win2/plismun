@@ -1,10 +1,10 @@
 import { db } from "@/utils/db"
 import { NextApiRequest, NextApiResponse } from "next"
 import type { ApiResponse } from "@/utils/types"
-import { Committee, CommiteeType } from "@/utils/validators"
 import { z } from "zod"
+import { CommitteeCountries } from "@prisma/client"
 
-type CommitteeResponse = ApiResponse<CommiteeType[] | CommiteeType>
+type CommitteeResponse = ApiResponse<CommitteeCountries[]>
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,8 +12,9 @@ export default async function handler(
 ) {
   const { id: stringId } = req.query
   const parsedQuery = z
-    .array(z.string().regex(/^\d+$/))
-    .transform((x) => x.map(Number))
+    .string()
+    .regex(/^\d+$/)
+    .transform(Number)
     .safeParse(stringId)
 
   if (!parsedQuery.success) {
@@ -31,26 +32,14 @@ export default async function handler(
   }
 
   const id = parsedQuery.data
-  const unverified = await db.committee.findFirst({
+  const unverified = await db.committeeCountries.findMany({
     where: {
-      id: id[0],
+      committeeId: id,
     },
   })
-  if (!unverified) {
-    return res.status(404).json({
-      status: "error",
-      errors: [
-        {
-          statusCode: 404,
-          message: "Committee not found",
-          description: "The committee with the given ID was not found",
-        },
-      ],
-    })
-  }
-  const verified = Committee.parse(unverified)
+
   return res.status(200).json({
     status: "success",
-    data: verified,
+    data: unverified,
   })
 }

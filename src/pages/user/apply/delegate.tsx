@@ -47,9 +47,36 @@ export default function Signup({
   delegations,
 }: DelegateAppProps) {
   const { user } = useAppSelector((state) => state.user)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<boolean | null>(null)
 
   const submitApplication = async (form: DelegateApply) => {
-    console.log({ form })
+    setLoading(true)
+    setError(null)
+    setSuccess(null)
+    try {
+      const result = await fetch("/api/user/application/delegate", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      })
+
+      setLoading(false)
+
+      if (result.status === 201) {
+        setSuccess(true)
+      } else {
+        setError("An unknown error occured")
+      }
+      return
+    } catch (err) {
+      setError(err as string)
+      setSuccess(false)
+      setLoading(false)
+    }
   }
 
   const { setFieldValue, values, handleSubmit, errors } =
@@ -59,20 +86,18 @@ export default function Signup({
         motivation: "",
         experience: "",
         delegationId: null,
-        //@ts-expect-error
-        choice1committee: null,
+        choice1committee: -1,
         choice1country: "",
-        //@ts-expect-error
-        choice2committee: null,
+        choice2committee: -1,
         choice2country: "",
-        //@ts-expect-error
-        choice3committee: null,
+        choice3committee: -1,
         choice3country: "",
+        shirtSize: null,
       },
       onSubmit: submitApplication,
-      validate: (values) => {
+      validate: async (values) => {
         // this function should return errors it finds
-        const results = DelegateApply.safeParse(values)
+        const results = await DelegateApply.safeParseAsync(values)
         // if success, return an empty object (no errors)
         if (results.success) return {}
         // here we need to map the errors to the form fields
@@ -163,305 +188,378 @@ export default function Signup({
 
       <br />
 
+      {loading && <Heading>Loading...</Heading>}
+      {error && <Heading>{error}</Heading>}
+      {success && (
+        <>
+          <Heading>You have successfully applied to be a delegate</Heading>
+          <br />
+          <Text>
+            Go back <Link href="/">home</Link>
+          </Text>
+        </>
+      )}
+
       {/* application form */}
-      <form onSubmit={handleSubmit}>
-        <FormControl>
-          {/* committee choices */}
-          <Grid
-            width="100%"
-            templateRows="repeat(2, 0.1fr)"
-            templateColumns="repeat(6, 1fr)"
-            gap={4}
-            style={{ paddingBottom: "2rem" }}
-          >
+      {!success && (
+        <form onSubmit={handleSubmit}>
+          <FormControl>
             {/* committee choices */}
-            <GridItem rowSpan={1} colSpan={2}>
-              <FormControl
-                isInvalid={Boolean(errors.choice1committee)}
-                isRequired
-              >
-                <FormLabel>Committee Choice 1</FormLabel>
-                <Select<CommitteeChoice, false>
-                  options={committees.map((committee) => ({
-                    label: committee.displayname,
-                    value: committee.id,
-                    isDisabled: checkShouldBeDisabled(committee.id, 1),
-                  }))}
-                  placeholder="Select a committee"
-                  closeMenuOnSelect
-                  selectedOptionColor="green"
-                  onChange={(option) =>
-                    setFieldValue("choice1committee", option?.value ?? -1)
-                  }
+            <Grid
+              width="100%"
+              templateRows="repeat(2, 0.1fr)"
+              templateColumns="repeat(6, 1fr)"
+              gap={4}
+              style={{ paddingBottom: "2rem" }}
+            >
+              {/* committee choices */}
+              <GridItem rowSpan={1} colSpan={2}>
+                <FormControl
                   isInvalid={Boolean(errors.choice1committee)}
-                />
-                {errors.choice1committee ? (
-                  <FormErrorMessage>{errors.choice1committee}</FormErrorMessage>
-                ) : (
-                  <FormHelperText>
-                    Select your first committee choice
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </GridItem>
+                  isRequired
+                >
+                  <FormLabel>Committee Choice 1</FormLabel>
+                  <Select<CommitteeChoice, false>
+                    options={committees.map((committee) => ({
+                      label: committee.displayname,
+                      value: committee.id,
+                      isDisabled: checkShouldBeDisabled(committee.id, 1),
+                    }))}
+                    placeholder="Select a committee"
+                    closeMenuOnSelect
+                    selectedOptionColor="green"
+                    onChange={(option) =>
+                      setFieldValue("choice1committee", option?.value ?? -1)
+                    }
+                    isInvalid={Boolean(errors.choice1committee)}
+                  />
+                  {errors.choice1committee ? (
+                    <FormErrorMessage>
+                      {errors.choice1committee}
+                    </FormErrorMessage>
+                  ) : (
+                    <FormHelperText>
+                      Select your first committee choice
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </GridItem>
 
-            <GridItem rowSpan={1} colSpan={2}>
-              <FormControl
-                isInvalid={Boolean(errors.choice2committee)}
-                isRequired
-              >
-                <FormLabel>Committee Choice 2</FormLabel>
-                <Select<CommitteeChoice, false>
-                  options={committees.map((committee) => ({
-                    label: committee.displayname,
-                    value: committee.id,
-                    isDisabled: checkShouldBeDisabled(committee.id, 2),
-                  }))}
-                  placeholder="Select a committee"
-                  closeMenuOnSelect
-                  selectedOptionColor="green"
-                  onChange={(option) =>
-                    setFieldValue("choice2committee", option?.value ?? -1)
-                  }
+              <GridItem rowSpan={1} colSpan={2}>
+                <FormControl
                   isInvalid={Boolean(errors.choice2committee)}
-                />
-                {errors.choice2committee ? (
-                  <FormErrorMessage>{errors.choice2committee}</FormErrorMessage>
-                ) : (
-                  <FormHelperText>
-                    Select your second committee choice
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </GridItem>
+                  isRequired
+                >
+                  <FormLabel>Committee Choice 2</FormLabel>
+                  <Select<CommitteeChoice, false>
+                    options={committees.map((committee) => ({
+                      label: committee.displayname,
+                      value: committee.id,
+                      isDisabled: checkShouldBeDisabled(committee.id, 2),
+                    }))}
+                    placeholder="Select a committee"
+                    closeMenuOnSelect
+                    selectedOptionColor="green"
+                    onChange={(option) =>
+                      setFieldValue("choice2committee", option?.value ?? -1)
+                    }
+                    isInvalid={Boolean(errors.choice2committee)}
+                  />
+                  {errors.choice2committee ? (
+                    <FormErrorMessage>
+                      {errors.choice2committee}
+                    </FormErrorMessage>
+                  ) : (
+                    <FormHelperText>
+                      Select your second committee choice
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </GridItem>
 
-            <GridItem rowSpan={1} colSpan={2}>
-              <FormControl
-                isInvalid={Boolean(errors.choice3committee)}
-                isRequired
-              >
-                <FormLabel>Committee Choice 3</FormLabel>
-                <Select<CommitteeChoice, false>
-                  options={committees.map((committee) => ({
-                    label: committee.displayname,
-                    value: committee.id,
-                    isDisabled: checkShouldBeDisabled(committee.id, 3),
-                  }))}
-                  placeholder="Select a committee"
-                  closeMenuOnSelect
-                  selectedOptionColor="green"
-                  onChange={(option) =>
-                    setFieldValue("choice3committee", option?.value ?? -1)
-                  }
+              <GridItem rowSpan={1} colSpan={2}>
+                <FormControl
                   isInvalid={Boolean(errors.choice3committee)}
-                />
-                {errors.choice3committee ? (
-                  <FormErrorMessage>{errors.choice3committee}</FormErrorMessage>
-                ) : (
-                  <FormHelperText>
-                    Select your third committee choice
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </GridItem>
-
-            {/* country choices */}
-
-            <GridItem rowSpan={1} colSpan={2}>
-              <FormControl
-                isInvalid={Boolean(errors.choice1country)}
-                isRequired
-              >
-                <FormLabel>Country Choice 1</FormLabel>
-                <Select<CountryChoice, false>
-                  // filter to only include countries in the specific committee that is selected for the choice
-                  options={countries
-                    .filter(
-                      (country) =>
-                        country.committeeId === Number(values.choice1committee)
-                    )
-                    .map((country) => ({
-                      label: country.country,
-                      value: country.country,
+                  isRequired
+                >
+                  <FormLabel>Committee Choice 3</FormLabel>
+                  <Select<CommitteeChoice, false>
+                    options={committees.map((committee) => ({
+                      label: committee.displayname,
+                      value: committee.id,
+                      isDisabled: checkShouldBeDisabled(committee.id, 3),
                     }))}
-                  isDisabled={values.choice1committee === -1}
-                  onChange={(option) =>
-                    setFieldValue("choice1country", option?.value ?? "")
-                  }
+                    placeholder="Select a committee"
+                    closeMenuOnSelect
+                    selectedOptionColor="green"
+                    onChange={(option) =>
+                      setFieldValue("choice3committee", option?.value ?? -1)
+                    }
+                    isInvalid={Boolean(errors.choice3committee)}
+                  />
+                  {errors.choice3committee ? (
+                    <FormErrorMessage>
+                      {errors.choice3committee}
+                    </FormErrorMessage>
+                  ) : (
+                    <FormHelperText>
+                      Select your third committee choice
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </GridItem>
+
+              {/* country choices */}
+
+              <GridItem rowSpan={1} colSpan={2}>
+                <FormControl
                   isInvalid={Boolean(errors.choice1country)}
-                />
-                {errors.choice1country ? (
-                  <FormErrorMessage>{errors.choice1country}</FormErrorMessage>
-                ) : (
-                  <FormHelperText>
-                    Select a country that you want to delegate as in the{" "}
-                    {choice1committee ? choice1committee.displayname : "3rd"}{" "}
-                    committee
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </GridItem>
+                  isRequired
+                >
+                  <FormLabel>Country Choice 1</FormLabel>
+                  <Select<CountryChoice, false>
+                    // filter to only include countries in the specific committee that is selected for the choice
+                    options={countries
+                      .filter(
+                        (country) =>
+                          country.committeeId ===
+                          Number(values.choice1committee)
+                      )
+                      .map((country) => ({
+                        label: country.country,
+                        value: country.country,
+                      }))}
+                    isDisabled={values.choice1committee === -1}
+                    onChange={(option) =>
+                      setFieldValue("choice1country", option?.value ?? "")
+                    }
+                    isInvalid={Boolean(errors.choice1country)}
+                  />
+                  {errors.choice1country ? (
+                    <FormErrorMessage>{errors.choice1country}</FormErrorMessage>
+                  ) : (
+                    <FormHelperText>
+                      Select a country that you want to delegate as in the{" "}
+                      {choice1committee ? choice1committee.displayname : "3rd"}{" "}
+                      committee
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </GridItem>
 
-            <GridItem rowSpan={1} colSpan={2}>
-              <FormControl
-                isInvalid={Boolean(errors.choice2country)}
-                isRequired
-              >
-                <FormLabel>Country Choice 2</FormLabel>
-                <Select<CountryChoice, false>
-                  // filter to only include countries in the specific committee that is selected for the choice
-                  options={countries
-                    .filter(
-                      (country) =>
-                        country.committeeId === Number(values.choice2committee)
-                    )
-                    .map((country) => ({
-                      label: country.country,
-                      value: country.country,
-                    }))}
-                  isDisabled={values.choice2committee === -1}
-                  onChange={(option) =>
-                    setFieldValue("choice2country", option?.value ?? "")
-                  }
+              <GridItem rowSpan={1} colSpan={2}>
+                <FormControl
                   isInvalid={Boolean(errors.choice2country)}
-                />
-                {errors.choice2country ? (
-                  <FormErrorMessage>{errors.choice2country}</FormErrorMessage>
-                ) : (
-                  <FormHelperText>
-                    Select a country that you want to delegate as in the{" "}
-                    {choice2committee ? choice2committee.displayname : "3rd"}{" "}
-                    committee
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </GridItem>
+                  isRequired
+                >
+                  <FormLabel>Country Choice 2</FormLabel>
+                  <Select<CountryChoice, false>
+                    // filter to only include countries in the specific committee that is selected for the choice
+                    options={countries
+                      .filter(
+                        (country) =>
+                          country.committeeId ===
+                          Number(values.choice2committee)
+                      )
+                      .map((country) => ({
+                        label: country.country,
+                        value: country.country,
+                      }))}
+                    isDisabled={values.choice2committee === -1}
+                    onChange={(option) =>
+                      setFieldValue("choice2country", option?.value ?? "")
+                    }
+                    isInvalid={Boolean(errors.choice2country)}
+                  />
+                  {errors.choice2country ? (
+                    <FormErrorMessage>{errors.choice2country}</FormErrorMessage>
+                  ) : (
+                    <FormHelperText>
+                      Select a country that you want to delegate as in the{" "}
+                      {choice2committee ? choice2committee.displayname : "3rd"}{" "}
+                      committee
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </GridItem>
 
-            <GridItem rowSpan={1} colSpan={2}>
-              <FormControl
-                isInvalid={Boolean(errors.choice3country)}
-                isRequired
-              >
-                <FormLabel>Country Choice 3</FormLabel>
-                <Select<CountryChoice, false>
-                  // filter to only include countries in the specific committee that is selected for the choice
-                  options={countries
-                    .filter(
-                      (country) =>
-                        country.committeeId === Number(values.choice3committee)
-                    )
-                    .map((country) => ({
-                      label: country.country,
-                      value: country.country,
-                    }))}
-                  isDisabled={values.choice3committee === -1}
-                  onChange={(option) =>
-                    setFieldValue("choice3country", option?.value ?? "")
-                  }
+              <GridItem rowSpan={1} colSpan={2}>
+                <FormControl
                   isInvalid={Boolean(errors.choice3country)}
-                />
-                {errors.choice3country ? (
-                  <FormErrorMessage>{errors.choice3country}</FormErrorMessage>
-                ) : (
-                  <FormHelperText>
-                    Select a country that you want to delegate as in the{" "}
-                    {choice3committee ? choice3committee.displayname : "3rd"}{" "}
-                    committee
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </GridItem>
-          </Grid>
+                  isRequired
+                >
+                  <FormLabel>Country Choice 3</FormLabel>
+                  <Select<CountryChoice, false>
+                    // filter to only include countries in the specific committee that is selected for the choice
+                    options={countries
+                      .filter(
+                        (country) =>
+                          country.committeeId ===
+                          Number(values.choice3committee)
+                      )
+                      .map((country) => ({
+                        label: country.country,
+                        value: country.country,
+                      }))}
+                    isDisabled={values.choice3committee === -1}
+                    onChange={(option) =>
+                      setFieldValue("choice3country", option?.value ?? "")
+                    }
+                    isInvalid={Boolean(errors.choice3country)}
+                  />
+                  {errors.choice3country ? (
+                    <FormErrorMessage>{errors.choice3country}</FormErrorMessage>
+                  ) : (
+                    <FormHelperText>
+                      Select a country that you want to delegate as in the{" "}
+                      {choice3committee ? choice3committee.displayname : "3rd"}{" "}
+                      committee
+                    </FormHelperText>
+                  )}
+                </FormControl>
+              </GridItem>
+            </Grid>
 
-          <Divider />
+            <Divider />
 
-          <br />
+            <br />
 
-          <FormControl isInvalid={Boolean(errors.delegationId)} isRequired>
-            <FormLabel>Delegation</FormLabel>
-            <Select<CommitteeChoice, false>
-              options={[
-                {
-                  name: "None",
-                  delegationId: -1,
-                },
-                ...delegations,
-              ].map((delegation) => ({
-                label: delegation.name,
-                value: delegation.delegationId,
-              }))}
-              placeholder="Select a delegation"
-              onChange={(option) =>
-                setFieldValue("delegationId", option?.value ?? null)
-              }
-              defaultValue={{
-                label: "None",
-                value: -1,
-              }}
-              isInvalid={Boolean(errors.delegationId)}
-            />
+            <FormControl isInvalid={Boolean(errors.delegationId)} isRequired>
+              <FormLabel>Delegation</FormLabel>
+              <Select<CommitteeChoice, false>
+                options={[
+                  {
+                    name: "None",
+                    delegationId: -1,
+                  },
+                  ...delegations,
+                ].map((delegation) => ({
+                  label: delegation.name,
+                  value: delegation.delegationId,
+                }))}
+                placeholder="Select a delegation"
+                onChange={(option) =>
+                  setFieldValue("delegationId", option?.value ?? null)
+                }
+                defaultValue={{
+                  label: "None",
+                  value: -1,
+                }}
+                isInvalid={Boolean(errors.delegationId)}
+              />
 
-            {errors.delegationId ? (
-              <FormErrorMessage>{errors.delegationId}</FormErrorMessage>
-            ) : (
-              <FormHelperText>
-                Select a delegation that you are part of if you are part of one.
-                This is something that your club leader or teacher would have
-                told you about. Don't worry about it if you are not partaking in
-                PLISMUN as a club member or as a part of a school
-              </FormHelperText>
-            )}
+              {errors.delegationId ? (
+                <FormErrorMessage>{errors.delegationId}</FormErrorMessage>
+              ) : (
+                <FormHelperText>
+                  Select a delegation that you are part of if you are part of
+                  one. This is something that your club leader or teacher would
+                  have told you about. Don't worry about it if you are not
+                  partaking in PLISMUN as a club member or as a part of a school
+                </FormHelperText>
+              )}
+            </FormControl>
+
+            <br />
+
+            <FormControl isInvalid={Boolean(errors.motivation)} isRequired>
+              <FormLabel>Motivation</FormLabel>
+              <Textarea
+                // onChange={(e) => setMotivation(e.target.value)}
+                onChange={(e) =>
+                  debouncedHandleChange("motivation", e.target.value)
+                }
+                isInvalid={Boolean(errors.motivation)}
+                height="20em"
+              />
+              {errors.motivation ? (
+                <FormErrorMessage>{errors.motivation}</FormErrorMessage>
+              ) : (
+                <FormHelperText>
+                  Fill in some motivation about why you would like to attend
+                  PLISMUN as a delegate here (approx. 400 words)
+                </FormHelperText>
+              )}
+            </FormControl>
+
+            <br />
+
+            <FormControl isInvalid={Boolean(errors.experience)} isRequired>
+              <FormLabel>Experience</FormLabel>
+              <Textarea
+                onChange={(e) =>
+                  debouncedHandleChange("experience", e.target.value)
+                }
+                isInvalid={Boolean(errors.experience)}
+                height="20em"
+              />
+              {errors.experience ? (
+                <FormErrorMessage>{errors.experience}</FormErrorMessage>
+              ) : (
+                <FormHelperText>
+                  Fill in some experience about your past experiences with
+                  PLISMUN, other MUN conferences, or other related work here
+                  (approx. 400 words)
+                </FormHelperText>
+              )}
+            </FormControl>
+
+            <FormControl isInvalid={Boolean(errors.shirtSize)} isRequired>
+              <FormLabel>Shirt Size</FormLabel>
+              <Select<
+                { value: string | null; label: string } & OptionBase,
+                false
+              >
+                options={[
+                  {
+                    label: "None",
+                    value: null,
+                  },
+                  {
+                    value: "XS",
+                    label: "XS",
+                  },
+                  {
+                    value: "S",
+                    label: "S",
+                  },
+                  {
+                    value: "M",
+                    label: "M",
+                  },
+                  {
+                    value: "L",
+                    label: "L",
+                  },
+                  {
+                    value: "XL",
+                    label: "XL",
+                  },
+                  {
+                    value: "XXL",
+                    label: "XXL",
+                  },
+                ]}
+                placeholder="Select a shirt size"
+                onChange={(option) =>
+                  setFieldValue("shirtSize", option?.value ?? null)
+                }
+              />
+              {errors.shirtSize ? (
+                <FormErrorMessage>{errors.shirtSize}</FormErrorMessage>
+              ) : (
+                <FormHelperText>
+                  Select a shirt size or none if you don't want one
+                </FormHelperText>
+              )}
+            </FormControl>
+
+            <Center>
+              <Button type="submit">Submit application</Button>
+            </Center>
           </FormControl>
-
-          <br />
-
-          <FormControl isInvalid={Boolean(errors.motivation)} isRequired>
-            <FormLabel>Motivation</FormLabel>
-            <Textarea
-              // onChange={(e) => setMotivation(e.target.value)}
-              onChange={(e) =>
-                debouncedHandleChange("motivation", e.target.value)
-              }
-              isInvalid={Boolean(errors.motivation)}
-              height="20em"
-            />
-            {errors.motivation ? (
-              <FormErrorMessage>{errors.motivation}</FormErrorMessage>
-            ) : (
-              <FormHelperText>
-                Fill in some motivation about why you would like to attend
-                PLISMUN as a delegate here (approx. 400 words)
-              </FormHelperText>
-            )}
-          </FormControl>
-
-          <br />
-
-          <FormControl isInvalid={Boolean(errors.experience)} isRequired>
-            <FormLabel>Experience</FormLabel>
-            <Textarea
-              onChange={(e) =>
-                debouncedHandleChange("experience", e.target.value)
-              }
-              isInvalid={Boolean(errors.experience)}
-              height="20em"
-            />
-            {errors.experience ? (
-              <FormErrorMessage>{errors.experience}</FormErrorMessage>
-            ) : (
-              <FormHelperText>
-                Fill in some experience about your past experiences with
-                PLISMUN, other MUN conferences, or other related work here
-                (approx. 400 words)
-              </FormHelperText>
-            )}
-          </FormControl>
-
-          <Center>
-            <Button type="submit">Submit application</Button>
-          </Center>
-        </FormControl>
-      </form>
+        </form>
+      )}
     </Container>
   )
 }
