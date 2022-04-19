@@ -18,6 +18,13 @@ export default function Signup() {
       <Heading>DELEGATE APPLICATIONS</Heading>
       {/* some basic info here */}
       <Link href="/user/apply/delegate">Apply to be a delegate here</Link>
+
+      <br />
+      <br />
+
+      <Heading>CHAIR APPLICATIONS</Heading>
+      {/* some basic info here */}
+      <Link href="/user/apply/chair">Apply to be a chair here</Link>
     </Container>
   )
 }

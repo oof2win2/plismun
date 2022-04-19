@@ -71,6 +71,20 @@ model AppliedUser {
   shirtSize        String?
 }
 
+model ChairApplication {
+  chairId          Int     @id @default(autoincrement())
+  userId           Int     @unique
+  delegationId     Int?
+  choice1committee Int
+  choice2committee Int
+  choice3committee Int
+  experience       String
+  motivation       String
+  finalCommittee   String?
+  paymentStatus    String
+  shirtSize        String?
+}
+
 // a "group" of people that have decided to join PLISMUN together
 // usually with clubs
 model Delegation {

@@ -190,3 +190,89 @@ export const refineDelegateApply = (
       })
   }
 }
+
+export const ChairApply = z.object({
+  userId: z.number(),
+
+  motivation: z
+    .string()
+    .max(4000, "Your motivation is too long")
+    .min(10, "Please enter a short motivation"),
+  experience: z
+    .string()
+    .max(4000, "Your experience is too long")
+    .min(10, "Please enter a short experience"),
+
+  // ID of delegation
+  // -1 is taken as no delegation
+  delegationId: z.preprocess(
+    (val) => (val === -1 ? null : val),
+    z.number().nullable()
+  ),
+
+  // choices
+  choice1committee: z
+    .number({ invalid_type_error: "Please choose a committee" })
+    .min(0, "Please choose a committee"),
+  choice2committee: z
+    .number({ invalid_type_error: "Please choose a committee" })
+    .min(0, "Please choose a committee"),
+  choice3committee: z
+    .number({ invalid_type_error: "Please choose a committee" })
+    .min(0, "Please choose a committee"),
+
+  // shirt size or null if no shirt desired
+  shirtSize: z.enum(["XS", "S", "M", "L", "XL", "XXL"]).nullable(),
+})
+export type ChairApply = z.infer<typeof ChairApply>
+
+// we have this extra function for chair applications so we can get the committees and committee countries from the database or from nextjs,
+// depending on where the function is ran
+export const refineChairApply = (
+  params:
+    | (() => Promise<{
+        committees: Committee[]
+      }>)
+    | {
+        committees: Committee[]
+      }
+) => {
+  return async (body: ChairApply, ctx: z.RefinementCtx) => {
+    const { committees } =
+      typeof params === "function" ? await params() : params
+
+    const committee1valid = committees.find(
+      (c) => c.id === body.choice1committee
+    )
+    if (!committee1valid) {
+      ctx.addIssue({
+        code: "invalid_enum_value",
+        options: committees.map((c) => c.id),
+        path: ["choice1committee"],
+        message: "The committee with the given ID was not found",
+      })
+    }
+    const committee2valid = committees.find(
+      (c) => c.id === body.choice2committee
+    )
+    if (!committee2valid) {
+      ctx.addIssue({
+        code: "invalid_enum_value",
+        options: committees.map((c) => c.id),
+        path: ["choice2committee"],
+        message: "The committee with the given ID was not found",
+      })
+    }
+    const committee3valid = committees.find(
+      (c) => c.id === body.choice3committee
+    )
+    if (!committee3valid) {
+      ctx.addIssue({
+        code: "invalid_enum_value",
+        options: committees.map((c) => c.id),
+        path: ["choice3committee"],
+        message: "The committee with the given ID was not found",
+      })
+    }
+  }
+}

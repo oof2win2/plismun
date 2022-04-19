@@ -4,18 +4,24 @@ import { ApiRequest, PopulatedApiRequest } from "@/utils/types"
 import { NextApiRequest, NextApiResponse } from "next"
 import nc from "next-connect"
 import { z } from "zod"
-import { DelegateApply, refineDelegateApply } from "@/utils/validators"
+import {
+  ChairApply,
+  DelegateApply,
+  refineChairApply,
+  refineDelegateApply,
+} from "@/utils/validators"
 
 const handler = nc<ApiRequest, NextApiResponse>()
 
 // Get the user's application based on their login state
 handler.get<PopulatedApiRequest, NextApiResponse>(authAPI, async (req, res) => {
   // get current user's delegate application from the database, or return 404 if not found
-  const application = await db.appliedUser.findFirst({
+  const application = await db.chairApplication.findFirst({
     where: {
       userId: req.user.id,
     },
   })
+
   if (application) {
     return res.status(200).json({
       statusCode: 200,
@@ -32,18 +38,17 @@ handler.get<PopulatedApiRequest, NextApiResponse>(authAPI, async (req, res) => {
 handler.put(
   authAPI,
   validate({
-    body: DelegateApply.superRefine(
-      refineDelegateApply(async () => {
+    body: ChairApply.superRefine(
+      refineChairApply(async () => {
         return {
           committees: await db.committee.findMany(),
-          committeeCountries: await db.committeeCountries.findMany(),
         }
       })
     ),
     async: true,
   }),
   async (req: ApiRequest, res) => {
-    const application: DelegateApply = req.body
+    const application: ChairApply = req.body
 
     if (!req.populated)
       return res.status(500).json({
@@ -52,7 +57,7 @@ handler.put(
         description: "You are not logged in",
       })
 
-    const existingApplication = await db.appliedUser.findFirst({
+    const existingApplication = await db.chairApplication.findFirst({
       where: {
         userId: req.user.id,
       },
@@ -68,7 +73,7 @@ handler.put(
 
     // submit a new application for the user, since they dont have one yet
     // TODO: send an email to the user
-    const newApplication = await db.appliedUser.create({
+    const newApplication = await db.chairApplication.create({
       data: {
         ...application,
         userId: req.user.id,
