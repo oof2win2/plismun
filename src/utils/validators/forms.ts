@@ -56,61 +56,59 @@ export const LoginSchema = z.object({
   password: z.string(),
 })
 
-export const DelegateApply = z
-  .object({
-    userId: z.number(),
+export const DelegateApply = z.object({
+  userId: z.number(),
 
-    motivation: z
-      .string()
-      .max(4000, "Your motivation is too long")
-      .min(10, "Please enter a short motivation"),
-    experience: z
-      .string()
-      .max(4000, "Your experience is too long")
-      .min(10, "Please enter a short experience"),
+  motivation: z
+    .string()
+    .max(4000, "Your motivation is too long")
+    .min(10, "Please enter a short motivation"),
+  experience: z
+    .string()
+    .max(4000, "Your experience is too long")
+    .min(10, "Please enter a short experience"),
 
-    // ID of delegation
-    // -1 is taken as no delegation
-    delegationId: z.preprocess(
-      (val) => (val === -1 ? null : val),
-      z.number().nullable()
-    ),
+  // ID of delegation
+  // -1 is taken as no delegation
+  delegationId: z.preprocess(
+    (val) => (val === -1 ? null : val),
+    z.number().nullable()
+  ),
 
-    // choices
-    choice1committee: z
-      .number({ invalid_type_error: "Please choose a committee" })
-      .min(0, "Please choose a committee"),
-    choice1country: z.string().min(2, "Please choose a country"),
-    choice2committee: z
-      .number({ invalid_type_error: "Please choose a committee" })
-      .min(0, "Please choose a committee"),
-    choice2country: z.string().min(2, "Please choose a country"),
-    choice3committee: z
-      .number({ invalid_type_error: "Please choose a committee" })
-      .min(0, "Please choose a committee"),
-    choice3country: z.string().min(2, "Please choose a country"),
+  // choices
+  choice1committee: z
+    .number({ invalid_type_error: "Please choose a committee" })
+    .min(0, "Please choose a committee"),
+  choice1country: z.string().min(2, "Please choose a country"),
+  choice2committee: z
+    .number({ invalid_type_error: "Please choose a committee" })
+    .min(0, "Please choose a committee"),
+  choice2country: z.string().min(2, "Please choose a country"),
+  choice3committee: z
+    .number({ invalid_type_error: "Please choose a committee" })
+    .min(0, "Please choose a committee"),
+  choice3country: z.string().min(2, "Please choose a country"),
 
-    // shirt size or null if no shirt desired
-    shirtSize: z.enum(["XS", "S", "M", "L", "XL", "XXL"]).nullable(),
-  })
-  .superRefine(async (body, ctx) => {
-    let committees: Committee[]
-    let committeeCountries: CommitteeCountries[]
-
-    // TODO: implement some form of caching here as these fetches are fairly useless
-    if (typeof window !== "undefined") {
-      committees = await fetch("/api/committees")
-        .then((res) => res.json())
-        .then((json) => json.data)
-      committeeCountries = await fetch("/api/committees/countries")
-        .then((res) => res.json())
-        .then((json) => json.data)
-    } else {
-      const { db } = await import("@/utils/db")
-      committees = await db.committee.findMany()
-      committeeCountries = await db.committeeCountries.findMany()
-    }
-
+  // shirt size or null if no shirt desired
+  shirtSize: z.enum(["XS", "S", "M", "L", "XL", "XXL"]).nullable(),
+})
+export type DelegateApply = z.infer<typeof DelegateApply>
+// we have this extra function for delegate applications so we can get the committees and committee countries from the database or from nextjs,
+// depending on where the function is ran
+export const refineDelegateApply = (
+  params:
+    | (() => Promise<{
+        committees: Committee[]
+        committeeCountries: CommitteeCountries[]
+      }>)
+    | {
+        committees: Committee[]
+        committeeCountries: CommitteeCountries[]
+      }
+) => {
+  return async (body: DelegateApply, ctx: z.RefinementCtx) => {
+    const { committees, committeeCountries } =
+      typeof params === "function" ? await params() : params
     const committee1valid = committees.find(
       (c) => c.id === body.choice1committee
     )
@@ -190,5 +188,5 @@ export const DelegateApply = z
           .filter((c) => c.committeeId === body.choice3committee)
           .map((c) => c.country),
       })
-  })
-export type DelegateApply = z.infer<typeof DelegateApply>
+  }
+}

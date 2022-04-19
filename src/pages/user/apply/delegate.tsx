@@ -18,7 +18,7 @@ import {
   Textarea,
 } from "@chakra-ui/react"
 import { Select, OptionBase } from "chakra-react-select"
-import { DelegateApply } from "@/utils/validators"
+import { DelegateApply, refineDelegateApply } from "@/utils/validators"
 import { useFormik } from "formik"
 import Link from "next/link"
 import { Committee, CommitteeCountries, Delegation } from "@prisma/client"
@@ -97,7 +97,10 @@ export default function Signup({
       onSubmit: submitApplication,
       validate: async (values) => {
         // this function should return errors it finds
-        const results = await DelegateApply.safeParseAsync(values)
+        const results = await DelegateApply.superRefine(
+          refineDelegateApply({ committees, committeeCountries: countries })
+        ).safeParseAsync(values)
+
         // if success, return an empty object (no errors)
         if (results.success) return {}
         // here we need to map the errors to the form fields

@@ -4,7 +4,7 @@ import { ApiRequest, PopulatedApiRequest } from "@/utils/types"
 import { NextApiRequest, NextApiResponse } from "next"
 import nc from "next-connect"
 import { z } from "zod"
-import { DelegateApply } from "@/utils/validators"
+import { DelegateApply, refineDelegateApply } from "@/utils/validators"
 
 const handler = nc<ApiRequest, NextApiResponse>()
 
@@ -32,7 +32,14 @@ handler.get<PopulatedApiRequest, NextApiResponse>(authAPI, async (req, res) => {
 handler.put(
   authAPI,
   validate({
-    body: DelegateApply,
+    body: DelegateApply.superRefine(
+      refineDelegateApply(async () => {
+        return {
+          committees: await db.committee.findMany(),
+          committeeCountries: await db.committeeCountries.findMany(),
+        }
+      })
+    ),
     async: true,
   }),
   async (req: ApiRequest, res) => {
