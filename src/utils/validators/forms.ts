@@ -140,7 +140,7 @@ export const DelegateApply = z
       ctx.addIssue({
         code: "invalid_enum_value",
         options: committees.map((c) => c.id),
-        path: ["choice2committee"],
+        path: ["choice3committee"],
         message: "The committee with the given ID was not found",
       })
     }
@@ -154,7 +154,7 @@ export const DelegateApply = z
     if (!choice1valid && committee1valid)
       ctx.addIssue({
         code: "invalid_enum_value",
-        path: ["choice2country"],
+        path: ["choice1country"],
         message: "Invalid country and committee combination",
         options: committeeCountries
           .filter((c) => c.committeeId === body.choice1committee)
@@ -169,7 +169,7 @@ export const DelegateApply = z
     if (!choice2valid && committee2valid)
       ctx.addIssue({
         code: "invalid_enum_value",
-        path: ["choice3country"],
+        path: ["choice2country"],
         message: "Invalid country and committee combination",
         options: committeeCountries
           .filter((c) => c.committeeId === body.choice2committee)
