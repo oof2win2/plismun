@@ -4,18 +4,19 @@ import { ApiRequest, PopulatedApiRequest } from "@/utils/types"
 import { NextApiRequest, NextApiResponse } from "next"
 import nc from "next-connect"
 import { z } from "zod"
-import { DelegateApply, refineDelegateApply } from "@/utils/validators"
+import { DelegationApply } from "@/utils/validators"
 
 const handler = nc<ApiRequest, NextApiResponse>()
 
 // Get the user's application based on their login state
 handler.get<PopulatedApiRequest, NextApiResponse>(authAPI, async (req, res) => {
   // get current user's delegate application from the database, or return 404 if not found
-  const application = await db.appliedUser.findFirst({
+  const application = await db.delegation.findFirst({
     where: {
-      userId: req.user.id,
+      delegationLeaderId: req.user.id,
     },
   })
+
   if (application) {
     return res.status(200).json({
       statusCode: 200,
@@ -32,18 +33,11 @@ handler.get<PopulatedApiRequest, NextApiResponse>(authAPI, async (req, res) => {
 handler.put(
   authAPI,
   validate({
-    body: DelegateApply.superRefine(
-      refineDelegateApply(async () => {
-        return {
-          committees: await db.committee.findMany(),
-          committeeCountries: await db.committeeCountries.findMany(),
-        }
-      })
-    ),
-    async: true,
+    body: DelegationApply,
+    async: false,
   }),
   async (req: ApiRequest, res) => {
-    const application: DelegateApply = req.body
+    const application: DelegationApply = req.body
 
     if (!req.populated)
       return res.status(500).json({
@@ -78,14 +72,16 @@ handler.put(
 
     // submit a new application for the user, since they dont have one yet
     // TODO: send an email to the user
-    const newApplication = await db.appliedUser.create({
+    const newApplication = await db.delegation.create({
       data: {
         ...application,
-        userId: req.user.id,
-        // the payment status is always pending initially
-        paymentStatus: "pending",
+        delegationLeaderId: req.user.id,
       },
     })
+
+    // re-render these pages as they need to have up-to-date information on delegations
+    res.unstable_revalidate("/user/apply/chair")
+    res.unstable_revalidate("/user/apply/delegate")
 
     return res.status(201).json({
       statusCode: 201,

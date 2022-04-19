@@ -1,13 +1,16 @@
 import { User } from "@prisma/client"
 import { createReducer } from "@reduxjs/toolkit"
-import { login, logout } from "./actions"
+import { login, logout, apply } from "./actions"
+import type { Application } from "./actions"
 
 type UserState = {
   user: User | null
+  application: Application | null
 }
 
 const initialState: UserState = {
   user: null,
+  application: null,
 }
 
 export const userReducer = createReducer(initialState, (builder) => {
@@ -17,5 +20,10 @@ export const userReducer = createReducer(initialState, (builder) => {
     })
     .addCase(logout, (state) => {
       state.user = null
+    })
+    .addCase(apply, (state, action) => {
+      if (state.application)
+        throw new Error("Application already exists, cannot have multiple")
+      state.application = action.payload
     })
 })

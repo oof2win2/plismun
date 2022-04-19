@@ -36,7 +36,7 @@ interface CommitteeChoice extends OptionBase {
   value: number
 }
 export default function Signup({ committees, delegations }: ChairAppProps) {
-  const { user } = useAppSelector((state) => state.user)
+  const userData = useAppSelector((state) => state.user)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<boolean | null>(null)
@@ -72,7 +72,7 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
   const { setFieldValue, values, handleSubmit, errors } = useFormik<ChairApply>(
     {
       initialValues: {
-        userId: user?.id ?? -1,
+        userId: userData.user?.id ?? -1,
         motivation: "",
         experience: "",
         delegationId: null,
@@ -115,12 +115,12 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
     500
   )
   // stuff that is shown when the user is not logged in
-  if (!user) {
+  if (!userData.user) {
     return (
       <Container maxW="110ch">
-        <Header title="DELEGATE APPLICATIONS" />
+        <Header title="CHAIR APPLICATIONS" />
 
-        <Heading>DELEGATE APPLICATIONS</Heading>
+        <Heading>CHAIR APPLICATIONS</Heading>
 
         <br />
         <Text>
@@ -131,6 +131,26 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
           You can log in to your existing account{" "}
           <Link href="/user/login">here</Link>, or you can create a new account{" "}
           <Link href="/user/signup">here</Link>
+        </Text>
+      </Container>
+    )
+  }
+
+  if (userData.application) {
+    return (
+      <Container maxW="110ch">
+        <Header title="CHAIR APPLICATIONS" />
+
+        <Heading>CHAIR APPLICATIONS</Heading>
+
+        <br />
+        <Text>
+          You have already applied to be a {userData.application.type}, you
+          therefore cannot apply again
+        </Text>
+        <Text>
+          You can go back to the main page
+          <Link href="/">here</Link>
         </Text>
       </Container>
     )
@@ -148,29 +168,10 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
     return false
   }
 
-  const choice1committee =
-    values.choice1committee !== undefined
-      ? committees.find(
-          (committee) => committee.id === values.choice1committee
-        ) || false
-      : false
-  const choice2committee =
-    values.choice2committee !== undefined
-      ? committees.find(
-          (committee) => committee.id === values.choice2committee
-        ) || false
-      : false
-  const choice3committee =
-    values.choice3committee !== undefined
-      ? committees.find(
-          (committee) => committee.id === values.choice3committee
-        ) || false
-      : false
-
   // stuff that is shown when the user is logged in
   return (
     <Container maxW="110ch">
-      <Header title="DELEGATE APPLICATIONS" />
+      <Header title="CHAIR APPLICATIONS" />
 
       <br />
 

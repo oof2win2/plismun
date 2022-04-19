@@ -276,3 +276,21 @@ export const refineChairApply = (
     }
   }
 }
+
+export const DelegationApply = z.object({
+  delegationLeaderId: z.number(),
+  name: z
+    .string()
+    .max(100, "Your name is too long")
+    .min(10, "Please input a name"),
+  country: z
+    .string()
+    .length(2, "Please enter a valid country code")
+    .refine(
+      (val) => validator.isISO31661Alpha2(val),
+      "You must pick a valid country"
+    ),
+  estimatedDelegates: z.number().min(1, "Please enter a valid number"),
+  delegates: z.number().nullable(),
+})
+export type DelegationApply = z.infer<typeof DelegationApply>

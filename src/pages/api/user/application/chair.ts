@@ -57,13 +57,23 @@ handler.put(
         description: "You are not logged in",
       })
 
-    const existingApplication = await db.chairApplication.findFirst({
+    const existingDelegation = await db.delegation.findFirst({
+      where: {
+        delegationLeaderId: req.user.id,
+      },
+    })
+    const existingDelegate = await db.appliedUser.findFirst({
+      where: {
+        userId: req.user.id,
+      },
+    })
+    const existingChair = await db.chairApplication.findFirst({
       where: {
         userId: req.user.id,
       },
     })
 
-    if (existingApplication)
+    if (existingDelegation || existingDelegate || existingChair)
       return res.status(403).json({
         statusCode: 403,
         message: "Forbidden",

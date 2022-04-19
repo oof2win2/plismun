@@ -28,6 +28,8 @@ export const User = z.object({
   position: z.string().nullable(),
   dietary: z.string().nullable(),
 
+  otherInfo: z.string(),
+
   createdAt: z
     .string()
     .refine((date) => validator.isISO8601(date))
