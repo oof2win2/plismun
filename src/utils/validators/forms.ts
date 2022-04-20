@@ -188,6 +188,67 @@ export const refineDelegateApply = (
           .filter((c) => c.committeeId === body.choice3committee)
           .map((c) => c.country),
       })
+
+    const choices = [1, 2, 3] as const
+
+    // ensure that the choices are not already taken by another applicant
+    choices.map((choiceId) => {
+      const country = body[`choice${choiceId}country`]
+      const committee = body[`choice${choiceId}committee`]
+      const committeeCountry = committeeCountries.find(
+        (c) => c.committeeId === committee && c.country === country
+      )
+      if (!committeeCountry) {
+        ctx.addIssue({
+          code: "invalid_enum_value",
+          path: [`choice${choiceId}country`],
+          message: "This choice is invalid",
+          options: committeeCountries
+            .filter((c) => c.committeeId === body[`choice${choiceId}committee`])
+            .map((c) => c.country),
+        })
+        return
+      }
+      if (committeeCountry.userId !== null) {
+        ctx.addIssue({
+          code: "invalid_enum_value",
+          path: [`choice${choiceId}country`],
+          message: "This choice is already taken",
+          options: committeeCountries
+            .filter((c) => c.committeeId === body[`choice${choiceId}committee`])
+            .map((c) => c.country),
+        })
+        return
+      }
+    })
+
+    // ensure that the choices are not identical
+    choices.map((choiceId, i, array) => {
+      const otherChoices = array.slice(i + 1)
+      otherChoices.map((otherChoiceId) => {
+        if (
+          body[`choice${choiceId}committee`] ===
+          body[`choice${otherChoiceId}committee`]
+        ) {
+          if (
+            body[`choice${choiceId}country`] ===
+            body[`choice${otherChoiceId}country`]
+          ) {
+            ctx.addIssue({
+              code: "invalid_enum_value",
+              path: [`choice${otherChoiceId}country`],
+              message:
+                "You cannot choose the same country and committee combination twice",
+              options: committeeCountries
+                .filter(
+                  (c) => c.committeeId === body[`choice${choiceId}committee`]
+                )
+                .map((c) => c.country),
+            })
+          }
+        }
+      })
+    })
   }
 }
 

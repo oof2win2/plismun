@@ -13,7 +13,6 @@ import {
   Grid,
   GridItem,
   Heading,
-  Input,
   Text,
   Textarea,
 } from "@chakra-ui/react"
@@ -168,18 +167,6 @@ export default function Signup({
     )
   }
 
-  // this function checks whether a committee ID should be disabled for a selection control
-  // this checks whether the other two committee IDs have this committee ID selected, if they do, it should be disabled on this one
-  const checkShouldBeDisabled = (committeeId: number, choiceId: number) => {
-    const otherChoiceIds = ([1, 2, 3] as const).filter((id) => id !== choiceId)
-    const otherChoicesAreSame = otherChoiceIds.map((id) => {
-      const selectedCommitteeId = values[`choice${id}committee`]
-      return selectedCommitteeId === committeeId
-    })
-    if (otherChoicesAreSame.some((isSame) => isSame == true)) return true
-    return false
-  }
-
   const choice1committee =
     values.choice1committee !== undefined
       ? committees.find(
@@ -198,6 +185,40 @@ export default function Signup({
           (committee) => committee.id === values.choice3committee
         ) || false
       : false
+
+  const isCountryDisabled = (choiceId: 1 | 2 | 3, country: string) => {
+    // check if the country in the committee is already occupied by someone else
+    const committeeCountry = countries.find(
+      (c) =>
+        c.committeeId === values[`choice${choiceId}committee`] &&
+        c.country === country
+    )
+    // if no committee country is found or the country is occupied by a user, it is disabled
+    if (!committeeCountry || committeeCountry.userId) return true
+
+    // if all committee choices are different, the country is not disabled
+    const choices = [
+      values.choice1committee,
+      values.choice2committee,
+      values.choice3committee,
+    ]
+    if (new Set(choices).size === 3) return false
+
+    // for each of the other committees, if the country is the same, the country is disabled
+    const otherCommittees = ([1, 2, 3] as const).filter((x) => x !== choiceId)
+    for (const otherId of otherCommittees) {
+      // if the other choice committee is not the same as the current choice committee, the country is not disabled since they are in different committees
+      if (
+        values[`choice${otherId}committee`] !==
+        values[`choice${choiceId}committee`]
+      )
+        continue
+      // if the countries are identical, then the country is disabled
+      if (values[`choice${otherId}country`] === country) return true
+    }
+    // this should never happen, but we return false
+    return false
+  }
 
   // stuff that is shown when the user is logged in
   return (
@@ -245,7 +266,6 @@ export default function Signup({
                   options={committees.map((committee) => ({
                     label: committee.displayname,
                     value: committee.id,
-                    isDisabled: checkShouldBeDisabled(committee.id, 1),
                   }))}
                   placeholder="Select a committee"
                   closeMenuOnSelect
@@ -275,7 +295,6 @@ export default function Signup({
                   options={committees.map((committee) => ({
                     label: committee.displayname,
                     value: committee.id,
-                    isDisabled: checkShouldBeDisabled(committee.id, 2),
                   }))}
                   placeholder="Select a committee"
                   closeMenuOnSelect
@@ -305,7 +324,6 @@ export default function Signup({
                   options={committees.map((committee) => ({
                     label: committee.displayname,
                     value: committee.id,
-                    isDisabled: checkShouldBeDisabled(committee.id, 3),
                   }))}
                   placeholder="Select a committee"
                   closeMenuOnSelect
@@ -343,6 +361,7 @@ export default function Signup({
                     .map((country) => ({
                       label: country.country,
                       value: country.country,
+                      isDisabled: isCountryDisabled(1, country.country),
                     }))}
                   isDisabled={values.choice1committee === -1}
                   onChange={(option) =>
@@ -378,6 +397,7 @@ export default function Signup({
                     .map((country) => ({
                       label: country.country,
                       value: country.country,
+                      isDisabled: isCountryDisabled(2, country.country),
                     }))}
                   isDisabled={values.choice2committee === -1}
                   onChange={(option) =>
@@ -413,6 +433,7 @@ export default function Signup({
                     .map((country) => ({
                       label: country.country,
                       value: country.country,
+                      isDisabled: isCountryDisabled(3, country.country),
                     }))}
                   isDisabled={values.choice3committee === -1}
                   onChange={(option) =>

@@ -117,6 +117,7 @@ model CommitteeCountries {
   committeeId Int
   country     String
   difficulty  String
+  userId      Int?
 }
 
 // the actual committee members that are in different committees
