@@ -1,16 +1,16 @@
 import { useState } from "react"
 import {
   useColorMode,
-  Switch,
   Flex,
   Button,
   IconButton,
-  Text,
   MenuButton,
   Menu,
   MenuItem,
   MenuList,
   useColorModeValue,
+  Heading,
+  Box,
 } from "@chakra-ui/react"
 import {
   HamburgerIcon,
@@ -73,10 +73,18 @@ const Navbar = () => {
   const [display, changeDisplay] = useState("none")
 
   return (
-    <Flex zIndex={1}>
-      <Flex position={"absolute"} top="1rem" right="1rem" align="center">
+    <Flex alignItems="center" padding="20px 10px 20px 10px">
+      <Flex alignItems="center" width="100%">
+        <Box padding="4">
+          <Heading whiteSpace="nowrap">PLISMUN '23</Heading>
+        </Box>
+
         {/* Desktop */}
-        <Flex display={["none", "none", "flex", "flex"]}>
+        <Flex
+          display={["none", "none", "flex", "flex"]}
+          marginLeft="auto"
+          alignItems="center"
+        >
           {pages.map((page, i) =>
             page.type === "category" ? (
               <Menu key={i}>
@@ -108,104 +116,108 @@ const Navbar = () => {
               </NextLink>
             )
           )}
-        </Flex>
-        <IconButton
-          aria-label="Toggle dark mode"
-          icon={isDark ? <MoonIcon /> : <SunIcon />}
-          onClick={toggleColorMode}
-          as="a"
-          variant="ghost"
-          display={["none", "none", "flex", "flex"]}
-        />
-
-        {/* Mobile */}
-        <IconButton
-          aria-label="Open Menu"
-          size="lg"
-          mr={2}
-          icon={<HamburgerIcon />}
-          onClick={() => changeDisplay("flex")}
-          display={["flex", "flex", "none", "none"]}
-          as="a"
-        />
-        <IconButton
-          aria-label="Toggle dark mode"
-          size="lg"
-          mr={2}
-          icon={isDark ? <MoonIcon /> : <SunIcon />}
-          onClick={toggleColorMode}
-          as="a"
-          display={["flex", "flex", "none", "none"]}
-        />
-      </Flex>
-
-      {/* Mobile Content */}
-      <Flex
-        w="100vw"
-        display={display}
-        bgColor={useColorModeValue("white", "gray.800")}
-        h="100vh"
-        pos="fixed"
-        top="0"
-        left="0"
-        zIndex={20}
-        overflowY="auto"
-        flexDir="column"
-      >
-        <Flex justify="flex-end">
           <IconButton
-            mt={2}
-            mr={2}
-            aria-label="Open Menu"
-            size="lg"
-            icon={<CloseIcon />}
-            onClick={() => changeDisplay("none")}
+            aria-label="Toggle dark mode"
+            icon={isDark ? <MoonIcon /> : <SunIcon />}
+            onClick={toggleColorMode}
+            as="a"
+            variant="ghost"
           />
         </Flex>
 
-        <Flex flexDir="column" align="center">
-          {pages.map((page, i) =>
-            page.type === "category" ? (
-              <Menu key={i}>
-                <MenuButton
-                  as={Button}
-                  rightIcon={<ChevronDownIcon />}
-                  my={5}
-                  variant="ghost"
-                >
-                  {page.categoryName}
-                </MenuButton>
-                <MenuList>
-                  {page.pages.map((pg, i) => (
-                    <MenuItem key={i}>
-                      <NextLink href={pg.href}>
-                        <Button
-                          as="a"
-                          variant="ghost"
-                          aria-label={pg.title}
-                          w="100%"
-                          onClick={() => changeDisplay("none")}
-                        >
-                          {pg.title}
-                        </Button>
-                      </NextLink>
-                    </MenuItem>
-                  ))}
-                </MenuList>
-              </Menu>
-            ) : (
-              <NextLink href={page.href} key={i}>
-                <Button
-                  as="a"
-                  variant="ghost"
-                  my={5}
-                  onClick={() => changeDisplay("none")}
-                >
-                  {page.title}
-                </Button>
-              </NextLink>
-            )
-          )}
+        {/* Mobile closed */}
+        <Flex
+          display={["flex", "flex", "none", "none"]}
+          marginLeft="auto"
+          alignItems="center"
+        >
+          <IconButton
+            aria-label="Open Menu"
+            size="lg"
+            icon={<HamburgerIcon />}
+            onClick={() => changeDisplay("flex")}
+            as="a"
+            variant="ghost"
+          />
+          <IconButton
+            aria-label="Toggle dark mode"
+            size="lg"
+            icon={isDark ? <MoonIcon /> : <SunIcon />}
+            onClick={toggleColorMode}
+            as="a"
+            variant="ghost"
+          />
+        </Flex>
+        {/* Mobile open */}
+        <Flex
+          w="100vw"
+          display={display}
+          padding="20px 10px 20px 10px"
+          bgColor={useColorModeValue("white", "gray.800")}
+          h="100vh"
+          pos="fixed"
+          top="0"
+          left="0"
+          zIndex={20}
+          overflowY="auto"
+          flexDir="column"
+        >
+          <Flex justify="flex-end">
+            <IconButton
+              mt={2}
+              mr={2}
+              aria-label="Open Menu"
+              size="lg"
+              icon={<CloseIcon />}
+              onClick={() => changeDisplay("none")}
+              variant="ghost"
+            />
+          </Flex>
+
+          <Flex flexDir="column" align="center">
+            {pages.map((page, i) =>
+              page.type === "category" ? (
+                <Menu key={i}>
+                  <MenuButton
+                    as={Button}
+                    rightIcon={<ChevronDownIcon />}
+                    my={5}
+                    variant="ghost"
+                  >
+                    {page.categoryName}
+                  </MenuButton>
+                  <MenuList>
+                    {page.pages.map((pg, i) => (
+                      <MenuItem key={i}>
+                        <NextLink href={pg.href}>
+                          <Button
+                            as="a"
+                            variant="ghost"
+                            aria-label={pg.title}
+                            w="100%"
+                            onClick={() => changeDisplay("none")}
+                          >
+                            {pg.title}
+                          </Button>
+                        </NextLink>
+                      </MenuItem>
+                    ))}
+                  </MenuList>
+                </Menu>
+              ) : (
+                <NextLink href={page.href} key={i}>
+                  <Button
+                    as="a"
+                    variant="ghost"
+                    my={5}
+                    onClick={() => changeDisplay("none")}
+                  >
+                    {page.title}
+                  </Button>
+                </NextLink>
+              )
+            )}
+          </Flex>
         </Flex>
       </Flex>
     </Flex>
