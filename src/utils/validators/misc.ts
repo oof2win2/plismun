@@ -7,8 +7,6 @@ export const SessionData = z.object({
   iat: z.number(),
   exp: z.number(),
   aud: z.number(),
-  data: z.object({
-    user: User,
-  }),
+  user: User, // this is added by the getSession, the user is found by the `aud` field
 })
 export type SessionDataType = z.infer<typeof SessionData>

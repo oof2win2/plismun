@@ -75,7 +75,7 @@ export default async function handler(
   })
 
   // save their user in the session
-  await saveSessionData(res, user, { user }, null)
+  await saveSessionData(res, user, null)
 
   return res.status(200).json({
     status: "success",

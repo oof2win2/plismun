@@ -18,22 +18,28 @@ export const User = z.object({
   lastname: z.string(),
 
   phone: z.string().nullable(),
-  birthdate: z
-    .string()
-    .refine((date) => validator.isISO8601(date))
-    .transform((x) => new Date(x)),
+  birthdate: z.union([
+    z
+      .string()
+      .refine((x) => validator.isISO8601(x), "Invalid date provided")
+      .transform((x) => new Date(x)),
+    z.date(),
+  ]),
   nationality: z.string(),
   gender: z.string().nullable(),
   schoolname: z.string().nullable(),
   position: z.string().nullable(),
   dietary: z.string().nullable(),
 
-  otherInfo: z.string(),
+  otherInfo: z.string().nullable(),
 
-  createdAt: z
-    .string()
-    .refine((date) => validator.isISO8601(date))
-    .transform((x) => new Date(x)),
+  createdAt: z.union([
+    z
+      .string()
+      .refine((x) => validator.isISO8601(x), "Invalid date provided")
+      .transform((x) => new Date(x)),
+    z.date(),
+  ]),
 })
 export type UserType = z.infer<typeof User>
 

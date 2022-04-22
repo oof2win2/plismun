@@ -11,9 +11,9 @@ const JWT_SECRET = Buffer.from(ENV.JWT_SECRET)
  * Get session
  */
 export async function getSessionData(
-  req: NextApiRequest
+  cookies: Record<string, string>
 ): Promise<null | SessionDataType> {
-  const cookie = req.cookies[ENV.COOKIE_NAME]
+  const cookie = cookies[ENV.COOKIE_NAME]
   if (!cookie) return null
   if (!cookie.startsWith("Bearer ")) return null
 
@@ -47,10 +47,16 @@ export async function getSessionData(
     return null
   }
 
+  const user = await db.user.findFirst({
+    where: {
+      id: saved.aud,
+    },
+  })
+
   // parse the data from the database and return it
   const session = SessionData.safeParse({
     ...saved,
-    data: JSON.parse(saved.data),
+    user,
   })
   return session.success ? session.data : null
 }
@@ -61,7 +67,6 @@ export async function getSessionData(
 export async function saveSessionData(
   res: NextApiResponse,
   user: User,
-  sessionData: SessionDataType["data"],
   prevSession: SessionDataType | null
 ): Promise<{
   /**
@@ -89,10 +94,8 @@ export async function saveSessionData(
         iat: Math.floor(Date.now() / 1000),
         aud: user.id,
         exp: expiryDate,
-        data: JSON.stringify(sessionData),
       },
       update: {
-        data: JSON.stringify(sessionData),
         exp: expiryDate,
       },
     })
@@ -102,13 +105,12 @@ export async function saveSessionData(
         iat: Math.floor(Date.now() / 1000),
         aud: user.id,
         exp: expiryDate,
-        data: JSON.stringify(sessionData),
       },
     })
   }
 
   // sign the session data with the JWT secret and return it
-  const cookie = await new jose.SignJWT(sessionData)
+  const cookie = await new jose.SignJWT({})
     .setExpirationTime(saved.exp)
     .setJti(saved.jti)
     .setAudience(saved.aud.toString())

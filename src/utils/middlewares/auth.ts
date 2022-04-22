@@ -12,7 +12,7 @@ export async function authAPI(
   res: NextApiResponse,
   next: NextHandler
 ) {
-  const sessionData = await getSessionData(req)
+  const sessionData = await getSessionData(req.cookies)
   if (!sessionData) {
     return res.status(401).json({
       statusCode: 401,
@@ -23,7 +23,7 @@ export async function authAPI(
   req.populated = true
   if (req.populated) {
     req.sessionData = sessionData
-    req.user = sessionData.data.user
+    req.user = sessionData.user
   }
   next()
 }

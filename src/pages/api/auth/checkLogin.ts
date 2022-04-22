@@ -27,7 +27,7 @@ export default async function handler(
     })
   }
 
-  const data = await getSessionData(req)
+  const data = await getSessionData(req.cookies)
 
   if (!data) {
     return res.status(401).send({
@@ -44,6 +44,6 @@ export default async function handler(
 
   return res.status(200).send({
     status: "success",
-    data: data.data.user,
+    data: data.user,
   })
 }

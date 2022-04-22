@@ -45,11 +45,6 @@ model Session {
   exp Int
   // ID of the user it is issued to
   aud Int
-
-  // Serialized data that is NOT stored on the client
-  data String
-
-  // user User @relation(fields: [jti], references: [id], onDelete: Cascade)
 }
 
 // a single delegate as they apply
