@@ -88,8 +88,8 @@ async function main() {
     format:
       "Generating committees [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}",
   })
+  const committeeIDs: number[] = []
   committeeBar.start(amountsToGenerate.committees, 0)
-  let startingCommitteeId: number | undefined = undefined
   for (let i = 0; i < amountsToGenerate.committees; i++) {
     const hasTopic2 = Math.random() > 0.5
     const x = await db.committee.create({
@@ -107,7 +107,7 @@ async function main() {
         para2: hasTopic2 ? faker.lorem.paragraph() : undefined,
       },
     })
-    if (!startingCommitteeId) startingCommitteeId = x.id
+    committeeIDs.push(x.id)
     committeeBar.increment()
   }
   committeeBar.stop()
@@ -122,7 +122,7 @@ async function main() {
     for (const country of countries) {
       await db.committeeCountries.create({
         data: {
-          committeeId: startingCommitteeId! + i,
+          committeeId: randomElementFromList(committeeIDs),
           country: country,
           difficulty: randomElementFromList([
             "beginner",
@@ -175,11 +175,7 @@ async function main() {
     // make sure that a user can be a delegate only once
     // make sure that a user can only lead OR delegate, not both
     const userId = getRandomUserID()
-    const choices = randomDifferentNumbers(
-      0,
-      amountsToGenerate.committees - 1,
-      3
-    )
+    const choices = randomDifferentNumbers(1, amountsToGenerate.committees, 3)
     const delegate = await db.appliedUser.create({
       data: {
         delegationId: faker.datatype.number({
