@@ -49,13 +49,16 @@ async function main() {
   }
   resetBar.stop()
 
+  await db.$queryRaw`DELETE FROM sqlite_sequence;` // reset the autoincrement
+
   const userBar = new SingleBar({
     format:
       "Generating users [{bar}] {percentage}% | ETA: {eta_formatted} |  {value}/{total}",
   })
   userBar.start(amountsToGenerate.users, 0)
+  let availableUserIDs = new Set<number>()
   for (let i = 0; i < amountsToGenerate.users; i++) {
-    await db.user.create({
+    const user = await db.user.create({
       data: {
         email: faker.internet.email(),
         firstname: faker.name.firstName(),
@@ -67,9 +70,19 @@ async function main() {
         nationality: faker.address.country(),
       },
     })
+    availableUserIDs.add(user.id)
     userBar.increment()
   }
   userBar.stop()
+  // shuffle the available user IDs
+  availableUserIDs = new Set(
+    [...availableUserIDs].sort(() => Math.random() - 0.5)
+  )
+  const getRandomUserID = () => {
+    const [first] = availableUserIDs
+    availableUserIDs.delete(first)
+    return first
+  }
 
   const committeeBar = new SingleBar({
     format:
@@ -131,14 +144,6 @@ async function main() {
   const alreadyLeading: Set<number> = new Set()
   let currentDelegates = 0
   for (let i = 0; i < amountsToGenerate.delegations; i++) {
-    let leaderId = Infinity
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      leaderId = Math.floor(Math.random() * amountsToGenerate.users)
-      const canStop = !alreadyLeading.has(leaderId)
-      alreadyLeading.add(leaderId)
-      if (canStop) break
-    }
     // make up a number of estimated delegates that will arrive from this delegation
     // min 1, max half of delegates that are not in a delegation yet
     const estimatedDelegates = faker.datatype.number({
@@ -149,7 +154,7 @@ async function main() {
     await db.delegation.create({
       data: {
         // get a random user ID
-        delegationLeaderId: leaderId,
+        delegationLeaderId: getRandomUserID(),
         name: faker.company.companyName(),
         country: faker.address.country(),
         // make the estimated number of delegates be
@@ -165,20 +170,11 @@ async function main() {
       "Generating delegates [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}",
   })
   delegateBar.start(amountsToGenerate.delegates, 0)
-  const alreadyDelegating: Set<number> = new Set()
   const allDelegates: AppliedUser[] = []
   for (let i = 0; i < amountsToGenerate.delegates; i++) {
     // make sure that a user can be a delegate only once
     // make sure that a user can only lead OR delegate, not both
-    let userId: number
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      userId = Math.floor(Math.random() * amountsToGenerate.users)
-      const canStop =
-        !alreadyDelegating.has(userId) && !alreadyLeading.has(userId)
-      alreadyDelegating.add(userId)
-      if (canStop) break
-    }
+    const userId = getRandomUserID()
     const choices = randomDifferentNumbers(
       0,
       amountsToGenerate.committees - 1,
@@ -215,7 +211,7 @@ async function main() {
   })
   CommitteeMemberBar.start(amountsToGenerate.committeeMembers, 0)
   const alreadyInCommittee: Set<number> = new Set()
-  const delegateUserIds = [...alreadyDelegating]
+  const delegateUserIds = allDelegates.map((u) => u.userId)
   for (let i = 0; i < amountsToGenerate.committeeMembers; i++) {
     let userId: number
     // genereate a random user ID that is a delegate and is not already in a committee
