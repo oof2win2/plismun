@@ -1,10 +1,8 @@
 import Header from "@/components/header"
 import { useAppSelector } from "@/utils/redux/hooks"
-import { useForm } from "react-hook-form"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import { zodResolver } from "@hookform/resolvers/zod"
 import {
   DietaryOptions,
   SignupSchema,
@@ -15,6 +13,7 @@ import {
   Center,
   Container,
   FormControl,
+  FormErrorMessage,
   FormHelperText,
   FormLabel,
   Grid,
@@ -37,6 +36,9 @@ import {
 import { DayPicker } from "react-day-picker"
 import "react-day-picker/dist/style.css"
 import { format } from "date-fns"
+import { useFormik } from "formik"
+import { zodErrorToFormik } from "@/utils/utils"
+import { useDebouncedCallback } from "use-debounce"
 
 export default function Signup() {
   const router = useRouter()
@@ -47,16 +49,6 @@ export default function Signup() {
   // otherwise it would render the date once only, which doesn't seem very intuitive
   // see https://reactjs.org/docs/uncontrolled-components.html
   const [birthdate, setBirthdate] = useState(new Date())
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-    getValues,
-  } = useForm<SignupSchemaType>({
-    resolver: zodResolver(SignupSchema),
-  })
 
   const { user } = useAppSelector((state) => state.user)
 
@@ -103,6 +95,34 @@ export default function Signup() {
     }
   }
 
+  const { setFieldValue, values, handleSubmit, errors } =
+    useFormik<SignupSchemaType>({
+      initialValues: {
+        firstname: "",
+        lastname: "",
+        email: "",
+        password: "",
+        passwordConfirm: "",
+        dietary: "None",
+        nationality: "",
+        phone: null,
+        schoolname: null,
+        birthdate: new Date(),
+        otherInfo: null,
+      },
+      onSubmit: signupForm,
+      validate: (data) => {
+        const results = SignupSchema.safeParse(data)
+
+        return zodErrorToFormik(results)
+      },
+    })
+
+  const debouncedHandleChange = useDebouncedCallback(
+    (field: string, value: any) => setFieldValue(field, value),
+    500
+  )
+
   return (
     <Container maxW="110ch">
       <Header title="SIGN UP" />
@@ -136,7 +156,7 @@ export default function Signup() {
         {!loading && fetchError && <Heading>{fetchError}</Heading>}
         {!wasSuccess && (
           <Center maxW="110ch">
-            <form onSubmit={handleSubmit(signupForm)}>
+            <form onSubmit={handleSubmit}>
               <FormControl>
                 <Grid
                   // make a grid that is 4x6 so that we can fit in the form nicely
@@ -148,114 +168,171 @@ export default function Signup() {
                 >
                   {/* First name */}
                   <GridItem rowSpan={1} colSpan={3}>
-                    <FormLabel>First name</FormLabel>
-                    <Input
-                      {...register("firstname")}
+                    <FormControl
+                      variant="floating"
+                      isRequired
                       isInvalid={Boolean(errors.firstname)}
-                    />
-                    <FormHelperText>
-                      {errors.firstname?.message}&nbsp;
-                    </FormHelperText>
+                    >
+                      <Input
+                        isInvalid={Boolean(errors.firstname)}
+                        placeholder="    "
+                        onChange={(e) =>
+                          debouncedHandleChange("firstname", e.target.value)
+                        }
+                      />
+                      <FormLabel>First name</FormLabel>
+                      <FormHelperText>Your first name</FormHelperText>
+                      <FormErrorMessage>{errors.firstname}</FormErrorMessage>
+                    </FormControl>
                   </GridItem>
 
                   {/* Last name */}
                   <GridItem rowSpan={1} colSpan={3}>
-                    <FormLabel>Last name</FormLabel>
-                    <Input
-                      {...register("lastname")}
+                    <FormControl
+                      variant="floating"
+                      isRequired
                       isInvalid={Boolean(errors.lastname)}
-                    />
-                    <FormHelperText>
-                      {errors.lastname?.message}&nbsp;
-                    </FormHelperText>
+                    >
+                      <Input
+                        isInvalid={Boolean(errors.lastname)}
+                        onChange={(e) =>
+                          debouncedHandleChange("lastname", e.target.value)
+                        }
+                        placeholder="    "
+                      />
+                      <FormLabel>Last name</FormLabel>
+                      <FormErrorMessage>{errors.lastname}</FormErrorMessage>
+                    </FormControl>
                   </GridItem>
 
                   {/* Phone number */}
                   <GridItem rowSpan={1} colSpan={3}>
-                    <FormLabel>Phone number</FormLabel>
-                    <Input
-                      {...register("phone")}
+                    <FormControl
+                      variant="floating"
+                      isRequired
                       isInvalid={Boolean(errors.phone)}
-                    />
-                    <FormHelperText>
-                      {errors.phone?.message}&nbsp;
-                    </FormHelperText>
+                    >
+                      <Input
+                        isInvalid={Boolean(errors.phone)}
+                        onChange={(e) =>
+                          debouncedHandleChange("phone", e.target.value)
+                        }
+                        placeholder="    "
+                      />
+                      <FormLabel>Phone number</FormLabel>
+                      <FormErrorMessage>{errors.phone}</FormErrorMessage>
+                    </FormControl>
                   </GridItem>
 
                   {/* School name */}
                   <GridItem rowSpan={1} colSpan={3}>
-                    <FormLabel>School name</FormLabel>
-                    <Input
-                      {...register("schoolname")}
+                    <FormControl
+                      variant="floating"
                       isInvalid={Boolean(errors.schoolname)}
-                    />
-                    <FormHelperText>
-                      {errors.schoolname?.message}&nbsp;
-                    </FormHelperText>
+                    >
+                      <FormLabel>School name</FormLabel>
+                      <Input
+                        onChange={(e) =>
+                          debouncedHandleChange("schoolname", e.target.value)
+                        }
+                        isInvalid={Boolean(errors.schoolname)}
+                        placeholder="    "
+                      />
+                      <FormErrorMessage>{errors.schoolname}</FormErrorMessage>
+                    </FormControl>
                   </GridItem>
 
                   {/* Email */}
                   <GridItem rowSpan={1} colSpan={3}>
-                    <FormLabel>Email</FormLabel>
-                    <Input
-                      {...register("email")}
+                    <FormControl
+                      variant="floating"
                       isInvalid={Boolean(errors.email)}
-                    />
-                    <FormHelperText>
-                      {errors.email?.message}&nbsp;
-                    </FormHelperText>
+                    >
+                      <Input
+                        isInvalid={Boolean(errors.email)}
+                        onChange={(e) =>
+                          debouncedHandleChange("email", e.target.value)
+                        }
+                        placeholder="    "
+                      />
+                      <FormLabel>Email</FormLabel>
+                      <FormErrorMessage>{errors.email}</FormErrorMessage>
+                    </FormControl>
                   </GridItem>
 
                   {/* Password */}
                   <GridItem rowSpan={1} colSpan={3}>
-                    <FormLabel>Password</FormLabel>
-                    <Input
-                      type="password"
-                      {...register("password")}
+                    <FormControl
+                      variant="floating"
                       isInvalid={Boolean(errors.password)}
-                    />
-                    <FormHelperText>
-                      {errors.password?.message}&nbsp;
-                    </FormHelperText>
+                    >
+                      <Input
+                        type="password"
+                        isInvalid={Boolean(errors.password)}
+                        onChange={(e) =>
+                          debouncedHandleChange("password", e.target.value)
+                        }
+                        placeholder="    "
+                      />
+                      <FormLabel>Password</FormLabel>
+                      <FormErrorMessage>{errors.password}</FormErrorMessage>
+                    </FormControl>
                   </GridItem>
 
                   {/* Dietary */}
                   <GridItem rowSpan={1} colSpan={3}>
-                    <FormLabel>Dietary</FormLabel>
-                    <AutoComplete
-                      openOnFocus
-                      disableFilter
-                      // when we get the value, map it to the country code
-                      onChange={(value) => setValue("dietary", value)}
+                    <FormControl
+                      variant="floating"
+                      isRequired
+                      isInvalid={Boolean(errors.dietary)}
                     >
-                      <AutoCompleteInput
-                        variant="outline"
-                        isInvalid={Boolean(errors.dietary)}
-                      />
-                      <AutoCompleteList>
-                        {DietaryOptions.options.map((dietName, i) => (
-                          <AutoCompleteItem value={dietName} key={i}>
-                            {dietName}
-                          </AutoCompleteItem>
-                        ))}
-                      </AutoCompleteList>
-                    </AutoComplete>
-                    <FormHelperText>
-                      {errors.dietary?.message}&nbsp;
-                    </FormHelperText>
+                      <AutoComplete
+                        openOnFocus
+                        disableFilter
+                        // when we get the value, map it to the country code
+                        onChange={(value) => setFieldValue("dietary", value)}
+                        placeholder="    "
+                      >
+                        <AutoCompleteInput
+                          variant="outline"
+                          isInvalid={Boolean(errors.dietary)}
+                        />
+                        <AutoCompleteList>
+                          {DietaryOptions.options.map((dietName, i) => (
+                            <AutoCompleteItem value={dietName} key={i}>
+                              {dietName}
+                            </AutoCompleteItem>
+                          ))}
+                        </AutoCompleteList>
+                      </AutoComplete>
+                      <FormLabel>Dietary</FormLabel>
+                      <FormErrorMessage>{errors.dietary}</FormErrorMessage>
+                    </FormControl>
                   </GridItem>
 
                   {/* Confirm password */}
                   <GridItem rowSpan={1} colSpan={3}>
-                    <FormLabel>Confirm password</FormLabel>
-                    <Input
-                      type="password"
-                      {...register("passwordConfirm")}
+                    <FormControl
+                      variant="floating"
+                      isRequired
                       isInvalid={Boolean(errors.passwordConfirm)}
-                    />
-                    <FormHelperText>
-                      {errors.passwordConfirm?.message}&nbsp;
-                    </FormHelperText>
+                    >
+                      <Input
+                        type="password"
+                        isInvalid={Boolean(errors.passwordConfirm)}
+                        onChange={(e) =>
+                          debouncedHandleChange(
+                            "passwordConfirm",
+                            e.target.value
+                          )
+                        }
+                        placeholder="		"
+                      />
+                      <FormLabel>Confirm password</FormLabel>
+                      <FormErrorMessage>
+                        {errors.passwordConfirm}
+                      </FormErrorMessage>
+                    </FormControl>
                   </GridItem>
 
                   {/* Birthdate */}
@@ -268,75 +345,94 @@ export default function Signup() {
                       --rdp-background-color: var(--chakra-colors-blue-200);
                     `}
                   >
-                    <FormLabel>Birthdate</FormLabel>
-                    <Popover>
-                      <PopoverTrigger>
-                        <Input
-                          readOnly
-                          value={format(birthdate, "PP")}
-                          isInvalid={Boolean(errors.birthdate)}
-                        />
-                      </PopoverTrigger>
-                      <PopoverContent>
-                        <DayPicker
-                          mode="single"
-                          selected={getValues("birthdate")}
-                          onSelect={(date = new Date()) => {
-                            setValue("birthdate", date)
-                            setBirthdate(date)
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormHelperText>
-                      {errors.birthdate?.message}&nbsp;
-                    </FormHelperText>
+                    <FormControl
+                      variant="floating"
+                      isRequired
+                      isInvalid={Boolean(errors.birthdate)}
+                    >
+                      <Popover>
+                        <PopoverTrigger>
+                          <Input
+                            readOnly
+                            value={format(values.birthdate, "PP")}
+                            isInvalid={Boolean(errors.birthdate)}
+                            placeholder=""
+                          />
+                        </PopoverTrigger>
+                        <FormLabel>Birthdate</FormLabel>
+                        <PopoverContent>
+                          <DayPicker
+                            mode="single"
+                            selected={values.birthdate}
+                            onSelect={(date = new Date()) => {
+                              setFieldValue("birthdate", date)
+                            }}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormHelperText>{errors.birthdate}</FormHelperText>
+                    </FormControl>
                   </GridItem>
 
                   {/* Nationality */}
                   <GridItem rowSpan={1} colSpan={4}>
-                    <FormLabel>Nationality</FormLabel>
-                    <AutoComplete
-                      openOnFocus
-                      // when we get the value, map it to the country code
-                      onChange={(value) =>
-                        setValue(
-                          "nationality",
-                          countryList.getCode(value) || "None"
-                        )
-                      }
+                    <FormControl
+                      variant="floating"
+                      isRequired
+                      isInvalid={Boolean(errors.nationality)}
                     >
-                      <AutoCompleteInput
-                        variant="outline"
-                        isInvalid={Boolean(errors.nationality)}
-                      />
-                      <AutoCompleteList>
-                        {countryList
-                          .getData()
-                          // sort the country names alphabetically
-                          .sort((a, b) => {
-                            const an = a.name,
-                              bn = b.name
-                            if (an < bn) return -1
-                            if (an > bn) return 1
-                            return 0
-                          })
-                          .map((country, i) => (
-                            <AutoCompleteItem value={country.name} key={i}>
-                              {country.name}
-                            </AutoCompleteItem>
-                          ))}
-                      </AutoCompleteList>
-                    </AutoComplete>
-                    <FormHelperText>
-                      {errors.nationality?.message}&nbsp;
-                    </FormHelperText>
+                      <AutoComplete
+                        openOnFocus
+                        // when we get the value, map it to the country code
+                        onChange={(value) =>
+                          setFieldValue(
+                            "nationality",
+                            countryList.getCode(value) ?? " "
+                          )
+                        }
+                      >
+                        <AutoCompleteInput
+                          variant="outline"
+                          isInvalid={Boolean(errors.nationality)}
+                          placeholder=""
+                        />
+
+                        <AutoCompleteList>
+                          {countryList
+                            .getData()
+                            // sort the country names alphabetically
+                            .sort((a, b) => {
+                              const an = a.name,
+                                bn = b.name
+                              if (an < bn) return -1
+                              if (an > bn) return 1
+                              return 0
+                            })
+                            .map((country, i) => (
+                              <AutoCompleteItem value={country.name} key={i}>
+                                {country.name}
+                              </AutoCompleteItem>
+                            ))}
+                        </AutoCompleteList>
+                      </AutoComplete>
+                      <FormLabel>Nationality</FormLabel>
+                      <FormErrorMessage>{errors.nationality}</FormErrorMessage>
+                    </FormControl>
                   </GridItem>
 
                   {/* Other info (big textbox) */}
                   <GridItem rowSpan={2} colSpan={6}>
-                    <FormLabel>Other information</FormLabel>
-                    <Textarea {...register("otherInfo")} />
+                    <FormControl
+                      variant="floating"
+                      isInvalid={Boolean(errors.otherInfo)}
+                    >
+                      <Textarea
+                        onChange={(e) =>
+                          debouncedHandleChange("otherInfo", e.target.value)
+                        }
+                      />
+                      <FormLabel>Other information</FormLabel>
+                    </FormControl>
                   </GridItem>
 
                   <GridItem rowSpan={1} colSpan={3}></GridItem>

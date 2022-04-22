@@ -341,9 +341,12 @@ export const refineChairApply = (
 export const DelegationApply = z.object({
   delegationLeaderId: z.number(),
   name: z
-    .string()
+    .string({
+      required_error: "Please enter a name",
+      invalid_type_error: "Please enter a name",
+    })
     .max(100, "Your name is too long")
-    .min(10, "Please input a name"),
+    .min(10, "Your name is too short"),
   country: z
     .string()
     .length(2, "Please enter a valid country code")

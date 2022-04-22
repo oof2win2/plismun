@@ -200,26 +200,31 @@ export default function Signup({}: DelegationAppProps) {
             >
               {/* delegation name */}
               <GridItem rowSpan={1} colSpan={1}>
-                <FormControl isInvalid={Boolean(errors.name)} isRequired>
-                  <FormLabel>Delegation name</FormLabel>
+                <FormControl
+                  variant="floating"
+                  isInvalid={Boolean(errors.name)}
+                  isRequired
+                >
                   <Input
                     isInvalid={Boolean(errors.name)}
                     onChange={(e) =>
                       debouncedHandleChange("name", e.target.value)
                     }
+                    placeholder=" "
                   />
-                  {errors.name ? (
-                    <FormErrorMessage>{errors.name}</FormErrorMessage>
-                  ) : (
-                    <FormHelperText>The name of your delegation</FormHelperText>
-                  )}
+                  <FormLabel>Delegation name</FormLabel>
+                  <FormErrorMessage>{errors.name}</FormErrorMessage>
+                  <FormHelperText>The name of your delegation</FormHelperText>
                 </FormControl>
               </GridItem>
 
               {/* delegation country */}
               <GridItem rowSpan={1} colSpan={1}>
-                <FormControl isInvalid={Boolean(errors.country)} isRequired>
-                  <FormLabel>Delegation country</FormLabel>
+                <FormControl
+                  variant="floating"
+                  isInvalid={Boolean(errors.country)}
+                  isRequired
+                >
                   <Select<{ value: string; label: string } & OptionBase, false>
                     options={CountryCodes.map((item) => ({
                       label: item.name,
@@ -229,24 +234,23 @@ export default function Signup({}: DelegationAppProps) {
                     onChange={(option) =>
                       setFieldValue("country", option?.value ?? "")
                     }
+                    placeholder=" "
                   />
-                  {errors.country ? (
-                    <FormErrorMessage>{errors.country}</FormErrorMessage>
-                  ) : (
-                    <FormHelperText>
-                      The country of origin of your delegation
-                    </FormHelperText>
-                  )}
+                  <FormLabel>Delegation country</FormLabel>
+                  <FormErrorMessage>{errors.country}</FormErrorMessage>
+                  <FormHelperText>
+                    The country of origin of your delegation
+                  </FormHelperText>
                 </FormControl>
               </GridItem>
 
               {/* estimated amount of delegates */}
               <GridItem rowSpan={1} colSpan={1}>
                 <FormControl
+                  variant="floating"
                   isInvalid={Boolean(errors.estimatedDelegates)}
                   isRequired
                 >
-                  <FormLabel>Estimated amount of delegates</FormLabel>
                   <NumberInput
                     isInvalid={Boolean(errors.estimatedDelegates)}
                     onChange={(e) =>
@@ -254,8 +258,10 @@ export default function Signup({}: DelegationAppProps) {
                     }
                     defaultValue={5}
                     min={1}
+                    placeholder=" "
                   >
                     <NumberInputField />
+                    <FormLabel>Estimated amount of delegates</FormLabel>
                     <NumberInputStepper>
                       <NumberIncrementStepper />
                       <NumberDecrementStepper />
