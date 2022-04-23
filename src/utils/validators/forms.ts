@@ -358,3 +358,27 @@ export const DelegationApply = z.object({
   delegates: z.number().nullable(),
 })
 export type DelegationApply = z.infer<typeof DelegationApply>
+
+// TODO: check if this can be shown with zod
+// type base = {
+//   userId: number
+//   success: boolean
+// } & (
+//   | {
+//       success: true
+//       finalChoice: string
+//     }
+//   | {
+//       success: false
+//       message: string
+//     }
+// )
+
+export const ReplyDelegateApplication = z.object({
+  userId: z.number(),
+  success: z.boolean(),
+  message: z.string().nullable(),
+  finalCommittee: z.number().nullable(),
+  finalCountry: z.string().nullable(),
+})
+export type ReplyDelegateApplication = z.infer<typeof ReplyDelegateApplication>

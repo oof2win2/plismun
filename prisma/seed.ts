@@ -65,7 +65,7 @@ async function main() {
         lastname: faker.name.lastName(),
         password: await hashPassword(randomElementFromList(userPasswords)),
         createdAt: new Date(),
-        birthdate: new Date(),
+        birthdate: faker.date.past(18), // create a fake birthdate up to 18 years in the past
         phone: Math.random() > 0.5 ? faker.phone.phoneNumber() : undefined,
         nationality: faker.address.country(),
       },
