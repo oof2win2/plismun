@@ -1,6 +1,6 @@
 import "tsconfig-paths/register"
 
-import { AppliedUser, PrismaClient } from "@prisma/client"
+import { AppliedUser, CommitteeCountries, PrismaClient } from "@prisma/client"
 import faker from "@faker-js/faker"
 import { SingleBar } from "cli-progress"
 import { randomElementFromList } from "@/utils/utils"
@@ -117,31 +117,35 @@ async function main() {
       "Generating committee countries [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}",
   })
   const countries = faker.helpers.uniqueArray(faker.address.country, 25)
+  let committeeCountries: CommitteeCountries[] = []
   committeeCountryBar.start(amountsToGenerate.committees * countries.length, 0)
   for (let i = 0; i < amountsToGenerate.committees; i++) {
     for (const country of countries) {
-      await db.committeeCountries.create({
-        data: {
-          committeeId: randomElementFromList(committeeIDs),
-          country: country,
-          difficulty: randomElementFromList([
-            "beginner",
-            "intermediate",
-            "advanced",
-          ]),
-        },
-      })
+      committeeCountries.push(
+        await db.committeeCountries.create({
+          data: {
+            committeeId: randomElementFromList(committeeIDs),
+            country: country,
+            difficulty: randomElementFromList([
+              "beginner",
+              "intermediate",
+              "advanced",
+            ]),
+          },
+        })
+      )
       committeeCountryBar.increment()
     }
   }
   committeeCountryBar.stop()
+  // shuffle committee countries
+  committeeCountries = committeeCountries.sort(() => Math.random() - 0.5)
 
   const delegationBar = new SingleBar({
     format:
       "Generating delegations [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}",
   })
   delegationBar.start(amountsToGenerate.delegations, 0)
-  const alreadyLeading: Set<number> = new Set()
   let currentDelegates = 0
   for (let i = 0; i < amountsToGenerate.delegations; i++) {
     // make up a number of estimated delegates that will arrive from this delegation
@@ -175,7 +179,11 @@ async function main() {
     // make sure that a user can be a delegate only once
     // make sure that a user can only lead OR delegate, not both
     const userId = getRandomUserID()
-    const choices = randomDifferentNumbers(1, amountsToGenerate.committees, 3)
+    const choices = [
+      randomElementFromList(committeeCountries),
+      randomElementFromList(committeeCountries),
+      randomElementFromList(committeeCountries),
+    ]
     const delegate = await db.appliedUser.create({
       data: {
         delegationId: faker.datatype.number({
@@ -183,12 +191,12 @@ async function main() {
           max: amountsToGenerate.delegations - 1,
         }),
         userId: userId,
-        choice1committee: choices[0],
-        choice1country: faker.address.country(),
-        choice2committee: choices[1],
-        choice2country: faker.address.country(),
-        choice3committee: choices[2],
-        choice3country: faker.address.country(),
+        choice1committee: choices[0].committeeId,
+        choice1country: choices[0].country,
+        choice2committee: choices[1].committeeId,
+        choice2country: choices[1].country,
+        choice3committee: choices[2].committeeId,
+        choice3country: choices[2].country,
         experience: faker.lorem.sentences(),
         motivation: faker.lorem.sentences(),
         paymentStatus: ["pending", "paid", "rejected"][
