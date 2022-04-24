@@ -28,6 +28,7 @@ import {
   AccordionPanel,
   Switch,
   FormErrorMessage,
+  Textarea,
 } from "@chakra-ui/react"
 import { LoginSchema, ReplyDelegateApplication } from "@/utils/validators"
 import { useForm } from "react-hook-form"
@@ -91,8 +92,20 @@ const DelegateApplication = (props: {
   countries: CommitteeCountries[]
   committees: Committee[]
   delegation: Delegation | null
+  removeApplication: (delegateId: number) => void
 }) => {
-  const { delegate, user, countries, committees, delegation } = props
+  const {
+    delegate,
+    user,
+    countries,
+    committees,
+    delegation,
+    removeApplication,
+  } = props
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
 
   // get committees and countries for this user's application
   const [com1, com2, com3] = [
@@ -107,10 +120,27 @@ const DelegateApplication = (props: {
   ].map((name) => countries.find((c) => c.country === name)!)
 
   const submitResponse = async (form: ReplyDelegateApplication) => {
-    // TODO: submitting of form
+    setError(null)
+    setLoading(true)
+    setSuccess(false)
+
+    try {
+      // const response = await fetch("/api/")
+      // TODO: finish submitting of this form
+      setSuccess(true)
+      setError(null)
+      setTimeout(() => {
+        removeApplication(delegate.delegateId)
+      }, 3000)
+    } catch (error) {
+      setError(error as string)
+      setSuccess(false)
+    }
+
+    setLoading(false)
   }
 
-  const { setFieldValue, errors, values, submitForm } =
+  const { setFieldValue, errors, values, submitForm, handleChange } =
     useFormik<ReplyDelegateApplication>({
       initialValues: {
         userId: user.id,
@@ -129,8 +159,19 @@ const DelegateApplication = (props: {
 
   const userAge = differenceInYears(new Date(), new Date(user.birthdate))
 
+  if (success) {
+    return (
+      <Box width="65vw" padding="1em" border="2px solid" borderRadius="10px">
+        <Heading>Success replying to delegate application</Heading>
+      </Box>
+    )
+  }
+
   return (
     <Box width="65vw" padding="1em" border="2px solid" borderRadius="10px">
+      {loading && <Heading>Loading...</Heading>}
+      {error && <Heading>{error}</Heading>}
+
       {/* information about the user, their committee choices */}
       <Grid
         templateRows="repeat(1, 0.1fr)"
@@ -206,54 +247,69 @@ const DelegateApplication = (props: {
             <FormLabel marginLeft="1em">Accept</FormLabel>
           </FormControl>
           <Box>
-            <FormControl
-              variant="floating"
-              isInvalid={Boolean(errors.finalCommittee)}
-              isRequired
-              isDisabled={values.success === false}
-              width="24em"
-            >
-              <Select<CommitteeChoice, false>
-                options={committees.map((committee) => ({
-                  label: committee.displayname,
-                  value: committee.id,
-                }))}
-                placeholder=" "
-                closeMenuOnSelect
-                selectedOptionColor="green"
-                onChange={(option) =>
-                  setFieldValue("finalCommittee", option?.value ?? -1)
-                }
-                isInvalid={Boolean(errors.finalCommittee)}
-              />
-              <FormLabel>Select a final committee</FormLabel>
-              <FormErrorMessage>{errors.finalCommittee}</FormErrorMessage>
-            </FormControl>
-            <FormControl
-              variant="floating"
-              isInvalid={Boolean(errors.finalCommittee)}
-              isRequired
-              isDisabled={values.success === false}
-              width="24em"
-            >
-              <Select<CountryChoice, false>
-                options={countries
-                  .filter((c) => c.committeeId === values.finalCommittee)
-                  .map((country) => ({
-                    label: country.country,
-                    value: country.country,
-                  }))}
-                placeholder=" "
-                closeMenuOnSelect
-                selectedOptionColor="green"
-                onChange={(option) =>
-                  setFieldValue("finalCountry", option?.value ?? -1)
-                }
-                isInvalid={Boolean(errors.finalCountry)}
-              />
-              <FormLabel>Select a final country</FormLabel>
-              <FormErrorMessage>{errors.finalCountry}</FormErrorMessage>
-            </FormControl>
+            {values.success ? (
+              <>
+                <FormControl
+                  variant="floating"
+                  isInvalid={Boolean(errors?.finalCommittee)}
+                  isRequired
+                  width="24em"
+                >
+                  <Select<CommitteeChoice, false>
+                    options={committees.map((committee) => ({
+                      label: committee.displayname,
+                      value: committee.id,
+                    }))}
+                    placeholder=" "
+                    closeMenuOnSelect
+                    selectedOptionColor="green"
+                    onChange={(option) =>
+                      setFieldValue("finalCommittee", option?.value ?? -1)
+                    }
+                    isInvalid={Boolean(errors.finalCommittee)}
+                  />
+                  <FormLabel>Select a final committee</FormLabel>
+                  <FormErrorMessage>{errors.finalCommittee}</FormErrorMessage>
+                </FormControl>
+                <FormControl
+                  variant="floating"
+                  isInvalid={Boolean(errors.finalCommittee)}
+                  isRequired
+                  width="24em"
+                >
+                  <Select<CountryChoice, false>
+                    options={countries
+                      .filter((c) => c.committeeId === values.finalCommittee)
+                      .map((country) => ({
+                        label: country.country,
+                        value: country.country,
+                      }))}
+                    placeholder=" "
+                    closeMenuOnSelect
+                    selectedOptionColor="green"
+                    onChange={(option) =>
+                      setFieldValue("finalCountry", option?.value ?? -1)
+                    }
+                    isInvalid={Boolean(errors.finalCountry)}
+                  />
+                  <FormLabel>Select a final country</FormLabel>
+                  <FormErrorMessage>{errors.finalCountry}</FormErrorMessage>
+                </FormControl>
+              </>
+            ) : (
+              <>
+                <FormControl
+                  variant="floating"
+                  isInvalid={Boolean(errors.message)}
+                  isRequired
+                  width="24em"
+                >
+                  <Textarea onChange={handleChange} id="message" />
+                  <FormLabel>Please enter a reason for rejection</FormLabel>
+                  <FormErrorMessage>{errors.message}</FormErrorMessage>
+                </FormControl>
+              </>
+            )}
             <Button onClick={submitForm}>Submit</Button>
           </Box>
         </VStack>
@@ -265,19 +321,28 @@ const DelegateApplication = (props: {
 export default function About({ stringified }: { stringified: string }) {
   const props: DatabaseProps = superjson.parse(stringified)
 
+  if (!props.authorized) {
+    return (
+      <Container maxW="110ch">
+        <Header title="APPLICATIONS" />
+        <Heading>You are not authorized to view this page</Heading>
+        <Text>
+          If you believe that this is an error, please contact us at{" "}
+          <Link href="/contact">the contact page</Link>
+        </Text>
+      </Container>
+    )
+  }
+
+  const removeApplication = (delegateId: number) => {
+    props.delegates = props.delegates.filter(
+      (application) => application.delegateId !== delegateId
+    )
+  }
+
   return (
     <Container maxW="110ch">
       <Header title="APPLICATIONS" />
-
-      {!props.authorized && (
-        <>
-          <Heading>You are not authorized to view this page</Heading>
-          <Text>
-            If you believe that this is an error, please contact us at{" "}
-            <Link href="/contact">the contact page</Link>
-          </Text>
-        </>
-      )}
       {props.authorized && (
         <>
           <Text>
@@ -302,6 +367,7 @@ export default function About({ stringified }: { stringified: string }) {
                   committees={props.committees}
                   delegation={delegation ?? null}
                   key={delegate.delegateId}
+                  removeApplication={removeApplication}
                 />
               )
             })}

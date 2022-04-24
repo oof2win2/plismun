@@ -374,11 +374,71 @@ export type DelegationApply = z.infer<typeof DelegationApply>
 //     }
 // )
 
-export const ReplyDelegateApplication = z.object({
-  userId: z.number(),
-  success: z.boolean(),
-  message: z.string().nullable(),
-  finalCommittee: z.number().nullable(),
-  finalCountry: z.string().nullable(),
-})
+export const ReplyDelegateApplication = z
+  .object({
+    userId: z.number(),
+    success: z.boolean(),
+    message: z.string().nullable(),
+    finalCommittee: z.number().nullable(),
+    finalCountry: z.string().nullable(),
+  })
+  .superRefine((body, ctx) => {
+    if (body.success) {
+      if (body.finalCommittee === null) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["finalCommittee"],
+          message: "Please enter a committee",
+        })
+      } else if (body.finalCommittee < 0) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["finalCommittee"],
+          message: "Please enter a valid committee",
+        })
+      }
+
+      if (body.finalCountry === null) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["finalCountry"],
+          message: "Please enter a country",
+        })
+      } else if (body.finalCountry.length < 2) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["finalCountry"],
+          message: "Please enter a valid country",
+        })
+      }
+    } else {
+      if (body.message === null) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["message"],
+          message: "Please enter a message",
+        })
+      } else if (body.message.length < 10) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["message"],
+          message: "Please enter a message",
+        })
+      }
+    }
+  })
+  .transform((body) => {
+    if (body.success) {
+      return {
+        ...body,
+        message: null,
+      }
+    } else {
+      return {
+        ...body,
+        finalCommittee: null,
+        finalCountry: null,
+      }
+    }
+  })
 export type ReplyDelegateApplication = z.infer<typeof ReplyDelegateApplication>
