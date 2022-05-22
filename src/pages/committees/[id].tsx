@@ -1,18 +1,26 @@
 import Header from "@/components/header"
-import { Committee, CommitteeCountries } from "@prisma/client"
+import {
+  ChairApplication,
+  Committee,
+  CommitteeCountries,
+  User,
+} from "@prisma/client"
 import { Committee as CommitteeSchema } from "@/utils/validators"
 import { z } from "zod"
 import { db } from "@/utils/db"
 import { GetStaticPaths, GetStaticProps } from "next"
 import React from "react"
-import { Heading, Text } from "@chakra-ui/react"
+import { Center, Flex, Heading, Text } from "@chakra-ui/react"
 
 interface CommitteeProps {
   committee: Committee
   committeeCountries: CommitteeCountries[]
 }
 
-const CommitteePage = ({ committee, committeeCountries }: CommitteeProps) => {
+const CommitteePage = ({
+  committee,
+  committeeCountries,
+}: CommitteeProps) => {
   const beginnerCountries = committeeCountries.filter(
     (c) => c.difficulty === "beginner"
   )
@@ -55,19 +63,52 @@ const CommitteePage = ({ committee, committeeCountries }: CommitteeProps) => {
         )}
         <br />
 
+
         <Heading size="lg">Country matrix</Heading>
-        <Heading size="md">Beginner ({beginnerCountries.length})</Heading>
-        <Text>{beginnerCountries.map((c) => c.country).join(", ")}</Text>
+
+        <Center>
+          <Flex direction="column">
+            <Heading size="md" textAlign="center">
+              Beginner ({beginnerCountries.length})
+            </Heading>
+            {beginnerCountries.map((c) => (
+              <>
+                <Text align="center">{c.country}</Text>
+                <br></br>
+              </>
+            ))}
+          </Flex>
+        </Center>
         <br />
 
-        <Heading size="md">
-          Intermediate ({intermediateCountries.length})
-        </Heading>
-        <Text>{intermediateCountries.map((c) => c.country).join(", ")}</Text>
+        <Center>
+          <Flex direction="column">
+            <Heading size="md" textAlign="center">
+              Intermediate ({intermediateCountries.length})
+            </Heading>
+            {intermediateCountries.map((c) => (
+              <>
+                <Text align="center">{c.country}</Text>
+                <br></br>
+              </>
+            ))}
+          </Flex>
+        </Center>
         <br />
 
-        <Heading size="md">Advanced ({advancedCountries.length})</Heading>
-        <Text>{advancedCountries.map((c) => c.country).join(", ")}</Text>
+        <Center>
+          <Flex direction="column">
+            <Heading size="md" textAlign="center">
+              Advanced ({advancedCountries.length})
+            </Heading>
+            {advancedCountries.map((c) => (
+              <>
+                <Text align="center">{c.country}</Text>
+                <br></br>
+              </>
+            ))}
+          </Flex>
+        </Center>
       </div>
     </div>
   )
@@ -77,10 +118,11 @@ export const getStaticProps: GetStaticProps<CommitteeProps> = async ({
   params,
 }) => {
   if (!params) throw new Error("Expected params")
-  const committeeIds = z
-    .array(z.string().regex(/^\d+$/).transform(Number))
+  const committeeId = z
+    .string()
+    .regex(/^\d+$/)
+    .transform(Number)
     .parse(params.id)
-  const committeeId = committeeIds[0]
   const committee = await db.committee.findFirst({
     where: {
       id: committeeId,
@@ -93,6 +135,7 @@ export const getStaticProps: GetStaticProps<CommitteeProps> = async ({
       committeeId,
     },
   })
+
 
   return {
     props: {
@@ -112,7 +155,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     paths: data.map((committee) => {
       return {
         params: {
-          id: [committee.id.toString()],
+          id: committee.id.toString(),
         },
       }
     }),
