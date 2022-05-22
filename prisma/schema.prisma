@@ -75,7 +75,7 @@ model ChairApplication {
   choice3committee Int
   experience       String
   motivation       String
-  finalCommittee   String?
+  finalCommittee   Int?
   paymentStatus    String
   shirtSize        String?
 }

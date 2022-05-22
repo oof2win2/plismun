@@ -15,11 +15,13 @@ import { Center, Flex, Heading, Text } from "@chakra-ui/react"
 interface CommitteeProps {
   committee: Committee
   committeeCountries: CommitteeCountries[]
+  committeeChairs: User[]
 }
 
 const CommitteePage = ({
   committee,
   committeeCountries,
+  committeeChairs,
 }: CommitteeProps) => {
   const beginnerCountries = committeeCountries.filter(
     (c) => c.difficulty === "beginner"
@@ -63,6 +65,32 @@ const CommitteePage = ({
         )}
         <br />
 
+        <Heading size="lg">Chairs</Heading>
+        <Center>
+          <Flex>
+            <Center flexDir="column" margin="8px">
+              <Heading size="sm">Chair 1</Heading>
+              {committeeChairs[0] ? (
+                <Text>
+                  {committeeChairs[0].firstname} {committeeChairs[0].lastname}
+                </Text>
+              ) : (
+                <Text>No determined chair yet</Text>
+              )}
+            </Center>
+            <Center flexDir="column" margin="8px">
+              <Heading size="sm">Chair 2</Heading>
+              {committeeChairs[1] ? (
+                <Text>
+                  {committeeChairs[1].firstname} {committeeChairs[1].lastname}
+                </Text>
+              ) : (
+                <Text>No determined chair yet</Text>
+              )}
+            </Center>
+          </Flex>
+        </Center>
+        <br />
 
         <Heading size="lg">Country matrix</Heading>
 
@@ -136,11 +164,25 @@ export const getStaticProps: GetStaticProps<CommitteeProps> = async ({
     },
   })
 
+  const chairs = await db.chairApplication.findMany({
+    where: {
+      finalCommittee: committeeId,
+    },
+  })
+
+  const chairUsers = await db.user.findMany({
+    where: {
+      id: {
+        in: chairs.map((c) => c.userId),
+      },
+    },
+  })
 
   return {
     props: {
       committee: committee,
       committeeCountries: countries,
+      committeeChairs: chairUsers,
     },
   }
 }
