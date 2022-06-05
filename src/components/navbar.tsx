@@ -53,6 +53,11 @@ const pages: (Page | Category)[] = [
         href: "/about/tos",
         type: "page",
       },
+      {
+        title: "About the Team",
+        href: "/about/team",
+        type: "page",
+      },
     ],
   },
   {
