@@ -1,7 +1,6 @@
 // Prisma database connection
 
 import { PrismaClient } from "@prisma/client"
-import { setCommitteeCountries, setCommittees } from "./cache"
 const IS_PROD = process.env.NODE_ENV === "production"
 
 /**

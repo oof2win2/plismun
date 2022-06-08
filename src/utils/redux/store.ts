@@ -54,6 +54,8 @@ export const makeStore = () => {
       preloadedState: {
         user: {
           user: null,
+		  application: null,
+		  extraData: null,
         },
       },
     })
