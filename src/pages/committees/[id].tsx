@@ -10,6 +10,7 @@ import { z } from "zod"
 import { db } from "@/utils/db"
 import { GetStaticPaths, GetStaticProps } from "next"
 import React from "react"
+import superjson from "superjson"
 import { Center, Flex, Heading, Text } from "@chakra-ui/react"
 
 interface CommitteeProps {
@@ -18,11 +19,9 @@ interface CommitteeProps {
   committeeChairs: User[]
 }
 
-const CommitteePage = ({
-  committee,
-  committeeCountries,
-  committeeChairs,
-}: CommitteeProps) => {
+const CommitteePage = ({ stringified }: { stringified: string }) => {
+  const { committee, committeeCountries, committeeChairs }: CommitteeProps =
+    superjson.parse(stringified)
   const beginnerCountries = committeeCountries.filter(
     (c) => c.difficulty === "beginner"
   )
@@ -142,7 +141,7 @@ const CommitteePage = ({
   )
 }
 
-export const getStaticProps: GetStaticProps<CommitteeProps> = async ({
+export const getStaticProps: GetStaticProps<{ stringified: string }> = async ({
   params,
 }) => {
   if (!params) throw new Error("Expected params")
@@ -180,9 +179,11 @@ export const getStaticProps: GetStaticProps<CommitteeProps> = async ({
 
   return {
     props: {
-      committee: committee,
-      committeeCountries: countries,
-      committeeChairs: chairUsers,
+      stringified: superjson.stringify({
+        committee: committee,
+        committeeCountries: countries,
+        committeeChairs: chairUsers,
+      }),
     },
   }
 }
