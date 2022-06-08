@@ -1,5 +1,5 @@
 import Header from "@/components/header"
-import { Committee, CommitteeCountries, CommitteeMember } from "@prisma/client"
+import { Committee, CommitteeCountries } from "@prisma/client"
 import { Committee as CommitteeSchema } from "@/utils/validators"
 import { z } from "zod"
 import { db } from "@/utils/db"

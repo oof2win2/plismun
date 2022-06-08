@@ -19,7 +19,7 @@ handler.get<PopulatedApiRequest, NextApiResponse>(authAPI, async (req, res) => {
     return res.status(200).json({
       statusCode: 200,
       data: {
-        applicationType: "delegation",
+        type: "delegation",
         application: delegation,
       },
     })
@@ -35,7 +35,7 @@ handler.get<PopulatedApiRequest, NextApiResponse>(authAPI, async (req, res) => {
     return res.status(200).json({
       statusCode: 200,
       data: {
-        applicationType: "delegate",
+        type: "delegate",
         application: delegate,
       },
     })
@@ -51,7 +51,7 @@ handler.get<PopulatedApiRequest, NextApiResponse>(authAPI, async (req, res) => {
     return res.status(200).json({
       statusCode: 200,
       data: {
-        applicationType: "chair",
+        type: "chair",
         application: chair,
       },
     })

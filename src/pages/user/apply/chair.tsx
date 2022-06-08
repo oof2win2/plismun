@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react"
 import Header from "@/components/header"
-import { useAppSelector } from "@/utils/redux/hooks"
+import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks"
 import {
   Button,
   Center,
@@ -13,9 +13,17 @@ import {
   Grid,
   GridItem,
   Heading,
-  Input,
+  Thead,
+  Table,
+  TableCaption,
+  TableContainer,
   Text,
   Textarea,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+  Flex,
 } from "@chakra-ui/react"
 import { Select, OptionBase } from "chakra-react-select"
 import { ChairApply, refineChairApply } from "@/utils/validators"
@@ -26,6 +34,12 @@ import { GetStaticPropsResult } from "next"
 import { db } from "@/utils/db"
 import { useDebouncedCallback } from "use-debounce"
 import { zodErrorToFormik } from "@/utils/utils"
+import {
+  Application,
+  apply,
+  ExtraData,
+  setExtraData,
+} from "@/utils/redux/parts/user"
 
 interface ChairAppProps {
   committees: Committee[]
@@ -41,6 +55,23 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<boolean | null>(null)
+
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    const run = async () => {
+      const req = await fetch("/api/user/application")
+      if (req.status !== 200) return
+      const json = await req.json()
+      const data = json.data as Application
+      dispatch(apply(data))
+
+      const extraQuery = await fetch("/api/user/application/extra")
+      if (extraQuery.status !== 200) return
+      const extraJson = (await extraQuery.json()) as ExtraData
+      dispatch(setExtraData(extraJson))
+    }
+    run()
+  }, [])
 
   const submitApplication = async (form: ChairApply) => {
     setLoading(true)
@@ -121,7 +152,7 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
     )
   }
 
-  if (userData.application) {
+  if (userData.application && !userData.extraData) {
     return (
       <Container maxW="110ch">
         <Header title="CHAIR APPLICATIONS" />
@@ -130,13 +161,120 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
 
         <br />
         <Text>
-          You have already applied to be a {userData.application.type}, you
-          therefore cannot apply again
+          An error occured whilst fetching information about your application
         </Text>
         <Text>
           You can go back to the main page
           <Link href="/">here</Link>
         </Text>
+      </Container>
+    )
+  }
+
+  if (userData.application && userData.application.type !== "chair") {
+    return (
+      <Container maxW="110ch">
+        <Header title="CHAIR APPLICATIONS" />
+
+        <Heading>CHAIR APPLICATIONS</Heading>
+
+        <br />
+        <Text>
+          You do not have a valid chair application. Please go back to the
+          applications homepage
+        </Text>
+        <Text>
+          You can go back to the main page
+          <Link href="/">here</Link>
+        </Text>
+      </Container>
+    )
+  }
+
+  if (
+    userData.application &&
+    userData.extraData?.status === "accepted" &&
+    userData.application.application.finalCommittee !== null
+  ) {
+    const extraData = userData.extraData
+    const firstChair = extraData.chairs[0]
+      ? extraData.users.find((user) => user.id === extraData.chairs[0].userId)!
+      : null
+    const secondChair = extraData.chairs[1]
+      ? extraData.users.find((user) => user.id === extraData.chairs[1].userId)!
+      : null
+    return (
+      <Container maxW="110ch">
+        <Header title="CHAIR APPLICATIONS" />
+
+        <Heading>CHAIR APPLICATIONS</Heading>
+
+        <br />
+        <Text>
+          Application status: Accepted Final committee:{" "}
+          {userData.application.application.finalCommittee}
+        </Text>
+        <br />
+
+        <Center>
+          <Flex direction="row">
+            <Center>
+              <Text>Chair 1</Text>
+              {firstChair ? (
+                <>
+                  <Text>
+                    {firstChair.firstname} {firstChair.lastname}
+                  </Text>
+                  <Text>{firstChair.email}</Text>
+                </>
+              ) : (
+                <Text>No chair determined yet</Text>
+              )}
+            </Center>
+            <Center>
+              <Text>Chair 2</Text>
+              {secondChair ? (
+                <>
+                  <Text>
+                    {secondChair.firstname} {secondChair.lastname}
+                  </Text>
+                  <Text>{secondChair.email}</Text>
+                </>
+              ) : (
+                <Text>No chair determined yet</Text>
+              )}
+            </Center>
+          </Flex>
+        </Center>
+
+        <TableContainer>
+          <Table>
+            <TableCaption>Committee members</TableCaption>
+            <Thead>
+              <Tr>
+                <Th>Country</Th>
+                <Th>Name</Th>
+                <Th>Email</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {extraData.allCommitteeMembers.map((application) => {
+                const user = extraData.users.find(
+                  (user) => user.id === application.userId
+                )!
+                return (
+                  <Tr key={user.id}>
+                    <Td>{application.finalCountry}</Td>
+                    <Td>
+                      {user.firstname} {user.lastname}
+                    </Td>
+                    <Td>{user.email}</Td>
+                  </Tr>
+                )
+              })}
+            </Tbody>
+          </Table>
+        </TableContainer>
       </Container>
     )
   }

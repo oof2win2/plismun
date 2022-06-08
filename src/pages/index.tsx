@@ -3,6 +3,8 @@ import Image from "next/image"
 // import { ParagraphTypography } from "@/utils/styles"
 import Header from "@/components/header"
 import { Center, Container, Text } from "@chakra-ui/react"
+import { useAppDispatch } from "@/utils/redux/hooks"
+import { apply } from "@/utils/redux/parts/user"
 
 export default function Home() {
   return (

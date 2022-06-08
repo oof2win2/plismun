@@ -60,7 +60,7 @@ model AppliedUser {
   choice3country   String
   experience       String
   motivation       String
-  finalCommittee   String?
+  finalCommittee   Int?
   finalCountry     String?
   paymentStatus    String
   shirtSize        String?
@@ -113,13 +113,4 @@ model CommitteeCountries {
   country     String
   difficulty  String
   userId      Int?
-}
-
-// the actual committee members that are in different committees
-model CommitteeMember {
-  committeeId Int
-  role        String // "chair" or "member"
-  // the user that is the delegate in this committee for this country
-  userId      Int    @unique
-  country     String
 }

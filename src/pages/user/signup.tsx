@@ -103,12 +103,8 @@ export default function Signup() {
         email: "",
         password: "",
         passwordConfirm: "",
-        dietary: "None",
         nationality: "",
-        phone: null,
-        schoolname: null,
         birthdate: new Date(),
-        otherInfo: null,
       },
       onSubmit: signupForm,
       validate: (data) => {
@@ -181,7 +177,6 @@ export default function Signup() {
                         }
                       />
                       <FormLabel>First name</FormLabel>
-                      <FormHelperText>Your first name</FormHelperText>
                       <FormErrorMessage>{errors.firstname}</FormErrorMessage>
                     </FormControl>
                   </GridItem>
@@ -205,47 +200,11 @@ export default function Signup() {
                     </FormControl>
                   </GridItem>
 
-                  {/* Phone number */}
-                  <GridItem rowSpan={1} colSpan={3}>
+                  {/* Email */}
+                  <GridItem rowSpan={1} colSpan={6}>
                     <FormControl
                       variant="floating"
                       isRequired
-                      isInvalid={Boolean(errors.phone)}
-                    >
-                      <Input
-                        isInvalid={Boolean(errors.phone)}
-                        onChange={(e) =>
-                          debouncedHandleChange("phone", e.target.value)
-                        }
-                        placeholder="    "
-                      />
-                      <FormLabel>Phone number</FormLabel>
-                      <FormErrorMessage>{errors.phone}</FormErrorMessage>
-                    </FormControl>
-                  </GridItem>
-
-                  {/* School name */}
-                  <GridItem rowSpan={1} colSpan={3}>
-                    <FormControl
-                      variant="floating"
-                      isInvalid={Boolean(errors.schoolname)}
-                    >
-                      <FormLabel>School name</FormLabel>
-                      <Input
-                        onChange={(e) =>
-                          debouncedHandleChange("schoolname", e.target.value)
-                        }
-                        isInvalid={Boolean(errors.schoolname)}
-                        placeholder="    "
-                      />
-                      <FormErrorMessage>{errors.schoolname}</FormErrorMessage>
-                    </FormControl>
-                  </GridItem>
-
-                  {/* Email */}
-                  <GridItem rowSpan={1} colSpan={3}>
-                    <FormControl
-                      variant="floating"
                       isInvalid={Boolean(errors.email)}
                     >
                       <Input
@@ -264,6 +223,7 @@ export default function Signup() {
                   <GridItem rowSpan={1} colSpan={3}>
                     <FormControl
                       variant="floating"
+                      isRequired
                       isInvalid={Boolean(errors.password)}
                     >
                       <Input
@@ -276,37 +236,6 @@ export default function Signup() {
                       />
                       <FormLabel>Password</FormLabel>
                       <FormErrorMessage>{errors.password}</FormErrorMessage>
-                    </FormControl>
-                  </GridItem>
-
-                  {/* Dietary */}
-                  <GridItem rowSpan={1} colSpan={3}>
-                    <FormControl
-                      variant="floating"
-                      isRequired
-                      isInvalid={Boolean(errors.dietary)}
-                    >
-                      <AutoComplete
-                        openOnFocus
-                        disableFilter
-                        // when we get the value, map it to the country code
-                        onChange={(value) => setFieldValue("dietary", value)}
-                        placeholder="    "
-                      >
-                        <AutoCompleteInput
-                          variant="outline"
-                          isInvalid={Boolean(errors.dietary)}
-                        />
-                        <AutoCompleteList>
-                          {DietaryOptions.options.map((dietName, i) => (
-                            <AutoCompleteItem value={dietName} key={i}>
-                              {dietName}
-                            </AutoCompleteItem>
-                          ))}
-                        </AutoCompleteList>
-                      </AutoComplete>
-                      <FormLabel>Dietary</FormLabel>
-                      <FormErrorMessage>{errors.dietary}</FormErrorMessage>
                     </FormControl>
                   </GridItem>
 
@@ -338,7 +267,7 @@ export default function Signup() {
                   {/* Birthdate */}
                   <GridItem
                     rowSpan={1}
-                    colSpan={2}
+                    colSpan={3}
                     css={`
                       --rdp-cell-size: 2rem;
                       --rdp-accent-color: var(--chakra-colors-blue-500);
@@ -375,7 +304,7 @@ export default function Signup() {
                   </GridItem>
 
                   {/* Nationality */}
-                  <GridItem rowSpan={1} colSpan={4}>
+                  <GridItem rowSpan={1} colSpan={3}>
                     <FormControl
                       variant="floating"
                       isRequired
@@ -419,23 +348,6 @@ export default function Signup() {
                       <FormErrorMessage>{errors.nationality}</FormErrorMessage>
                     </FormControl>
                   </GridItem>
-
-                  {/* Other info (big textbox) */}
-                  <GridItem rowSpan={2} colSpan={6}>
-                    <FormControl
-                      variant="floating"
-                      isInvalid={Boolean(errors.otherInfo)}
-                    >
-                      <Textarea
-                        onChange={(e) =>
-                          debouncedHandleChange("otherInfo", e.target.value)
-                        }
-                      />
-                      <FormLabel>Other information</FormLabel>
-                    </FormControl>
-                  </GridItem>
-
-                  <GridItem rowSpan={1} colSpan={3}></GridItem>
                 </Grid>
 
                 <Center>

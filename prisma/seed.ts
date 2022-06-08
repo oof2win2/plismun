@@ -8,10 +8,10 @@ import { hashPassword } from "@/utils/dbUtil"
 
 const amountsToGenerate = {
   committees: 10,
-  users: 50,
+  users: 100,
   delegations: 10,
   delegates: 25,
-  committeeMembers: 10,
+  chairs: 25,
 }
 
 /**
@@ -81,6 +81,7 @@ async function main() {
   const getRandomUserID = () => {
     const [first] = availableUserIDs
     availableUserIDs.delete(first)
+    if (first === undefined) throw new Error("No available users to get IDs of")
     return first
   }
 
@@ -186,11 +187,11 @@ async function main() {
     ]
     const delegate = await db.appliedUser.create({
       data: {
+        userId: userId,
         delegationId: faker.datatype.number({
           min: 0,
           max: amountsToGenerate.delegations - 1,
         }),
-        userId: userId,
         choice1committee: choices[0].committeeId,
         choice1country: choices[0].country,
         choice2committee: choices[1].committeeId,
@@ -202,6 +203,14 @@ async function main() {
         paymentStatus: ["pending", "paid", "rejected"][
           Math.floor(Math.random() * 3)
         ],
+        finalCommittee:
+          Math.random() > 0.6
+            ? choices[Math.floor(Math.random() * 3)].committeeId
+            : null,
+        finalCountry:
+          Math.random() > 0.6
+            ? choices[Math.floor(Math.random() * 3)].country
+            : null,
       },
     })
     allDelegates.push(delegate)
@@ -209,46 +218,44 @@ async function main() {
   }
   delegateBar.stop()
 
-  const CommitteeMemberBar = new SingleBar({
+  const ChairBar = new SingleBar({
     format:
-      "Generating committee members [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}",
+      "Generating chairs [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}",
   })
-  CommitteeMemberBar.start(amountsToGenerate.committeeMembers, 0)
-  const alreadyInCommittee: Set<number> = new Set()
-  const delegateUserIds = allDelegates.map((u) => u.userId)
-  for (let i = 0; i < amountsToGenerate.committeeMembers; i++) {
-    let userId: number
-    // genereate a random user ID that is a delegate and is not already in a committee
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      userId =
-        delegateUserIds[Math.floor(Math.random() * delegateUserIds.length)]
-      const canStop = !alreadyInCommittee.has(userId)
-      alreadyInCommittee.add(userId)
-      if (canStop) break
-    }
-    const user = allDelegates.find((delegate) => delegate.userId === userId)
-    if (!user) {
-      CommitteeMemberBar.increment()
-      continue
-    }
-    // get a random committee from the user
-
-    const committeeId = user.choice1committee
-    const committeeCountry = user.choice1country
-    await db.committeeMember.create({
+  ChairBar.start(amountsToGenerate.chairs, 0)
+  for (let i = 0; i < amountsToGenerate.chairs; i++) {
+    const userId = getRandomUserID()
+    const choices = [
+      randomElementFromList(committeeCountries),
+      randomElementFromList(committeeCountries),
+      randomElementFromList(committeeCountries),
+    ]
+    console.log(userId)
+    await db.chairApplication.create({
       data: {
-        userId: user.userId,
-        role: "member",
-        committeeId: committeeId,
-        country: committeeCountry,
+        userId: userId,
+        delegationId: faker.datatype.number({
+          min: 0,
+          max: amountsToGenerate.delegations - 1,
+        }),
+        choice1committee: choices[0].committeeId,
+        choice2committee: choices[1].committeeId,
+        choice3committee: choices[2].committeeId,
+        experience: faker.lorem.sentences(),
+        motivation: faker.lorem.sentences(),
+        paymentStatus: ["pending", "paid", "rejected"][
+          Math.floor(Math.random() * 3)
+        ],
+        finalCommittee:
+          Math.random() > 0.6
+            ? choices[Math.floor(Math.random() * 3)].committeeId
+            : null,
       },
     })
-    CommitteeMemberBar.increment()
+    ChairBar.increment()
   }
-  CommitteeMemberBar.stop()
+  ChairBar.stop()
 }
-// TODO: generate chairs
 
 main()
   .catch((e) => {

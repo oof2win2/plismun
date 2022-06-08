@@ -8,7 +8,6 @@ import {
   Text,
 } from "@chakra-ui/react"
 import Header from "@/components/header"
-import NextChakraImage from "@/components/nextChakraImage"
 
 type PersonData = {
   image: string

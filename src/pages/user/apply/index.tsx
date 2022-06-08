@@ -2,27 +2,32 @@ import Header from "@/components/header"
 import React, { useEffect } from "react"
 import Link from "next/link"
 import { Container, Heading, Text } from "@chakra-ui/react"
-import { useAppSelector } from "@/utils/redux/hooks"
-import { useDispatch } from "react-redux"
-import { apply } from "@/utils/redux/parts/user"
+import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks"
+import {
+  Application,
+  apply,
+  ExtraData,
+  setExtraData,
+} from "@/utils/redux/parts/user"
+import { AppliedUser, ChairApplication, Delegation } from "@prisma/client"
 
 export default function ApplyIndex() {
   const { application } = useAppSelector((state) => state.user)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   useEffect(() => {
     const run = async () => {
       const req = await fetch("/api/user/application")
       if (req.status !== 200) return
       const json = await req.json()
-      const { data } = json
-      dispatch(
-        apply({
-          application: data.application,
-          type: data.applicationType,
-        })
-      )
+      const data = json.data as Application
+      dispatch(apply(data))
+
+      const extraQuery = await fetch("/api/user/application/delegation")
+      if (extraQuery.status !== 200) return
+      const extraJson = (await extraQuery.json()) as ExtraData
+      dispatch(setExtraData(extraJson))
     }
-    if (!application) run()
+    run()
   }, [])
 
   if (!application)
@@ -52,13 +57,32 @@ export default function ApplyIndex() {
       </Container>
     )
 
+  if (application.type === "delegation") {
+    return (
+      <Container maxW="110ch">
+        <Header title="APPLICATIONS" />
+
+        <Text>
+          You are a leader of the {application.application.name} delegation
+        </Text>
+      </Container>
+    )
+  }
+
   return (
     <Container maxW="110ch">
       <Header title="APPLICATIONS" />
 
       <Text>
         You have already submitted a {application.type} application. Please
-        check your email inbox for updates on your application
+        check your email inbox for updates on your application.
+      </Text>
+
+      <br />
+
+      <Text>
+        Your application however has{" "}
+        {application.application.finalCommittee ? "accepted" : "pending"}
       </Text>
     </Container>
   )

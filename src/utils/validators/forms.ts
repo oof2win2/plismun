@@ -18,15 +18,6 @@ export const SignupSchema = z
     firstname: z.string().min(1, "Please enter first name"),
     lastname: z.string().min(1, "Please enter last name"),
 
-    phone: z
-      .string()
-      .nullable()
-      // validate if it is a mobile phone number if present
-      .refine(
-        (phone) => (phone ? validator.isMobilePhone(phone) : true),
-        "Invalid phone number"
-      )
-      .transform((phone) => phone || null),
     birthdate: z.union([
       z
         .string()
@@ -35,9 +26,6 @@ export const SignupSchema = z
       z.date(),
     ]),
     nationality: z.string().refine((nat) => validator.isISO31661Alpha2(nat)),
-    schoolname: z.string().nullable(),
-    dietary: DietaryOptions.nullable(),
-    otherInfo: z.string().max(400).nullable(),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.passwordConfirm) {
