@@ -95,7 +95,6 @@ model Delegation {
 
 model Committee {
   id          Int     @id @default(autoincrement())
-  description String
   displayname String
   difficulty  String
   chair1      Int?

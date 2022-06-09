@@ -49,9 +49,6 @@ const CommitteePage = ({ stringified }: { stringified: string }) => {
       </div>
 
       <div className="page animate">
-        <Text>{committee.description}</Text>
-        <br />
-
         <Heading size="lg">Topic 1: {committee.topic1}</Heading>
         <Text>{committee.para1}</Text>
         <br />
