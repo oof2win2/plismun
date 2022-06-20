@@ -58,7 +58,7 @@ export default function About() {
             >
               <ion-icon name="mail" />
             </a>
-            <Text>secretariat@plismun.com</Text>
+            <Text>plismun@parklane-is.com</Text>
           </li>
         </ul>
       </div>

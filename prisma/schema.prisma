@@ -113,3 +113,12 @@ model CommitteeCountries {
   difficulty  String
   userId      Int?
 }
+
+model StaffMember {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String
+  position String
+  text     String
+  image    String
+}

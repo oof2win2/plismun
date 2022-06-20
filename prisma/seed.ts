@@ -12,6 +12,7 @@ const amountsToGenerate = {
   delegations: 10,
   delegates: 25,
   chairs: 25,
+  staff: 5,
 }
 
 /**
@@ -229,7 +230,6 @@ async function main() {
       randomElementFromList(committeeCountries),
       randomElementFromList(committeeCountries),
     ]
-    console.log(userId)
     await db.chairApplication.create({
       data: {
         userId: userId,
@@ -254,6 +254,25 @@ async function main() {
     ChairBar.increment()
   }
   ChairBar.stop()
+
+  const StaffBar = new SingleBar({
+    format:
+      "Generating staff [{bar}] {percentage}% | ETA: {eta_formatted} | {value}/{total}",
+  })
+  StaffBar.start(amountsToGenerate.staff, 0)
+  for (let i = 0; i < amountsToGenerate.staff; i++) {
+    await db.staffMember.create({
+      data: {
+        name: faker.name.findName(),
+        email: faker.internet.email(),
+        position: faker.lorem.words(),
+        text: faker.lorem.paragraphs(),
+        image: faker.image.avatar(),
+      },
+    })
+    StaffBar.increment()
+  }
+  StaffBar.stop()
 }
 
 main()
