@@ -47,6 +47,7 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.1",
+    "sharp": "^0.30.6",
     "superjson": "^1.8.2",
     "use-debounce": "^7.0.1",
     "validator": "^13.7.0",

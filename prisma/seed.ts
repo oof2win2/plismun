@@ -102,7 +102,6 @@ async function main() {
           "intermediate",
           "advanced",
         ]),
-        description: faker.lorem.paragraph(),
         topic1: faker.lorem.sentence(),
         para1: faker.lorem.paragraph(),
         topic2: hasTopic2 ? faker.lorem.sentence() : undefined,

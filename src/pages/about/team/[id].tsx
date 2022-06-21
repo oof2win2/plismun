@@ -18,14 +18,14 @@ export default function AboutUsPage({ person }: { person: StaffMember }) {
   return (
     <Container maxW="110ch">
       <Header title="About Us" />
-      <Flex justify="center">
+      <Flex justify="center" display={["none", "none", "flex", "flex"]}>
         <Grid
           gap={4}
           templateAreas={`"name image"
 													"description image"
 					"description blank"`}
           gridTemplateRows="auto"
-          gridTemplateColumns={"250px 1fr"}
+          gridTemplateColumns={"auto auto"}
         >
           <GridItem area="name" pl={2}>
             <Heading>{person.name}</Heading>
@@ -34,12 +34,31 @@ export default function AboutUsPage({ person }: { person: StaffMember }) {
             <Image src={person.image} borderRadius={4} boxSize={300} />
           </GridItem>
           <GridItem area="description" pl={2}>
-            <Text>{person.text}</Text>
+            {person.text.split("\n").map((x) => (
+              <>
+                <Text>{x}</Text>
+                <br />
+              </>
+            ))}
             <Text>
               <a href={`mailto:${person.email}`}>{person.email}</a>
             </Text>
           </GridItem>
         </Grid>
+      </Flex>
+      <Flex display={["flex", "flex", "none", "none"]} direction="column">
+        <Heading>{person.name}</Heading>
+        <Image src={person.image} borderRadius={4} boxSize={300} />
+
+        {person.text.split("\n").map((x) => (
+          <>
+            <Text>{x}</Text>
+            <br />
+          </>
+        ))}
+        <Text>
+          <a href={`mailto:${person.email}`}>{person.email}</a>
+        </Text>
       </Flex>
     </Container>
   )

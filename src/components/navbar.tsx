@@ -152,7 +152,7 @@ const Navbar = () => {
     <Flex alignItems="center" width="100%" padding="20px 10px 20px 10px">
       {/* Logo */}
       <Heading whiteSpace="nowrap" paddingLeft="4px">
-        PLISMUN '23
+        <a href="/">PLISMUN '23</a>
       </Heading>
 
       {/* Desktop */}
