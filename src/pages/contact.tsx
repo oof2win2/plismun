@@ -1,5 +1,5 @@
 import Header from "@/components/header"
-import { Container, Heading, Text } from "@chakra-ui/react"
+import { Container, Heading, Text, Img } from "@chakra-ui/react"
 import React from "react"
 
 export default function About() {
@@ -65,7 +65,7 @@ export default function About() {
 
       <br />
 
-      <div className="c-contact-form" id="contact">
+      {/* <div className="c-contact-form" id="contact">
         <div className="container">
           <div className="row">
             <div className="col col-12">
@@ -146,7 +146,13 @@ export default function About() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+      <Img
+        src="/images/contact.jpg"
+        //width="16"
+        //height="9"
+        borderRadius={16}
+      />
     </Container>
   )
 }
