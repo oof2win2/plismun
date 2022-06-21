@@ -44,6 +44,11 @@ const pages: (Page | Category)[] = [
     pages: [
       { title: "About PLISMUN", href: "/about", type: "page" },
       {
+        title: "About the Team",
+        href: "/about/team",
+        type: "page",
+      },
+      {
         title: "Privacy Policy",
         href: "/about/privacy",
         type: "page",
@@ -51,11 +56,6 @@ const pages: (Page | Category)[] = [
       {
         title: "Terms of Service",
         href: "/about/tos",
-        type: "page",
-      },
-      {
-        title: "About the Team",
-        href: "/about/team",
         type: "page",
       },
     ],

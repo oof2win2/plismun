@@ -37,7 +37,7 @@ export default ({ title, mainPage }: HeaderProps) => {
         {mainPage ? (
           <>
             <Image src="/images/logolarge.png" height={350} width={350} />
-            <Heading color="white">JANUARY 26TH - 29RD, 2023</Heading>
+            <Heading color="white">JANUARY 26TH - 29TH, 2023</Heading>
           </>
         ) : (
           <Heading color="white">{title}</Heading>
