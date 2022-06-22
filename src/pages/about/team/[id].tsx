@@ -4,15 +4,13 @@ import {
   Grid,
   GridItem,
   Heading,
-  HStack,
   Image,
   Text,
 } from "@chakra-ui/react"
 import Header from "@/components/header"
 import { StaffMember } from "@prisma/client"
 import { db } from "@/utils/db"
-import Link from "next/link"
-import { boolean, z } from "zod"
+import { z } from "zod"
 
 export default function AboutUsPage({ person }: { person: StaffMember }) {
   return (

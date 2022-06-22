@@ -29,70 +29,70 @@ handler.get<PopulatedApiRequest, NextApiResponse>(authAPI, async (req, res) => {
   })
 })
 
-handler.put(
-  authAPI,
-  validate({
-    body: DelegateApply.superRefine(
-      refineDelegateApply(async () => {
-        return {
-          committees: await db.committee.findMany(),
-          committeeCountries: await db.committeeCountries.findMany(),
-        }
-      })
-    ),
-    async: true,
-  }),
-  async (req: ApiRequest, res) => {
-    const application: DelegateApply = req.body
+// handler.put(
+//   authAPI,
+//   validate({
+//     body: DelegateApply.superRefine(
+//       refineDelegateApply(async () => {
+//         return {
+//           committees: await db.committee.findMany(),
+//           committeeCountries: await db.committeeCountries.findMany(),
+//         }
+//       })
+//     ),
+//     async: true,
+//   }),
+//   async (req: ApiRequest, res) => {
+//     const application: DelegateApply = req.body
 
-    if (!req.populated)
-      return res.status(500).json({
-        statusCode: 500,
-        message: "Internal Server Error",
-        description: "You are not logged in",
-      })
+//     if (!req.populated)
+//       return res.status(500).json({
+//         statusCode: 500,
+//         message: "Internal Server Error",
+//         description: "You are not logged in",
+//       })
 
-    const existingDelegation = await db.delegation.findFirst({
-      where: {
-        delegationLeaderId: req.user.id,
-      },
-    })
-    const existingDelegate = await db.appliedUser.findFirst({
-      where: {
-        userId: req.user.id,
-      },
-    })
-    const existingChair = await db.chairApplication.findFirst({
-      where: {
-        userId: req.user.id,
-      },
-    })
+//     const existingDelegation = await db.delegation.findFirst({
+//       where: {
+//         delegationLeaderId: req.user.id,
+//       },
+//     })
+//     const existingDelegate = await db.appliedUser.findFirst({
+//       where: {
+//         userId: req.user.id,
+//       },
+//     })
+//     const existingChair = await db.chairApplication.findFirst({
+//       where: {
+//         userId: req.user.id,
+//       },
+//     })
 
-    if (existingDelegation || existingDelegate || existingChair)
-      return res.status(403).json({
-        statusCode: 403,
-        message: "Forbidden",
-        description:
-          "You have already submitted an application, there is only one allowed per user",
-      })
+//     if (existingDelegation || existingDelegate || existingChair)
+//       return res.status(403).json({
+//         statusCode: 403,
+//         message: "Forbidden",
+//         description:
+//           "You have already submitted an application, there is only one allowed per user",
+//       })
 
-    // submit a new application for the user, since they dont have one yet
-    // TODO: send an email to the user
-    const newApplication = await db.appliedUser.create({
-      data: {
-        ...application,
-        userId: req.user.id,
-        // the payment status is always pending initially
-        paymentStatus: "pending",
-      },
-    })
+//     // submit a new application for the user, since they dont have one yet
+//     // TODO: send an email to the user
+//     const newApplication = await db.appliedUser.create({
+//       data: {
+//         ...application,
+//         userId: req.user.id,
+//         // the payment status is always pending initially
+//         paymentStatus: "pending",
+//       },
+//     })
 
-    return res.status(201).json({
-      statusCode: 201,
-      data: newApplication,
-    })
-  }
-)
+//     return res.status(201).json({
+//       statusCode: 201,
+//       data: newApplication,
+//     })
+//   }
+// )
 
 // TODO: update your current application
 

@@ -37,23 +37,26 @@ export default function ApplyIndex() {
 
         <Heading>DELEGATE APPLICATIONS</Heading>
         {/* some basic info here */}
-        <Link href="/user/apply/delegate">Apply to be a delegate here</Link>
+        {/* <Link href="/user/apply/delegate">Apply to be a delegate here</Link> */}
+        <p>Delegate applications are currently closed</p>
 
         <br />
         <br />
 
         <Heading>CHAIR APPLICATIONS</Heading>
         {/* some basic info here */}
-        <Link href="/user/apply/chair">Apply to be a chair here</Link>
+        {/* <Link href="/user/apply/chair">Apply to be a chair here</Link> */}
+        <p>Chair applications are currently closed</p>
 
         <br />
         <br />
 
         <Heading>DELEGATION LEADER APPLICATIONS</Heading>
         {/* some basic info here */}
-        <Link href="/user/apply/delegation">
+        {/* <Link href="/user/apply/delegation">
           Apply to be a delegation leader here
-        </Link>
+        </Link> */}
+        <p>Delegation applications are currently closed</p>
       </Container>
     )
 
