@@ -21,7 +21,7 @@ model User {
   lastname  String
 
   phone       String?
-  birthdate   DateTime
+  birthdate   DateTime @default(now())
   nationality String
   gender      String?
   schoolname  String?
