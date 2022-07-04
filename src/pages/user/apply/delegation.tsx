@@ -25,6 +25,7 @@ import { Select, OptionBase } from "chakra-react-select"
 import {
   DelegateApply,
   DelegationApply,
+  DietaryOptions,
   refineDelegateApply,
 } from "@/utils/validators"
 import { useFormik } from "formik"
@@ -87,6 +88,9 @@ export default function Signup({}: DelegationAppProps) {
         country: "",
         estimatedDelegates: -1,
         delegates: null,
+        diet: "None",
+        phone: "",
+        shirtSize: null,
       },
       onSubmit: submitApplication,
       validate: (values) => {
@@ -276,6 +280,113 @@ export default function Signup({}: DelegationAppProps) {
                       The estimated amount of delegates you will be representing
                     </FormHelperText>
                   )}
+                </FormControl>
+              </GridItem>
+
+              {/* shirt size / none */}
+              <GridItem rowSpan={1} colSpan={2}>
+                <FormControl
+                  variant="floating"
+                  isInvalid={Boolean(errors.shirtSize)}
+                  isRequired
+                >
+                  <Select<
+                    { value: string | null; label: string } & OptionBase,
+                    false
+                  >
+                    options={[
+                      {
+                        label: "None",
+                        value: null,
+                      },
+                      {
+                        value: "XS",
+                        label: "XS",
+                      },
+                      {
+                        value: "S",
+                        label: "S",
+                      },
+                      {
+                        value: "M",
+                        label: "M",
+                      },
+                      {
+                        value: "L",
+                        label: "L",
+                      },
+                      {
+                        value: "XL",
+                        label: "XL",
+                      },
+                      {
+                        value: "XXL",
+                        label: "XXL",
+                      },
+                    ]}
+                    placeholder=" "
+                    onChange={(option) =>
+                      setFieldValue("shirtSize", option?.value ?? null)
+                    }
+                    defaultValue={{
+                      label: "None",
+                      value: null,
+                    }}
+                  />
+                  <FormLabel>Shirt Size</FormLabel>
+                  <FormErrorMessage>{errors.shirtSize}</FormErrorMessage>
+                  <FormHelperText>
+                    Select a shirt size or none if you don't want one
+                  </FormHelperText>
+                </FormControl>
+              </GridItem>
+
+              {/* phone number */}
+              <GridItem rowSpan={1} colSpan={2}>
+                <FormControl
+                  variant="floating"
+                  isInvalid={Boolean(errors.phone)}
+                  isRequired
+                >
+                  <Input
+                    onChange={(e) =>
+                      debouncedHandleChange("phone", e.target.value)
+                    }
+                    placeholder=" "
+                    isInvalid={Boolean(errors.phone)}
+                  />
+                  <FormLabel>Phone number</FormLabel>
+                  <FormErrorMessage>{errors.phone}</FormErrorMessage>
+                  <FormHelperText>
+                    Please put in your phone number
+                  </FormHelperText>
+                </FormControl>
+              </GridItem>
+
+              {/* dietary choice */}
+              <GridItem rowSpan={1} colSpan={2}>
+                <FormControl
+                  variant="floating"
+                  isInvalid={Boolean(errors.diet)}
+                  isRequired
+                >
+                  <Select<
+                    { value: string | null; label: string } & OptionBase,
+                    false
+                  >
+                    options={DietaryOptions.options.map((x) => ({
+                      value: x,
+                      label: x,
+                    }))}
+                    placeholder=" "
+                    defaultValue={{ value: "None", label: "None" }}
+                    onChange={(option) =>
+                      setFieldValue("diet", option?.value ?? null)
+                    }
+                  />
+                  <FormLabel>Diet</FormLabel>
+                  <FormErrorMessage>{errors.diet}</FormErrorMessage>
+                  <FormHelperText>Select a diet that you have</FormHelperText>
                 </FormControl>
               </GridItem>
             </Grid>

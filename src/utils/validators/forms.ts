@@ -2,12 +2,7 @@ import { z } from "zod"
 import validator from "validator"
 import { Committee, CommitteeCountries } from "@prisma/client"
 
-export const DietaryOptions = z.enum([
-  "None",
-  "Vegetarian",
-  "Vegan",
-  "Other (please specify below)",
-])
+export const DietaryOptions = z.enum(["None", "Vegetarian", "Vegan"])
 
 export const SignupSchema = z
   .object({
@@ -47,6 +42,13 @@ export const LoginSchema = z.object({
 export const DelegateApply = z.object({
   userId: z.number(),
 
+  phone: z
+    .string()
+    .refine(
+      (p) => !p || validator.isMobilePhone(p),
+      "Phone must be either empty or valid"
+    ),
+
   motivation: z
     .string()
     .max(4000, "Your motivation is too long")
@@ -79,6 +81,8 @@ export const DelegateApply = z.object({
 
   // shirt size or null if no shirt desired
   shirtSize: z.enum(["XS", "S", "M", "L", "XL", "XXL"]).nullable(),
+
+  diet: DietaryOptions,
 })
 export type DelegateApply = z.infer<typeof DelegateApply>
 // we have this extra function for delegate applications so we can get the committees and committee countries from the database or from nextjs,
@@ -242,6 +246,12 @@ export const refineDelegateApply = (
 
 export const ChairApply = z.object({
   userId: z.number(),
+  phone: z
+    .string()
+    .refine(
+      (p) => !p || validator.isMobilePhone(p),
+      "Phone must be either empty or valid"
+    ),
 
   motivation: z
     .string()
@@ -272,6 +282,8 @@ export const ChairApply = z.object({
 
   // shirt size or null if no shirt desired
   shirtSize: z.enum(["XS", "S", "M", "L", "XL", "XXL"]).nullable(),
+
+  diet: DietaryOptions,
 })
 export type ChairApply = z.infer<typeof ChairApply>
 
@@ -344,29 +356,23 @@ export const DelegationApply = z.object({
     ),
   estimatedDelegates: z.number().min(1, "Please enter a valid number"),
   delegates: z.number().nullable(),
+
+  phone: z
+    .string()
+    .refine(
+      (p) => !p || validator.isMobilePhone(p),
+      "Phone must be either empty or valid"
+    ),
+  diet: DietaryOptions,
+  // shirt size or null if no shirt desired
+  shirtSize: z.enum(["XS", "S", "M", "L", "XL", "XXL"]).nullable(),
 })
 export type DelegationApply = z.infer<typeof DelegationApply>
-
-// TODO: check if this can be shown with zod
-// type base = {
-//   userId: number
-//   success: boolean
-// } & (
-//   | {
-//       success: true
-//       finalChoice: string
-//     }
-//   | {
-//       success: false
-//       message: string
-//     }
-// )
 
 export const ReplyDelegateApplication = z
   .object({
     userId: z.number(),
     success: z.boolean(),
-    message: z.string().nullable(),
     finalCommittee: z.number().nullable(),
     finalCountry: z.string().nullable(),
   })
@@ -399,27 +405,12 @@ export const ReplyDelegateApplication = z
           message: "Please enter a valid country",
         })
       }
-    } else {
-      if (body.message === null) {
-        ctx.addIssue({
-          code: "custom",
-          path: ["message"],
-          message: "Please enter a message",
-        })
-      } else if (body.message.length < 10) {
-        ctx.addIssue({
-          code: "custom",
-          path: ["message"],
-          message: "Please enter a message",
-        })
-      }
     }
   })
   .transform((body) => {
     if (body.success) {
       return {
         ...body,
-        message: null,
       }
     } else {
       return {

@@ -50,27 +50,60 @@ handler.get<PopulatedApiRequest, NextApiResponse>(authAPI, async (req, res) => {
       return res.status(200).json({
         status: "pending",
       })
-    // const committee = await db.committee.findFirst({
-    //   where: {
-    //     id: delegate.finalCommittee,
-    //   },
-    // })
-    // const allCommitteeMembers = committee
-    //   ? await db.appliedUser.findMany({
-    //       where: {
-    //         finalCommittee: committee.id,
-    //       },
-    //     })
-    //   : []
-    // return res.status(200).json({
-    //   statusCode: 200,
-    //   data: {
-    //     status: "accepted",
-    //     type: "delegate",
-    //     committee,
-    //     application: delegate,
-    //   },
-    // })
+    const committee = await db.committee.findFirst({
+      where: {
+        id: delegate.finalCommittee,
+      },
+    })
+    const allCommitteeMembers = committee
+      ? await db.appliedUser.findMany({
+          where: {
+            finalCommittee: committee.id,
+          },
+        })
+      : []
+    const chairs = committee
+      ? await db.chairApplication.findMany({
+          where: {
+            finalCommittee: committee.id,
+          },
+        })
+      : []
+    const users = committee
+      ? await db.user.findMany({
+          where: {
+            id: {
+              in: [
+                allCommitteeMembers.map((mem) => mem.userId),
+                chairs.map((c) => c.userId),
+              ].flat(),
+            },
+          },
+        })
+      : []
+    const countries = committee
+      ? await db.committeeCountries.findMany({
+          where: {
+            committeeId: committee.id,
+            userId: {
+              not: null,
+            },
+          },
+        })
+      : []
+    return res.status(200).json({
+      statusCode: 200,
+      data: {
+        status: "accepted",
+        type: "delegate",
+        committee,
+        application: delegate,
+        allCommitteeMembers: allCommitteeMembers,
+        users: users,
+        chairs: chairs,
+        countries: countries,
+      },
+    })
   }
 
   const chair = await db.chairApplication.findFirst({

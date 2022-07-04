@@ -24,9 +24,14 @@ import {
   Tbody,
   Td,
   Flex,
+  Input,
 } from "@chakra-ui/react"
 import { Select, OptionBase } from "chakra-react-select"
-import { ChairApply, refineChairApply } from "@/utils/validators"
+import {
+  ChairApply,
+  DietaryOptions,
+  refineChairApply,
+} from "@/utils/validators"
 import { useFormik } from "formik"
 import Link from "next/link"
 import { Committee, Delegation } from "@prisma/client"
@@ -112,6 +117,8 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
         choice2committee: -1,
         choice3committee: -1,
         shirtSize: null,
+        diet: "None",
+        phone: "",
       },
       onSubmit: submitApplication,
       validate: async (values) => {
@@ -318,245 +325,302 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
       {/* application form */}
       {!success && (
         <form onSubmit={handleSubmit}>
-          <FormControl>
+          {/* committee choices */}
+          <Grid
+            width="100%"
+            templateRows="repeat(2, 0.1fr)"
+            templateColumns="repeat(6, 1fr)"
+            gap={4}
+            style={{ paddingBottom: "2rem" }}
+          >
             {/* committee choices */}
-            <Grid
-              width="100%"
-              templateRows="repeat(2, 0.1fr)"
-              templateColumns="repeat(6, 1fr)"
-              gap={4}
-              style={{ paddingBottom: "2rem" }}
-            >
-              {/* committee choices */}
-              <GridItem rowSpan={1} colSpan={2}>
-                <FormControl
-                  variant="floating"
+            <GridItem rowSpan={1} colSpan={2}>
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.choice1committee)}
+                isRequired
+              >
+                <Select<CommitteeChoice, false>
+                  options={committees.map((committee) => ({
+                    label: committee.displayname,
+                    value: committee.id,
+                    isDisabled: checkShouldBeDisabled(committee.id, 1),
+                  }))}
+                  placeholder=" "
+                  closeMenuOnSelect
+                  selectedOptionColor="green"
+                  onChange={(option) =>
+                    setFieldValue("choice1committee", option?.value ?? -1)
+                  }
                   isInvalid={Boolean(errors.choice1committee)}
-                  isRequired
-                >
-                  <Select<CommitteeChoice, false>
-                    options={committees.map((committee) => ({
-                      label: committee.displayname,
-                      value: committee.id,
-                      isDisabled: checkShouldBeDisabled(committee.id, 1),
-                    }))}
-                    placeholder=" "
-                    closeMenuOnSelect
-                    selectedOptionColor="green"
-                    onChange={(option) =>
-                      setFieldValue("choice1committee", option?.value ?? -1)
-                    }
-                    isInvalid={Boolean(errors.choice1committee)}
-                  />
-                  <FormLabel>Committee Choice 1</FormLabel>
-                  <FormErrorMessage>{errors.choice1committee}</FormErrorMessage>
-                  <FormHelperText>
-                    Select your first committee choice
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
+                />
+                <FormLabel>Committee Choice 1</FormLabel>
+                <FormErrorMessage>{errors.choice1committee}</FormErrorMessage>
+                <FormHelperText>
+                  Select your first committee choice
+                </FormHelperText>
+              </FormControl>
+            </GridItem>
 
-              <GridItem rowSpan={1} colSpan={2}>
-                <FormControl
-                  variant="floating"
+            <GridItem rowSpan={1} colSpan={2}>
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.choice2committee)}
+                isRequired
+              >
+                <Select<CommitteeChoice, false>
+                  options={committees.map((committee) => ({
+                    label: committee.displayname,
+                    value: committee.id,
+                    isDisabled: checkShouldBeDisabled(committee.id, 2),
+                  }))}
+                  placeholder=" "
+                  closeMenuOnSelect
+                  selectedOptionColor="green"
+                  onChange={(option) =>
+                    setFieldValue("choice2committee", option?.value ?? -1)
+                  }
                   isInvalid={Boolean(errors.choice2committee)}
-                  isRequired
-                >
-                  <Select<CommitteeChoice, false>
-                    options={committees.map((committee) => ({
-                      label: committee.displayname,
-                      value: committee.id,
-                      isDisabled: checkShouldBeDisabled(committee.id, 2),
-                    }))}
-                    placeholder=" "
-                    closeMenuOnSelect
-                    selectedOptionColor="green"
-                    onChange={(option) =>
-                      setFieldValue("choice2committee", option?.value ?? -1)
-                    }
-                    isInvalid={Boolean(errors.choice2committee)}
-                  />
-                  <FormLabel>Committee Choice 2</FormLabel>
-                  <FormErrorMessage>{errors.choice2committee}</FormErrorMessage>
-                  <FormHelperText>
-                    Select your second committee choice
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
+                />
+                <FormLabel>Committee Choice 2</FormLabel>
+                <FormErrorMessage>{errors.choice2committee}</FormErrorMessage>
+                <FormHelperText>
+                  Select your second committee choice
+                </FormHelperText>
+              </FormControl>
+            </GridItem>
 
-              <GridItem rowSpan={1} colSpan={2}>
-                <FormControl
-                  variant="floating"
+            <GridItem rowSpan={1} colSpan={2}>
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.choice3committee)}
+                isRequired
+              >
+                <Select<CommitteeChoice, false>
+                  options={committees.map((committee) => ({
+                    label: committee.displayname,
+                    value: committee.id,
+                    isDisabled: checkShouldBeDisabled(committee.id, 3),
+                  }))}
+                  placeholder=" "
+                  closeMenuOnSelect
+                  selectedOptionColor="green"
+                  onChange={(option) =>
+                    setFieldValue("choice3committee", option?.value ?? -1)
+                  }
                   isInvalid={Boolean(errors.choice3committee)}
-                  isRequired
-                >
-                  <Select<CommitteeChoice, false>
-                    options={committees.map((committee) => ({
-                      label: committee.displayname,
-                      value: committee.id,
-                      isDisabled: checkShouldBeDisabled(committee.id, 3),
-                    }))}
-                    placeholder=" "
-                    closeMenuOnSelect
-                    selectedOptionColor="green"
-                    onChange={(option) =>
-                      setFieldValue("choice3committee", option?.value ?? -1)
-                    }
-                    isInvalid={Boolean(errors.choice3committee)}
-                  />
-                  <FormLabel>Committee Choice 3</FormLabel>
-                  <FormErrorMessage>{errors.choice3committee}</FormErrorMessage>
-                  <FormHelperText>
-                    Select your third committee choice
-                  </FormHelperText>
-                </FormControl>
-              </GridItem>
-            </Grid>
+                />
+                <FormLabel>Committee Choice 3</FormLabel>
+                <FormErrorMessage>{errors.choice3committee}</FormErrorMessage>
+                <FormHelperText>
+                  Select your third committee choice
+                </FormHelperText>
+              </FormControl>
+            </GridItem>
 
             <Divider />
 
             <br />
 
-            <FormControl
-              variant="floating"
-              isInvalid={Boolean(errors.delegationId)}
-              isRequired
-            >
-              <Select<CommitteeChoice, false>
-                options={[
-                  {
-                    name: "None",
-                    delegationId: -1,
-                  },
-                  ...delegations,
-                ].map((delegation) => ({
-                  label: delegation.name,
-                  value: delegation.delegationId,
-                }))}
-                placeholder=" "
-                onChange={(option) =>
-                  setFieldValue("delegationId", option?.value ?? null)
-                }
-                defaultValue={{
-                  label: "None",
-                  value: -1,
-                }}
+            {/* delegation choice */}
+            <GridItem rowSpan={1} colSpan={6}>
+              <FormControl
+                variant="floating"
                 isInvalid={Boolean(errors.delegationId)}
-              />
-              <FormLabel>Select a delegation</FormLabel>
-
-              <FormErrorMessage>{errors.delegationId}</FormErrorMessage>
-              <FormHelperText>
-                Select a delegation that you are part of if you are part of one.
-                This is something that your club leader or teacher would have
-                told you about. Don't worry about it if you are not partaking in
-                PLISMUN as a club member or as a part of a school
-              </FormHelperText>
-            </FormControl>
-
-            <br />
-
-            <FormControl
-              variant="floating"
-              isInvalid={Boolean(errors.motivation)}
-              isRequired
-            >
-              <Textarea
-                // onChange={(e) => setMotivation(e.target.value)}
-                onChange={(e) =>
-                  debouncedHandleChange("motivation", e.target.value)
-                }
-                placeholder=" "
-                isInvalid={Boolean(errors.motivation)}
-                height="20em"
-              />
-              <FormLabel>Motivation</FormLabel>
-              <FormErrorMessage>{errors.motivation}</FormErrorMessage>
-              <FormHelperText>
-                Fill in some motivation about why you would like to attend
-                PLISMUN as a delegate here (approx. 400 words)
-              </FormHelperText>
-            </FormControl>
-
-            <br />
-
-            <FormControl
-              variant="floating"
-              isInvalid={Boolean(errors.experience)}
-              isRequired
-            >
-              <Textarea
-                onChange={(e) =>
-                  debouncedHandleChange("experience", e.target.value)
-                }
-                placeholder=" "
-                isInvalid={Boolean(errors.experience)}
-                height="20em"
-              />
-              <FormLabel>Experience</FormLabel>
-              <FormErrorMessage>{errors.experience}</FormErrorMessage>
-              <FormHelperText>
-                Fill in some experience about your past experiences with
-                PLISMUN, other MUN conferences, or other related work here
-                (approx. 400 words)
-              </FormHelperText>
-            </FormControl>
-
-            <FormControl
-              variant="floating"
-              isInvalid={Boolean(errors.shirtSize)}
-              isRequired
-            >
-              <Select<
-                { value: string | null; label: string } & OptionBase,
-                false
+                isRequired
               >
-                options={[
-                  {
+                <Select<CommitteeChoice, false>
+                  options={[
+                    {
+                      name: "None",
+                      delegationId: -1,
+                    },
+                    ...delegations,
+                  ].map((delegation) => ({
+                    label: delegation.name,
+                    value: delegation.delegationId,
+                  }))}
+                  placeholder=" "
+                  onChange={(option) =>
+                    setFieldValue("delegationId", option?.value ?? null)
+                  }
+                  defaultValue={{
+                    label: "None",
+                    value: -1,
+                  }}
+                  isInvalid={Boolean(errors.delegationId)}
+                />
+                <FormLabel>Select a delegation</FormLabel>
+
+                <FormErrorMessage>{errors.delegationId}</FormErrorMessage>
+                <FormHelperText>
+                  Select a delegation that you are part of if you are part of
+                  one. This is something that your club leader or teacher would
+                  have told you about. Don't worry about it if you are not
+                  partaking in PLISMUN as a club member or as a part of a school
+                </FormHelperText>
+              </FormControl>
+            </GridItem>
+
+            {/* motivation */}
+            <GridItem rowSpan={2} colSpan={6}>
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.motivation)}
+                isRequired
+              >
+                <Textarea
+                  // onChange={(e) => setMotivation(e.target.value)}
+                  onChange={(e) =>
+                    debouncedHandleChange("motivation", e.target.value)
+                  }
+                  placeholder=" "
+                  isInvalid={Boolean(errors.motivation)}
+                  height="20em"
+                />
+                <FormLabel>Motivation</FormLabel>
+                <FormErrorMessage>{errors.motivation}</FormErrorMessage>
+                <FormHelperText>
+                  Fill in some motivation about why you would like to attend
+                  PLISMUN as a delegate here (approx. 400 words)
+                </FormHelperText>
+              </FormControl>
+            </GridItem>
+
+            {/* experience */}
+            <GridItem rowSpan={2} colSpan={6}>
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.experience)}
+                isRequired
+              >
+                <Textarea
+                  onChange={(e) =>
+                    debouncedHandleChange("experience", e.target.value)
+                  }
+                  placeholder=" "
+                  isInvalid={Boolean(errors.experience)}
+                  height="20em"
+                />
+                <FormLabel>Experience</FormLabel>
+                <FormErrorMessage>{errors.experience}</FormErrorMessage>
+                <FormHelperText>
+                  Fill in some experience about your past experiences with
+                  PLISMUN, other MUN conferences, or other related work here
+                  (approx. 400 words)
+                </FormHelperText>
+              </FormControl>
+            </GridItem>
+
+            {/* shirt size / none */}
+            <GridItem rowSpan={1} colSpan={2}>
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.shirtSize)}
+                isRequired
+              >
+                <Select<
+                  { value: string | null; label: string } & OptionBase,
+                  false
+                >
+                  options={[
+                    {
+                      label: "None",
+                      value: null,
+                    },
+                    {
+                      value: "XS",
+                      label: "XS",
+                    },
+                    {
+                      value: "S",
+                      label: "S",
+                    },
+                    {
+                      value: "M",
+                      label: "M",
+                    },
+                    {
+                      value: "L",
+                      label: "L",
+                    },
+                    {
+                      value: "XL",
+                      label: "XL",
+                    },
+                    {
+                      value: "XXL",
+                      label: "XXL",
+                    },
+                  ]}
+                  placeholder=" "
+                  onChange={(option) =>
+                    setFieldValue("shirtSize", option?.value ?? null)
+                  }
+                  defaultValue={{
                     label: "None",
                     value: null,
-                  },
-                  {
-                    value: "XS",
-                    label: "XS",
-                  },
-                  {
-                    value: "S",
-                    label: "S",
-                  },
-                  {
-                    value: "M",
-                    label: "M",
-                  },
-                  {
-                    value: "L",
-                    label: "L",
-                  },
-                  {
-                    value: "XL",
-                    label: "XL",
-                  },
-                  {
-                    value: "XXL",
-                    label: "XXL",
-                  },
-                ]}
-                placeholder=" "
-                onChange={(option) =>
-                  setFieldValue("shirtSize", option?.value ?? null)
-                }
-              />
-              <FormLabel>Shirt Size</FormLabel>
-              <FormErrorMessage>{errors.shirtSize}</FormErrorMessage>
-              <FormHelperText>
-                Select a shirt size or none if you don't want one
-              </FormHelperText>
-            </FormControl>
+                  }}
+                />
+                <FormLabel>Shirt Size</FormLabel>
+                <FormErrorMessage>{errors.shirtSize}</FormErrorMessage>
+                <FormHelperText>
+                  Select a shirt size or none if you don't want one
+                </FormHelperText>
+              </FormControl>
+            </GridItem>
 
-            <Center>
-              <Button type="submit">Submit application</Button>
-            </Center>
-          </FormControl>
+            {/* phone number */}
+            <GridItem rowSpan={1} colSpan={2}>
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.phone)}
+                isRequired
+              >
+                <Input
+                  onChange={(e) =>
+                    debouncedHandleChange("phone", e.target.value)
+                  }
+                  placeholder=" "
+                  isInvalid={Boolean(errors.phone)}
+                />
+                <FormLabel>Phone number</FormLabel>
+                <FormErrorMessage>{errors.phone}</FormErrorMessage>
+                <FormHelperText>Please put in your phone number</FormHelperText>
+              </FormControl>
+            </GridItem>
+
+            {/* dietary choice */}
+            <GridItem rowSpan={1} colSpan={2}>
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.diet)}
+                isRequired
+              >
+                <Select<
+                  { value: string | null; label: string } & OptionBase,
+                  false
+                >
+                  options={DietaryOptions.options.map((x) => ({
+                    value: x,
+                    label: x,
+                  }))}
+                  placeholder=" "
+                  defaultValue={{ value: "None", label: "None" }}
+                  onChange={(option) =>
+                    setFieldValue("diet", option?.value ?? null)
+                  }
+                />
+                <FormLabel>Diet</FormLabel>
+                <FormErrorMessage>{errors.diet}</FormErrorMessage>
+                <FormHelperText>Select a diet that you have</FormHelperText>
+              </FormControl>
+            </GridItem>
+          </Grid>
+
+          <Center>
+            <Button type="submit">Submit application</Button>
+          </Center>
         </form>
       )}
     </Container>

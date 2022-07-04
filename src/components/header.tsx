@@ -36,7 +36,7 @@ export default ({ title, mainPage }: HeaderProps) => {
       <Center paddingTop="16vh" flexDir="column">
         {mainPage ? (
           <>
-            <Image src="/images/logolarge.png" height={350} width={350} />
+            <Image src="/images/fulllogo.png" height={350} width={350} />
             <Heading color="white">JANUARY 26TH - 29TH, 2023</Heading>
           </>
         ) : (
