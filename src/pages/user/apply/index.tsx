@@ -45,16 +45,18 @@ export default function ApplyIndex() {
 
         <Heading>CHAIR APPLICATIONS</Heading>
         {/* some basic info here */}
-        <Link href="/user/apply/chair">Apply to be a chair here</Link>
+        {/* <Link href="/user/apply/chair">Apply to be a chair here</Link> */}
+        <Text>Chair applications are currently closed</Text>
 
         <br />
         <br />
 
         <Heading>DELEGATION LEADER APPLICATIONS</Heading>
         {/* some basic info here */}
-        <Link href="/user/apply/delegation">
+        {/* <Link href="/user/apply/delegation">
           Apply to be a delegation leader here
-        </Link>
+        </Link> */}
+        <Text>Delegation leader applications are currently closed</Text>
       </Container>
     )
 
