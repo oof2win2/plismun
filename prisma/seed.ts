@@ -164,6 +164,9 @@ async function main() {
         country: faker.address.country(),
         // make the estimated number of delegates be
         estimatedDelegates: estimatedDelegates,
+        phone: faker.phone.phoneNumber(),
+        diet: "None",
+        shirtSize: null,
       },
     })
     delegationBar.increment()
@@ -249,6 +252,9 @@ async function main() {
           Math.random() > 0.6
             ? choices[Math.floor(Math.random() * 3)].committeeId
             : null,
+        phone: faker.phone.phoneNumber(),
+        diet: "None",
+        shirtSize: null,
       },
     })
     ChairBar.increment()

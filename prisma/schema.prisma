@@ -78,12 +78,14 @@ model ChairApplication {
   finalCommittee   Int?
   paymentStatus    String
   shirtSize        String?
+  phone            String
+  diet             String
 }
 
 // a "group" of people that have decided to join PLISMUN together
 // usually with clubs
 model Delegation {
-  delegationId       Int    @id @default(autoincrement())
+  delegationId       Int     @id @default(autoincrement())
   // the delegation leader's user ID
   delegationLeaderId Int
   name               String
@@ -91,6 +93,9 @@ model Delegation {
   estimatedDelegates Int
   // this number is filled in closer to the conference
   delegates          Int?
+  shirtSize          String?
+  phone              String
+  diet               String
 }
 
 model Committee {
