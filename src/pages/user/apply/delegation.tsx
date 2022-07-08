@@ -14,6 +14,7 @@ import {
   GridItem,
   Heading,
   Input,
+  Image,
   NumberInput,
   Text,
   NumberInputField,
@@ -198,12 +199,17 @@ export default function Signup({}: DelegationAppProps) {
             <Grid
               width="100%"
               templateRows="repeat(1, 0.1fr)"
-              templateColumns="repeat(3, 2fr)"
+              templateColumns="repeat(6, 1fr)"
               gap={4}
               style={{ paddingBottom: "2rem" }}
+              templateAreas={`"name name country country number number"
+										"phone phone phone diet diet diet"
+										"divider divider divider divider divider divider"
+										"size size size image image image"
+										"text text text image image image"`}
             >
               {/* delegation name */}
-              <GridItem rowSpan={1} colSpan={1}>
+              <GridItem area={"name"}>
                 <FormControl
                   variant="floating"
                   isInvalid={Boolean(errors.name)}
@@ -223,7 +229,7 @@ export default function Signup({}: DelegationAppProps) {
               </GridItem>
 
               {/* delegation country */}
-              <GridItem rowSpan={1} colSpan={1}>
+              <GridItem area="country">
                 <FormControl
                   variant="floating"
                   isInvalid={Boolean(errors.country)}
@@ -249,7 +255,7 @@ export default function Signup({}: DelegationAppProps) {
               </GridItem>
 
               {/* estimated amount of delegates */}
-              <GridItem rowSpan={1} colSpan={1}>
+              <GridItem area="number">
                 <FormControl
                   variant="floating"
                   isInvalid={Boolean(errors.estimatedDelegates)}
@@ -283,8 +289,63 @@ export default function Signup({}: DelegationAppProps) {
                 </FormControl>
               </GridItem>
 
-              {/* shirt size / none */}
-              <GridItem rowSpan={1} colSpan={2}>
+              {/* phone number */}
+              <GridItem area="phone">
+                <FormControl
+                  variant="floating"
+                  isInvalid={Boolean(errors.phone)}
+                  isRequired
+                >
+                  <Input
+                    onChange={(e) =>
+                      debouncedHandleChange("phone", e.target.value)
+                    }
+                    placeholder=" "
+                    isInvalid={Boolean(errors.phone)}
+                  />
+                  <FormLabel>Phone number</FormLabel>
+                  <FormErrorMessage>{errors.phone}</FormErrorMessage>
+                  <FormHelperText>
+                    Please put in your phone number
+                  </FormHelperText>
+                </FormControl>
+              </GridItem>
+
+              {/* dietary choice */}
+              <GridItem area="diet">
+                <FormControl
+                  variant="floating"
+                  isInvalid={Boolean(errors.diet)}
+                  isRequired
+                >
+                  <Select<
+                    { value: string | null; label: string } & OptionBase,
+                    false
+                  >
+                    options={DietaryOptions.options.map((x) => ({
+                      value: x,
+                      label: x,
+                    }))}
+                    placeholder=" "
+                    defaultValue={{ value: "None", label: "None" }}
+                    onChange={(option) =>
+                      setFieldValue("diet", option?.value ?? null)
+                    }
+                  />
+                  <FormLabel>Diet</FormLabel>
+                  <FormErrorMessage>{errors.diet}</FormErrorMessage>
+                  <FormHelperText>
+                    Select a diet that you personally have
+                  </FormHelperText>
+                </FormControl>
+              </GridItem>
+
+              <GridItem area="divider">
+                <Divider />
+              </GridItem>
+
+              {/* shirt size */}
+              <GridItem area="size">
                 <FormControl
                   variant="floating"
                   isInvalid={Boolean(errors.shirtSize)}
@@ -341,56 +402,21 @@ export default function Signup({}: DelegationAppProps) {
                 </FormControl>
               </GridItem>
 
-              {/* phone number */}
-              <GridItem rowSpan={1} colSpan={2}>
-                <FormControl
-                  variant="floating"
-                  isInvalid={Boolean(errors.phone)}
-                  isRequired
-                >
-                  <Input
-                    onChange={(e) =>
-                      debouncedHandleChange("phone", e.target.value)
-                    }
-                    placeholder=" "
-                    isInvalid={Boolean(errors.phone)}
-                  />
-                  <FormLabel>Phone number</FormLabel>
-                  <FormErrorMessage>{errors.phone}</FormErrorMessage>
-                  <FormHelperText>
-                    Please put in your phone number
-                  </FormHelperText>
-                </FormControl>
+              {/* shirt description */}
+              <GridItem area="text">
+                <Text>
+                  The shirt is made from a mix of polyester and cotton, all
+                  renewably sourced
+                </Text>
+                <br />
+                <Text>Cost: 400czk</Text>
               </GridItem>
 
-              {/* dietary choice */}
-              <GridItem rowSpan={1} colSpan={2}>
-                <FormControl
-                  variant="floating"
-                  isInvalid={Boolean(errors.diet)}
-                  isRequired
-                >
-                  <Select<
-                    { value: string | null; label: string } & OptionBase,
-                    false
-                  >
-                    options={DietaryOptions.options.map((x) => ({
-                      value: x,
-                      label: x,
-                    }))}
-                    placeholder=" "
-                    defaultValue={{ value: "None", label: "None" }}
-                    onChange={(option) =>
-                      setFieldValue("diet", option?.value ?? null)
-                    }
-                  />
-                  <FormLabel>Diet</FormLabel>
-                  <FormErrorMessage>{errors.diet}</FormErrorMessage>
-                  <FormHelperText>Select a diet that you have</FormHelperText>
-                </FormControl>
+              {/* shirt image */}
+              <GridItem area="image">
+                <Image src="/images/shirt.png" width="100%" height="100%" />
               </GridItem>
             </Grid>
-
             <Center>
               <Button type="submit">Submit application</Button>
             </Center>

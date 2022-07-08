@@ -10,6 +10,7 @@ import {
   FormErrorMessage,
   FormHelperText,
   FormLabel,
+  Image,
   Grid,
   GridItem,
   Heading,
@@ -330,11 +331,23 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
             width="100%"
             templateRows="repeat(2, 0.1fr)"
             templateColumns="repeat(6, 1fr)"
+            templateAreas={`"choice1 choice1 choice2 choice2 choice3 choice3"
+										"divider1 divider1 divider1 divider1 divider1 divider1"
+										"delegation delegation delegation delegation delegation delegation"
+										"phone phone phone dietary dietary dietary"
+										"motivation motivation motivation motivation motivation motivation"
+										"motivation motivation motivation motivation motivation motivation"
+										"motivation motivation motivation motivation motivation motivation"
+										"motivation motivation motivation motivation motivation motivation"
+										"experience experience experience experience experience experience"
+										"divider2 divider2 divider2 divider2 divider2 divider2"
+										"size size size image image image"
+										"text text text image image image"`}
             gap={4}
             style={{ paddingBottom: "2rem" }}
           >
             {/* committee choices */}
-            <GridItem rowSpan={1} colSpan={2}>
+            <GridItem area="choice1">
               <FormControl
                 variant="floating"
                 isInvalid={Boolean(errors.choice1committee)}
@@ -362,7 +375,7 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
               </FormControl>
             </GridItem>
 
-            <GridItem rowSpan={1} colSpan={2}>
+            <GridItem area="choice2">
               <FormControl
                 variant="floating"
                 isInvalid={Boolean(errors.choice2committee)}
@@ -390,7 +403,7 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
               </FormControl>
             </GridItem>
 
-            <GridItem rowSpan={1} colSpan={2}>
+            <GridItem area="choice3">
               <FormControl
                 variant="floating"
                 isInvalid={Boolean(errors.choice3committee)}
@@ -418,12 +431,12 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
               </FormControl>
             </GridItem>
 
-            <Divider />
-
-            <br />
+            <GridItem area="divider1">
+              <Divider />
+            </GridItem>
 
             {/* delegation choice */}
-            <GridItem rowSpan={1} colSpan={6}>
+            <GridItem area="delegation">
               <FormControl
                 variant="floating"
                 isInvalid={Boolean(errors.delegationId)}
@@ -463,7 +476,7 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
             </GridItem>
 
             {/* motivation */}
-            <GridItem rowSpan={2} colSpan={6}>
+            <GridItem area="motivation">
               <FormControl
                 variant="floating"
                 isInvalid={Boolean(errors.motivation)}
@@ -488,7 +501,7 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
             </GridItem>
 
             {/* experience */}
-            <GridItem rowSpan={2} colSpan={6}>
+            <GridItem area="experience">
               <FormControl
                 variant="floating"
                 isInvalid={Boolean(errors.experience)}
@@ -512,8 +525,59 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
               </FormControl>
             </GridItem>
 
-            {/* shirt size / none */}
-            <GridItem rowSpan={1} colSpan={2}>
+            {/* phone number */}
+            <GridItem area="phone">
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.phone)}
+                isRequired
+              >
+                <Input
+                  onChange={(e) =>
+                    debouncedHandleChange("phone", e.target.value)
+                  }
+                  placeholder=" "
+                  isInvalid={Boolean(errors.phone)}
+                />
+                <FormLabel>Phone number</FormLabel>
+                <FormErrorMessage>{errors.phone}</FormErrorMessage>
+                <FormHelperText>Please put in your phone number</FormHelperText>
+              </FormControl>
+            </GridItem>
+
+            {/* dietary choice */}
+            <GridItem area="dietary">
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.diet)}
+                isRequired
+              >
+                <Select<
+                  { value: string | null; label: string } & OptionBase,
+                  false
+                >
+                  options={DietaryOptions.options.map((x) => ({
+                    value: x,
+                    label: x,
+                  }))}
+                  placeholder=" "
+                  defaultValue={{ value: "None", label: "None" }}
+                  onChange={(option) =>
+                    setFieldValue("diet", option?.value ?? null)
+                  }
+                />
+                <FormLabel>Diet</FormLabel>
+                <FormErrorMessage>{errors.diet}</FormErrorMessage>
+                <FormHelperText>Select a diet that you have</FormHelperText>
+              </FormControl>
+            </GridItem>
+
+            <GridItem area="divider2">
+              <Divider />
+            </GridItem>
+
+            {/* shirt size */}
+            <GridItem area="size">
               <FormControl
                 variant="floating"
                 isInvalid={Boolean(errors.shirtSize)}
@@ -570,54 +634,21 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
               </FormControl>
             </GridItem>
 
-            {/* phone number */}
-            <GridItem rowSpan={1} colSpan={2}>
-              <FormControl
-                variant="floating"
-                isInvalid={Boolean(errors.phone)}
-                isRequired
-              >
-                <Input
-                  onChange={(e) =>
-                    debouncedHandleChange("phone", e.target.value)
-                  }
-                  placeholder=" "
-                  isInvalid={Boolean(errors.phone)}
-                />
-                <FormLabel>Phone number</FormLabel>
-                <FormErrorMessage>{errors.phone}</FormErrorMessage>
-                <FormHelperText>Please put in your phone number</FormHelperText>
-              </FormControl>
+            {/* shirt description */}
+            <GridItem area="text">
+              <Text>
+                The shirt is made from a mix of polyester and cotton, all
+                renewably sourced Cost: 400czk
+              </Text>
+              <br />
+              <Text>Cost: 400czk</Text>
             </GridItem>
 
-            {/* dietary choice */}
-            <GridItem rowSpan={1} colSpan={2}>
-              <FormControl
-                variant="floating"
-                isInvalid={Boolean(errors.diet)}
-                isRequired
-              >
-                <Select<
-                  { value: string | null; label: string } & OptionBase,
-                  false
-                >
-                  options={DietaryOptions.options.map((x) => ({
-                    value: x,
-                    label: x,
-                  }))}
-                  placeholder=" "
-                  defaultValue={{ value: "None", label: "None" }}
-                  onChange={(option) =>
-                    setFieldValue("diet", option?.value ?? null)
-                  }
-                />
-                <FormLabel>Diet</FormLabel>
-                <FormErrorMessage>{errors.diet}</FormErrorMessage>
-                <FormHelperText>Select a diet that you have</FormHelperText>
-              </FormControl>
+            {/* shirt image */}
+            <GridItem area="image">
+              <Image src="/images/shirt.png" width="100%" height="100%" />
             </GridItem>
           </Grid>
-
           <Center>
             <Button type="submit">Submit application</Button>
           </Center>

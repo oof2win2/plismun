@@ -145,7 +145,6 @@ const DelegateApplication = (props: {
       initialValues: {
         userId: user.id,
         success: false,
-        message: null,
         finalCommittee: null,
         finalCountry: null,
       },
@@ -247,7 +246,7 @@ const DelegateApplication = (props: {
             <FormLabel marginLeft="1em">Accept</FormLabel>
           </FormControl>
           <Box>
-            {values.success ? (
+            {values.success && (
               <>
                 <FormControl
                   variant="floating"
@@ -294,19 +293,6 @@ const DelegateApplication = (props: {
                   />
                   <FormLabel>Select a final country</FormLabel>
                   <FormErrorMessage>{errors.finalCountry}</FormErrorMessage>
-                </FormControl>
-              </>
-            ) : (
-              <>
-                <FormControl
-                  variant="floating"
-                  isInvalid={Boolean(errors.message)}
-                  isRequired
-                  width="24em"
-                >
-                  <Textarea onChange={handleChange} id="message" />
-                  <FormLabel>Please enter a reason for rejection</FormLabel>
-                  <FormErrorMessage>{errors.message}</FormErrorMessage>
                 </FormControl>
               </>
             )}

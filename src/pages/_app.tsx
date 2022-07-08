@@ -19,7 +19,7 @@ function MyApp(props: AppProps) {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <title>PLISMUN '23</title>
-        <link rel="icon" href="/images/miniiconlogo.png" />
+        <link rel="icon" type="image/png" href="/images/miniiconlogo.png" />
       </Head>
       {/* @ts-expect-error due to the fact that __PERSISTOR is not default and ts will complain */}
       <PersistGate persistor={store.__PERSISTOR}>
