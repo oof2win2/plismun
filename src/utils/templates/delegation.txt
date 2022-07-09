@@ -1,0 +1,9 @@
+Dear {FIRSTNAME} {LASTNAME},
+
+Your application for the delegation {DELEGATION} has been accepted and people will now be able to apply as chairs and delegates with this delegation.
+
+Sincerely,
+The PLISMUN '23 team
+
+--
+This email was sent by a robot
