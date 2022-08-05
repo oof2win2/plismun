@@ -1,4 +1,11 @@
-import { ChairApplication, Committee, Delegation, User } from "@prisma/client"
+import {
+  AppliedUser,
+  ChairApplication,
+  Committee,
+  CommitteeCountries,
+  Delegation,
+  User,
+} from "@prisma/client"
 import nodemailer from "nodemailer"
 import ENV from "./env"
 import { Application } from "./redux/parts/user"
@@ -110,6 +117,61 @@ export async function sendChairEmail(
     subject: "New PLISMUN '23 Chair Application",
     text: messages[1][0],
     html: messages[1][1],
+  })
+}
+
+export async function sendDelegateEmail(
+  user: User,
+  application: AppliedUser,
+  committees: Committee[],
+  countries: CommitteeCountries[],
+  delegation: Delegation | null
+) {
+  let text = await fs.readFile(
+    path.join(".", "src", "utils", "templates", "delegate.txt"),
+    "utf8"
+  )
+  let html = await fs.readFile(
+    path.join(".", "src", "utils", "templates", "delegate.html"),
+    "utf8"
+  )
+  const delegationText = delegation
+    ? `You are part of the ${delegation.name} delegation`
+    : "You have not applied as part of a delegation"
+
+  const format = (msg: string) => {
+    return msg
+      .replaceAll("{FIRSTNAME}", user.firstname)
+      .replaceAll("{LASTNAME}", user.lastname)
+      .replaceAll("{DELEGATIONTEXT}", delegationText)
+      .replaceAll(
+        "{COM1}",
+        committees.find((x) => x.id == application.choice1committee)!
+          .displayname
+      )
+      .replaceAll(
+        "{COM2}",
+        committees.find((x) => x.id == application.choice2committee)!
+          .displayname
+      )
+      .replaceAll(
+        "{COM3}",
+        committees.find((x) => x.id == application.choice3committee)!
+          .displayname
+      )
+      .replaceAll("{CON1}", application.choice1country)
+      .replaceAll("{CON2}", application.choice2country)
+      .replaceAll("{CON3}", application.choice3country)
+  }
+  text = format(text)
+  html = format(html)
+
+  transport.sendMail({
+    to: user.email,
+    from: ENV.EMAIL_USERNAME,
+    subject: "Your PLISMUN '23 Delegation Application",
+    text: text,
+    html: html,
   })
 }
 

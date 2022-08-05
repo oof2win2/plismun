@@ -1,0 +1,19 @@
+Dear {FIRSTNAME} {LASTNAME},
+
+Your application for the chair position in the following committees and countries has been received and you will be informed about your application in due notice. Below are your chosen committees.
+
+| Committee 1 | Committee 2 | Committee 3 |
+|-------------|-------------|-------------|
+| {COM1}      | {COM2}      | {COM3}      |
+
+| Country   1 | Country   2 | Country   3 |
+|-------------|-------------|-------------|
+| {CON1}      | {CON2}      | {CON3}      |
+
+{DELEGATIONTEXT}
+
+Sincerely,
+The PLISMUN '23 Team
+
+--
+This email was sent by a robot
