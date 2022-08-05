@@ -120,6 +120,7 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
         shirtSize: null,
         diet: "None",
         phone: "",
+        school: null,
       },
       onSubmit: submitApplication,
       validate: async (values) => {
@@ -335,9 +336,7 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
 										"divider1 divider1 divider1 divider1 divider1 divider1"
 										"delegation delegation delegation delegation delegation delegation"
 										"phone phone phone dietary dietary dietary"
-										"motivation motivation motivation motivation motivation motivation"
-										"motivation motivation motivation motivation motivation motivation"
-										"motivation motivation motivation motivation motivation motivation"
+                    "school school school school school school"
 										"motivation motivation motivation motivation motivation motivation"
 										"experience experience experience experience experience experience"
 										"divider2 divider2 divider2 divider2 divider2 divider2"
@@ -471,6 +470,32 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
                   one. This is something that your club leader or teacher would
                   have told you about. Don't worry about it if you are not
                   partaking in PLISMUN as a club member or as a part of a school
+                </FormHelperText>
+              </FormControl>
+            </GridItem>
+
+            {/* school name */}
+            <GridItem area="school">
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.delegationId)}
+                isRequired
+              >
+                <Input
+                  // onChange={(e) => setMotivation(e.target.value)}
+                  onChange={(e) =>
+                    debouncedHandleChange("school", e.target.value)
+                  }
+                  placeholder=" "
+                  isInvalid={Boolean(errors.motivation)}
+                  // height="20em"
+                />
+                <FormLabel>School name</FormLabel>
+
+                <FormErrorMessage>{errors.delegationId}</FormErrorMessage>
+                <FormHelperText>
+                  Please input your school's name, regardless of whether you are
+                  going as part of a delegation or not
                 </FormHelperText>
               </FormControl>
             </GridItem>

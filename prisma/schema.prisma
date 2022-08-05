@@ -23,8 +23,6 @@ model User {
   phone       String?
   birthdate   DateTime @default(now())
   nationality String
-  gender      String?
-  schoolname  String?
   dietary     String?
 
   position String?
@@ -60,6 +58,7 @@ model AppliedUser {
   choice3country   String
   experience       String
   motivation       String
+  school           String?
   finalCommittee   Int?
   finalCountry     String?
   paymentStatus    String
@@ -75,6 +74,7 @@ model ChairApplication {
   choice3committee Int
   experience       String
   motivation       String
+  school           String?
   finalCommittee   Int?
   paymentStatus    String
   shirtSize        String?

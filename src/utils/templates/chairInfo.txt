@@ -1,0 +1,23 @@
+Chair application of {FIRSTNAME} {LASTNAME}
+
+Chosen committees
+
+| Committee 1 | Committee 2 | Committee 3 |
+|-------------|-------------|-------------|
+| {COM1}      | {COM2}      | {COM3}      |
+
+{DELEGATIONTEXT}
+
+---
+Motivation
+
+{MOTIVATION}
+---
+Experience
+
+{EXPERIENCE}
+---
+
+Phone: {PHONE}
+Email: {EMAIL}
+School: {SCHOOL}

@@ -58,6 +58,8 @@ export const DelegateApply = z.object({
     .max(4000, "Your experience is too long")
     .min(10, "Please enter a short experience"),
 
+  school: z.string().nullable(),
+
   // ID of delegation
   // -1 is taken as no delegation
   delegationId: z.preprocess(
@@ -282,6 +284,8 @@ export const ChairApply = z.object({
 
   // shirt size or null if no shirt desired
   shirtSize: z.enum(["XS", "S", "M", "L", "XL", "XXL"]).nullable(),
+
+  school: z.string().nullable(),
 
   diet: DietaryOptions,
 })
