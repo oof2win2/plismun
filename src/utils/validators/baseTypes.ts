@@ -26,8 +26,6 @@ export const User = z.object({
     z.date(),
   ]),
   nationality: z.string(),
-  gender: z.string().nullable(),
-  schoolname: z.string().nullable(),
   position: z.string().nullable(),
   dietary: z.string().nullable(),
 

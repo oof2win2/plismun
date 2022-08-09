@@ -179,7 +179,7 @@ const DelegateApplication = (props: {
       >
         <GridItem>First name: {user.firstname}</GridItem>
         <GridItem>Last name: {user.lastname}</GridItem>
-        <GridItem>School: {user.schoolname || "None"}</GridItem>
+        <GridItem>School: {delegate.school || "None"}</GridItem>
         <GridItem>Delegation: {delegation?.name || "None"}</GridItem>
         <GridItem>
           Birthdate: {format(user.birthdate, "PP")} ({userAge} years old)
@@ -368,6 +368,7 @@ export const getServerSideProps: GetServerSideProps<{
   stringified: string
 }> = async (context) => {
   const sessionData = await getSessionData(context.req.cookies)
+  console.log(sessionData, context.req.cookies)
   // user is not logged in at all
   if (!sessionData)
     return {
@@ -381,6 +382,7 @@ export const getServerSideProps: GetServerSideProps<{
   const { user } = sessionData
 
   // user is not staff so doesn't have perms to view applications
+  console.log({ user })
   if (!user.isStaff)
     return {
       props: {
