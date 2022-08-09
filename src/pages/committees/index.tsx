@@ -24,7 +24,10 @@ const Committee = ({ committee }: SingleCommitteeProps) => {
       <div className="c-project-card__content">
         <Link href={`/committees/${committee.id}`}>
           <a className="c-project-card__image">
-            <Image src={"/images/uw.png"} layout="fill" />
+            <Image
+              src={`/images/committees/${committee.id}.jpg`}
+              layout="fill"
+            />
           </a>
         </Link>
         <div className="c-project-card__info">
