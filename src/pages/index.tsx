@@ -1,6 +1,13 @@
 import React from "react"
 import Header from "@/components/header"
-import { Container, Text } from "@chakra-ui/react"
+import {
+  Center,
+  Container,
+  Divider,
+  Flex,
+  Heading,
+  Text,
+} from "@chakra-ui/react"
 
 export default function Home() {
   return (
@@ -24,6 +31,17 @@ export default function Home() {
         7 committees in PLISMUN '23 means that first-time MUN debutants and
         seasoned debating veterans alike will find their place.
       </Text>
+      <Divider margin="1em" />
+      <Center>
+        <Text>Latest news relating to the conference:</Text>
+        <br />
+      </Center>
+      <Container maxW="l" centerContent>
+        <Heading>CHAIR APPLICATIONS OPEN</Heading>
+        <Text>
+          Chair applications have been opened on the 9th of August, 2022
+        </Text>
+      </Container>
     </Container>
   )
 }
