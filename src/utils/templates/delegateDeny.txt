@@ -1,0 +1,10 @@
+Dear {FIRSTNAME} {LASTNAME},
+
+This email has been sent to inform you that your
+delegate application to PLISMUN '23 has been rejected.
+
+Sincerely,
+The PLISMUN '23 Team
+
+--
+This email was sent by a robot

@@ -63,6 +63,9 @@ model AppliedUser {
   finalCountry     String?
   paymentStatus    String
   shirtSize        String?
+  phone            String?
+  diet             String?
+  denied           Boolean @default(false)
 }
 
 model ChairApplication {

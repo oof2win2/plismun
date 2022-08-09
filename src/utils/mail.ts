@@ -11,6 +11,7 @@ import ENV from "./env"
 import { Application } from "./redux/parts/user"
 import fs from "fs/promises"
 import path from "path"
+import { ReplyDelegateApplication } from "./validators"
 
 const transport = nodemailer.createTransport({
   pool: true,
@@ -172,6 +173,58 @@ export async function sendDelegateEmail(
     subject: "Your PLISMUN '23 Delegation Application",
     text: text,
     html: html,
+  })
+}
+
+export async function sendDelegateAcceptance(
+  delegate: User,
+  committee: Committee,
+  country: CommitteeCountries
+) {
+  let text = await fs.readFile(
+    path.join(".", "src", "utils", "templates", "delegateAccept.txt"),
+    "utf8"
+  )
+  let html = await fs.readFile(
+    path.join(".", "src", "utils", "templates", "delegateAccept.html"),
+    "utf8"
+  )
+  const replacer = (text: string) => {
+    return text
+      .replaceAll("{FIRSTNAME}", delegate.firstname)
+      .replaceAll("{LASTNAME}", delegate.lastname)
+      .replaceAll("{COMMITTEE}", committee.displayname)
+      .replaceAll("{COUNTRY}", country.country)
+  }
+  transport.sendMail({
+    to: delegate.email,
+    from: ENV.EMAIL_USERNAME,
+    subject: "Your PLISMUN '23 Delegate Application",
+    text: replacer(text),
+    html: replacer(html),
+  })
+}
+
+export async function sendDelegateDeny(delegate: User) {
+  let text = await fs.readFile(
+    path.join(".", "src", "utils", "templates", "delegateDeny.txt"),
+    "utf8"
+  )
+  let html = await fs.readFile(
+    path.join(".", "src", "utils", "templates", "delegateDeny.html"),
+    "utf8"
+  )
+  const replacer = (text: string) => {
+    return text
+      .replaceAll("{FIRSTNAME}", delegate.firstname)
+      .replaceAll("{LASTNAME}", delegate.lastname)
+  }
+  transport.sendMail({
+    to: delegate.email,
+    from: ENV.EMAIL_USERNAME,
+    subject: "Your PLISMUN '23 Delegate Application",
+    text: replacer(text),
+    html: replacer(html),
   })
 }
 

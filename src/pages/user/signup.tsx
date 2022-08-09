@@ -139,13 +139,7 @@ export default function Signup() {
       <Center maxW="110ch">
         {wasSuccess && (
           <>
-            <Heading>
-              Success signing up, please verify your email address
-            </Heading>
-
-            <Text>
-              Please check your spam folder if you don't get an email soon
-            </Text>
+            <Heading>Success signing up, please log in</Heading>
           </>
         )}
         {loading && <Heading>Loading...</Heading>}

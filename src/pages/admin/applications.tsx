@@ -53,7 +53,7 @@ type DatabaseProps =
   | {
       authorized: true
       delegates: AppliedUser[]
-      chairs: ChairApplication[]
+      // chairs: ChairApplication[]
       users: User[]
       countries: CommitteeCountries[]
       committees: Committee[]
@@ -125,15 +125,22 @@ const DelegateApplication = (props: {
     setSuccess(false)
 
     try {
-      // const response = await fetch("/api/")
-      // TODO: finish submitting of this form
+      const response = await fetch("/api/admin/applications/delegate", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      })
+      if (response.status !== 200) throw await response.json()
       setSuccess(true)
       setError(null)
       setTimeout(() => {
         removeApplication(delegate.delegateId)
       }, 3000)
     } catch (error) {
-      setError(error as string)
+      // @ts-expect-error
+      setError(error.toString() as string)
       setSuccess(false)
     }
 
@@ -368,7 +375,6 @@ export const getServerSideProps: GetServerSideProps<{
   stringified: string
 }> = async (context) => {
   const sessionData = await getSessionData(context.req.cookies)
-  console.log(sessionData, context.req.cookies)
   // user is not logged in at all
   if (!sessionData)
     return {
@@ -382,7 +388,6 @@ export const getServerSideProps: GetServerSideProps<{
   const { user } = sessionData
 
   // user is not staff so doesn't have perms to view applications
-  console.log({ user })
   if (!user.isStaff)
     return {
       props: {
@@ -397,17 +402,18 @@ export const getServerSideProps: GetServerSideProps<{
     where: {
       finalCountry: null,
       finalCommittee: null,
+      denied: false,
     },
   })
-  const chairs = await db.chairApplication.findMany({
-    where: {
-      finalCommittee: null,
-    },
-  })
+  // const chairs = await db.chairApplication.findMany({
+  //   where: {
+  //     finalCommittee: null,
+  //   },
+  // })
 
   const appliedUserIDs = new Set([
     ...delegates.map((d) => d.userId),
-    ...chairs.map((c) => c.userId),
+    // ...chairs.map((c) => c.userId),
   ])
   // get user objects for each applied user
   const appliedUsers = await db.user.findMany({
@@ -427,9 +433,9 @@ export const getServerSideProps: GetServerSideProps<{
     ...delegates
       .map((d) => d.delegationId)
       .filter((id): id is number => id !== null),
-    ...chairs
-      .map((c) => c.delegationId)
-      .filter((id): id is number => id !== null),
+    // ...chairs
+    //   .map((c) => c.delegationId)
+    //   .filter((id): id is number => id !== null),
   ])
   const delegations = await db.delegation.findMany({
     where: {
@@ -442,7 +448,7 @@ export const getServerSideProps: GetServerSideProps<{
   const props: DatabaseProps = {
     authorized: true,
     delegates,
-    chairs,
+    // chairs: [],
     users: appliedUsers,
     committees,
     countries,
