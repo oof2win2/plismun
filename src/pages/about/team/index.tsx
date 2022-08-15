@@ -41,6 +41,8 @@ export default function AboutUsPage({ people }: AboutUsProps) {
           templateColumns="repeat(3, 1fr)"
           gap={4}
           justifyContent="center"
+          flexWrap="wrap"
+          display="flex"
         >
           {people.map((person, i) => (
             <StaffMember key={i} {...person} />
