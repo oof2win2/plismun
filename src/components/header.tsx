@@ -13,27 +13,18 @@ type HeaderProps =
 
 export default ({ title, mainPage }: HeaderProps) => {
   return (
-    <div style={{ zIndex: -1, paddingBottom: mainPage ? "18vh" : "24vh" }}>
-      <div
-        className="bgWrap"
-        style={{
-          zIndex: -1,
-          height: mainPage ? "70vh" : "40vh",
-          width: "100%",
-        }}
+    <div
+      style={{
+        paddingBottom: mainPage ? "12vh" : "16vh",
+      }}
+    >
+      <Center
+        paddingTop="8vh"
+        flexDir="column"
+        backgroundImage={'url("/images/school_img2.jpg")'}
+        backgroundPosition="center center"
+        paddingBottom="8vh"
       >
-        <Image
-          src={
-            mainPage
-              ? "/images/school_img2.jpg"
-              : "/images/school_imgheader.jpg"
-          }
-          layout="fill"
-          objectFit="cover"
-          className="backgroundImage"
-        />
-      </div>
-      <Center paddingTop="16vh" flexDir="column">
         {mainPage ? (
           <>
             <Image src="/images/fulllogo.png" height={350} width={350} />
@@ -44,8 +35,5 @@ export default ({ title, mainPage }: HeaderProps) => {
         )}
       </Center>
     </div>
-    // <div>
-    //   <img src="/images/school_img2.jpg" />
-    // </div>
   )
 }
