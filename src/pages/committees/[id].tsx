@@ -1,4 +1,3 @@
-import Header from "@/components/header"
 import {
   ChairApplication,
   Committee,
@@ -34,8 +33,6 @@ const CommitteePage = ({ stringified }: { stringified: string }) => {
 
   return (
     <div className="container">
-      <Header title="COMMITTEES" />
-
       <div className="container">
         <div className="c-page-heading">
           <Heading size="3xl" className="c-page-heading__title">
@@ -204,5 +201,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: false,
   }
 }
+
+CommitteePage.pageName = "COMMITTEES"
 
 export default CommitteePage

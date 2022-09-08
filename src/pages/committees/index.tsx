@@ -1,4 +1,3 @@
-import Header from "@/components/header"
 import { Committee, CommitteeCountries } from "@prisma/client"
 import { Committee as CommitteeSchema } from "@/utils/validators"
 import { z } from "zod"
@@ -45,15 +44,13 @@ const Committee = ({ committee }: SingleCommitteeProps) => {
   )
 }
 
-export default function ({ committees }: CommitteesProps) {
+function Committees({ committees }: CommitteesProps) {
   // TODO: convert this to chakra components
 
   return (
     <div className="c-page">
       <div className="container">
         <div className="container animate">
-          <Header title="COMMITTEES" />
-
           <div className="row" style={{ justifyContent: "center" }}>
             {committees.map((committee, i) => (
               <Committee committee={committee} key={i} />
@@ -64,6 +61,9 @@ export default function ({ committees }: CommitteesProps) {
     </div>
   )
 }
+
+Committees.pageName = "COMMITTEES"
+export default Committees
 
 export async function getStaticProps() {
   // const committees = await fetch("/api/committees").then((r) => r.json())

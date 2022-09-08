@@ -1,13 +1,10 @@
-import Header from "@/components/header"
 import { Container, Heading, Text } from "@chakra-ui/react"
 import Link from "next/link"
 import React from "react"
 
-export default function About() {
+function Privacy() {
   return (
     <Container maxW="110ch">
-      <Header title="PRIVACY POLICY" />
-
       <Text>
         PLISMUN ('we' or 'us') collect, process and use personally identifiable
         information in accordance with the principles described in this privacy
@@ -211,6 +208,9 @@ export default function About() {
     </Container>
   )
 }
+
+Privacy.pageName = "PRIVACY POLICY"
+export default Privacy
 
 // this makes the page render only once on server startup, which is good for SEO + performance
 // makes TTFB faster since the page is just sent immediately after the request rather than rendering it

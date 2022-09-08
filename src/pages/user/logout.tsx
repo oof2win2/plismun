@@ -1,11 +1,10 @@
-import Header from "@/components/header"
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks"
 import { logout } from "@/utils/redux/parts/user"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { Center, Container, Heading } from "@chakra-ui/react"
 
-export default function About() {
+function Logout() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<any>(null)
@@ -55,8 +54,6 @@ export default function About() {
 
   return (
     <Container maxW="110ch">
-      <Header title="LOGOUT" />
-
       <Center maxW="110ch">
         {loading && (
           <Heading style={{ width: "min-content" }}>Loading...</Heading>
@@ -71,3 +68,6 @@ export default function About() {
     </Container>
   )
 }
+
+Logout.pageName = "LOGOUT"
+export default Logout

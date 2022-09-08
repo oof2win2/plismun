@@ -9,8 +9,23 @@ import { ChakraProvider } from "@chakra-ui/react"
 import { theme } from "@/utils/styles"
 import { PersistGate } from "redux-persist/integration/react"
 import { useStore } from "react-redux"
+import Header from "@/components/header"
 
-function MyApp(props: AppProps) {
+type MyAppProps = AppProps & {
+  Component: React.Component &
+    (
+      | {
+          mainPage: true
+          pageName?: string
+        }
+      | {
+          mainPage?: false
+          pageName: string
+        }
+    )
+}
+
+function MyApp(props: MyAppProps) {
   const { Component, pageProps } = props
   const store = useStore()
 
@@ -25,6 +40,11 @@ function MyApp(props: AppProps) {
       <PersistGate persistor={store.__PERSISTOR}>
         <ChakraProvider theme={theme}>
           <Navbar />
+          {Component.mainPage ? (
+            <Header mainPage />
+          ) : (
+            <Header title={Component.pageName} />
+          )}
           <Component {...pageProps} />
           <Footer />
         </ChakraProvider>

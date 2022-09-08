@@ -1,4 +1,3 @@
-import Header from "@/components/header"
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks"
 import { login } from "@/utils/redux/parts/user"
 import React, { useEffect, useState } from "react"
@@ -311,13 +310,12 @@ const DelegateApplication = (props: {
   )
 }
 
-export default function About({ stringified }: { stringified: string }) {
+function Applications({ stringified }: { stringified: string }) {
   const props: DatabaseProps = superjson.parse(stringified)
 
   if (!props.authorized) {
     return (
       <Container maxW="110ch">
-        <Header title="APPLICATIONS" />
         <Heading>You are not authorized to view this page</Heading>
         <Text>
           If you believe that this is an error, please contact us at{" "}
@@ -335,7 +333,6 @@ export default function About({ stringified }: { stringified: string }) {
 
   return (
     <Container maxW="110ch">
-      <Header title="APPLICATIONS" />
       {props.authorized && (
         <>
           <Text>
@@ -370,6 +367,9 @@ export default function About({ stringified }: { stringified: string }) {
     </Container>
   )
 }
+
+Applications.pageName = "APPLICATIONS"
+export default Applications
 
 export const getServerSideProps: GetServerSideProps<{
   stringified: string

@@ -8,7 +8,6 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react"
-import Header from "@/components/header"
 import { StaffMember } from "@prisma/client"
 import { db } from "@/utils/db"
 import Link from "next/link"
@@ -31,10 +30,9 @@ type AboutUsProps = {
   people: StaffMember[]
 }
 
-export default function AboutUsPage({ people }: AboutUsProps) {
+function AboutUsPage({ people }: AboutUsProps) {
   return (
     <Container maxW="110ch">
-      <Header title="About Us" />
       <Flex justify="center">
         <Grid
           templateRows="repeat(1, 1fr)"
@@ -52,6 +50,9 @@ export default function AboutUsPage({ people }: AboutUsProps) {
     </Container>
   )
 }
+
+AboutUsPage.pageName = "ABOUT US"
+export default AboutUsPage
 
 export async function getStaticProps() {
   const team = await db.staffMember.findMany()

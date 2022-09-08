@@ -1,4 +1,3 @@
-import Header from "@/components/header"
 import React, { useEffect } from "react"
 import Link from "next/link"
 import { Container, Heading, Text } from "@chakra-ui/react"
@@ -11,7 +10,7 @@ import {
 } from "@/utils/redux/parts/user"
 import { AppliedUser, ChairApplication, Delegation } from "@prisma/client"
 
-export default function ApplyIndex() {
+function ApplyIndex() {
   const { application } = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -33,8 +32,6 @@ export default function ApplyIndex() {
   if (!application)
     return (
       <Container maxW="110ch">
-        <Header title="APPLICATIONS" />
-
         <Heading>DELEGATE APPLICATIONS</Heading>
         {/* some basic info here */}
         {/* <Link href="/user/apply/delegate">Apply to be a delegate here</Link> */}
@@ -63,8 +60,6 @@ export default function ApplyIndex() {
   if (application.type === "delegation") {
     return (
       <Container maxW="110ch">
-        <Header title="APPLICATIONS" />
-
         <Text>
           You are a leader of the {application.application.name} delegation
         </Text>
@@ -74,8 +69,6 @@ export default function ApplyIndex() {
 
   return (
     <Container maxW="110ch">
-      <Header title="APPLICATIONS" />
-
       <Text>
         You have already submitted a {application.type} application. Please
         check your email inbox for updates on your application.
@@ -90,3 +83,6 @@ export default function ApplyIndex() {
     </Container>
   )
 }
+
+ApplyIndex.pageName = "APPLICATIONS"
+export default ApplyIndex

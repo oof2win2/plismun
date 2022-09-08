@@ -1,11 +1,9 @@
-import Header from "@/components/header"
 import { Container, Heading, Text } from "@chakra-ui/react"
 import React from "react"
 
-export default function About() {
+function About() {
   return (
     <Container maxW="110ch">
-      <Header title="ABOUT PLISMUN" />
       <Text>
         With pride, we present to you the fifth annual Model United Nations
         conference hosted by{" "}
@@ -91,6 +89,9 @@ export default function About() {
     </Container>
   )
 }
+
+About.pageName = "ABOUT PLISMUN"
+export default About
 
 // this makes the page render only once on server startup, which is good for SEO + performance
 // makes TTFB faster since the page is just sent immediately after the request rather than rendering it

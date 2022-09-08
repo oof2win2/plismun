@@ -1,4 +1,3 @@
-import Header from "@/components/header"
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks"
 import { login } from "@/utils/redux/parts/user"
 import React, { useEffect, useState } from "react"
@@ -22,7 +21,7 @@ import { LoginSchema } from "@/utils/validators"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 
-export default function About() {
+function Login() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -88,8 +87,6 @@ export default function About() {
 
   return (
     <Container maxW="110ch">
-      <Header title="LOGIN" />
-
       {!wasSuccess && (
         <Center>
           <Text>
@@ -160,3 +157,6 @@ export default function About() {
     </Container>
   )
 }
+
+Login.pageName = "LOGIN"
+export default Login

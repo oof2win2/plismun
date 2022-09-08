@@ -1,13 +1,10 @@
-import Header from "@/components/header"
 import { Container, Heading, Text } from "@chakra-ui/react"
 import Link from "next/link"
 import React from "react"
 
-export default function About() {
+function TOS() {
   return (
     <Container maxW="110ch">
-      <Header title="TERMS AND CONDITIONS" />
-
       <Text>
         In these Terms and Conditions, the PLISMUN Secretariat and Park Lane
         Internation School is collectively referred to as 'we' or 'us', with all
@@ -181,6 +178,9 @@ export default function About() {
     </Container>
   )
 }
+
+TOS.pageName = "TERMS AND CONDITIONS"
+export default TOS
 
 // this makes the page render only once on server startup, which is good for SEO + performance
 // makes TTFB faster since the page is just sent immediately after the request rather than rendering it

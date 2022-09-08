@@ -1,15 +1,13 @@
 import React from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import Header from "@/components/header"
 import { Container, Heading, Text } from "@chakra-ui/react"
 
-export default function Home() {
+function Error404() {
   const router = useRouter()
 
   return (
     <Container maxW="110ch">
-      <Header title="" />
       <Heading size="4xl">404 - Page not found</Heading>
       <br />
       <Heading>Sorry, but the page you are looking for was not found</Heading>
@@ -29,6 +27,9 @@ export default function Home() {
     </Container>
   )
 }
+
+Error404.mainPage = false
+export default Error404
 
 // this makes the page render only once on server startup, which is good for SEO + performance
 // makes TTFB faster since the page is just sent immediately after the request rather than rendering it

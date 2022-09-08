@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react"
-import Header from "@/components/header"
 import { useAppDispatch, useAppSelector } from "@/utils/redux/hooks"
 import {
   Button,
@@ -56,7 +55,7 @@ interface CommitteeChoice extends OptionBase {
   label: string
   value: number
 }
-export default function Signup({ committees, delegations }: ChairAppProps) {
+function Signup({ committees, delegations }: ChairAppProps) {
   const userData = useAppSelector((state) => state.user)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -143,8 +142,6 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
   if (!userData.user) {
     return (
       <Container maxW="110ch">
-        <Header title="CHAIR APPLICATIONS" />
-
         <Heading>CHAIR APPLICATIONS</Heading>
 
         <br />
@@ -164,8 +161,6 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
   if (userData.application && !userData.extraData) {
     return (
       <Container maxW="110ch">
-        <Header title="CHAIR APPLICATIONS" />
-
         <Heading>CHAIR APPLICATIONS</Heading>
 
         <br />
@@ -183,8 +178,6 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
   if (userData.application && userData.application.type !== "chair") {
     return (
       <Container maxW="110ch">
-        <Header title="CHAIR APPLICATIONS" />
-
         <Heading>CHAIR APPLICATIONS</Heading>
 
         <br />
@@ -214,8 +207,6 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
       : null
     return (
       <Container maxW="110ch">
-        <Header title="CHAIR APPLICATIONS" />
-
         <Heading>CHAIR APPLICATIONS</Heading>
 
         <br />
@@ -303,8 +294,6 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
   // stuff that is shown when the user is logged in
   return (
     <Container maxW="110ch">
-      <Header title="CHAIR APPLICATIONS" />
-
       <br />
 
       <Heading>Information for chairs</Heading>
@@ -682,6 +671,9 @@ export default function Signup({ committees, delegations }: ChairAppProps) {
     </Container>
   )
 }
+
+Signup.pageName = "CHAIR APPLICATIONS"
+export default Signup
 
 export async function getStaticProps(): Promise<
   GetStaticPropsResult<ChairAppProps>

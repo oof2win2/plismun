@@ -44,5 +44,8 @@ export default ({ title, mainPage }: HeaderProps) => {
         )}
       </Center>
     </div>
+    // <div>
+    //   <img src="/images/school_img2.jpg" />
+    // </div>
   )
 }

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useReducer, useState } from "react"
-import Header from "@/components/header"
 import { useAppSelector } from "@/utils/redux/hooks"
 import {
   Button,
@@ -47,11 +46,7 @@ interface CountryChoice extends OptionBase {
   value: string
 }
 
-export default function Signup({
-  committees,
-  countries,
-  delegations,
-}: DelegateAppProps) {
+function Signup({ committees, countries, delegations }: DelegateAppProps) {
   const userData = useAppSelector((state) => state.user)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -123,8 +118,6 @@ export default function Signup({
   if (!userData.user) {
     return (
       <Container maxW="110ch">
-        <Header title="DELEGATE APPLICATIONS" />
-
         <Heading>DELEGATE APPLICATIONS</Heading>
 
         <br />
@@ -144,8 +137,6 @@ export default function Signup({
   if (userData.application) {
     return (
       <Container maxW="110ch">
-        <Header title="DELEGATE APPLICATIONS" />
-
         <Heading>DELEGATE APPLICATIONS</Heading>
 
         <br />
@@ -217,8 +208,6 @@ export default function Signup({
   // stuff that is shown when the user is logged in
   return (
     <Container maxW="110ch">
-      <Header title="DELEGATE APPLICATIONS" />
-
       <br />
 
       <Heading>Information for delegates</Heading>
@@ -702,6 +691,9 @@ export default function Signup({
     </Container>
   )
 }
+
+Signup.pageName = "DELEGATE APPLICATIONS"
+export default Signup
 
 export async function getStaticProps(): Promise<
   GetStaticPropsResult<DelegateAppProps>

@@ -1,5 +1,4 @@
 import React from "react"
-import Header from "@/components/header"
 import {
   Center,
   Container,
@@ -9,10 +8,9 @@ import {
   Text,
 } from "@chakra-ui/react"
 
-export default function Home() {
+function Home() {
   return (
     <Container maxW="110ch">
-      <Header mainPage />
       <Text>
         Park Lane International School Model United Nations, or PLISMUN for
         short, is a conference where students aged 13 - 18 discuss topics of
@@ -45,6 +43,10 @@ export default function Home() {
     </Container>
   )
 }
+
+Home.mainPage = true
+
+export default Home
 
 // this makes the page render only once on server startup, which is good for SEO + performance
 // makes TTFB faster since the page is just sent immediately after the request rather than rendering it

@@ -7,15 +7,13 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react"
-import Header from "@/components/header"
 import { StaffMember } from "@prisma/client"
 import { db } from "@/utils/db"
 import { z } from "zod"
 
-export default function AboutUsPage({ person }: { person: StaffMember }) {
+function AboutUsPage({ person }: { person: StaffMember }) {
   return (
     <Container maxW="110ch">
-      <Header title="About Us" />
       <Flex justify="center" display={["none", "none", "flex", "flex"]}>
         <Grid
           gap={4}
@@ -61,6 +59,9 @@ export default function AboutUsPage({ person }: { person: StaffMember }) {
     </Container>
   )
 }
+
+AboutUsPage.pageName = "ABOUT US"
+export default AboutUsPage
 
 export async function getStaticProps({ params }: { params: { id: string } }) {
   const staffId = z.string().regex(/^\d+$/).transform(Number).parse(params.id)

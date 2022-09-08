@@ -1,4 +1,3 @@
-import Header from "@/components/header"
 import { useAppSelector } from "@/utils/redux/hooks"
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
@@ -40,7 +39,7 @@ import { useFormik } from "formik"
 import { zodErrorToFormik } from "@/utils/utils"
 import { useDebouncedCallback } from "use-debounce"
 
-export default function Signup() {
+function Signup() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [fetchError, setFetchError] = useState<string | null>(null)
@@ -121,8 +120,6 @@ export default function Signup() {
 
   return (
     <Container maxW="110ch">
-      <Header title="SIGN UP" />
-
       {!wasSuccess && (
         <Center>
           <Text>
@@ -362,3 +359,6 @@ export default function Signup() {
     </Container>
   )
 }
+
+Signup.pageName = "SIGN UP"
+export default Signup
