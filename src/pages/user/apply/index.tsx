@@ -34,8 +34,8 @@ function ApplyIndex() {
       <Container maxW="110ch">
         <Heading>DELEGATE APPLICATIONS</Heading>
         {/* some basic info here */}
-        {/* <Link href="/user/apply/delegate">Apply to be a delegate here</Link> */}
-        <Text>Delegate applications are currently closed</Text>
+        <Link href="/user/apply/delegate">Apply to be a delegate here</Link>
+        {/* <Text>Delegate applications are currently closed</Text> */}
 
         <br />
         <br />

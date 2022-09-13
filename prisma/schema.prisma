@@ -66,6 +66,7 @@ model AppliedUser {
   phone            String?
   diet             String?
   denied           Boolean @default(false)
+  userSource       String?
 }
 
 model ChairApplication {

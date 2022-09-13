@@ -97,6 +97,7 @@ function Signup({ committees, countries, delegations }: DelegateAppProps) {
         diet: "None",
         phone: "",
         school: null,
+        userSource: "Other",
       },
       onSubmit: submitApplication,
       validate: async (values) => {
@@ -114,6 +115,10 @@ function Signup({ committees, countries, delegations }: DelegateAppProps) {
     (field: string, value: any) => setFieldValue(field, value),
     500
   )
+
+  // we use this to store the current state of the user source
+  const [customUserSource, setCustomUserSource] = useState(true)
+
   // stuff that is shown when the user is not logged in
   if (!userData.user) {
     return (
@@ -212,6 +217,11 @@ function Signup({ committees, countries, delegations }: DelegateAppProps) {
 
       <Heading>Information for delegates</Heading>
       {/* some more specific information here */}
+      <Text>
+        The cost of attendance is 1200CZK/delegate, early bird is 1150CZK. For a
+        delegation discount, please email{" "}
+        <a href="mailto:plismun@parklane-is.com.">plismun@parklane-is.com.</a>
+      </Text>
 
       <br />
 
@@ -244,6 +254,7 @@ function Signup({ committees, countries, delegations }: DelegateAppProps) {
 										"motivation motivation motivation motivation motivation motivation"
 										"experience experience experience experience experience experience"
 										"divider2 divider2 divider2 divider2 divider2 divider2"
+										"sourceSelect sourceSelect sourceSelect sourceText sourceText sourceText"
 										"size size size image image image"
 										"text text text image image image"`}
             gap={4}
@@ -680,6 +691,90 @@ function Signup({ committees, countries, delegations }: DelegateAppProps) {
             {/* shirt image */}
             <GridItem area="image">
               <Image src="/images/shirt.png" width="100%" height="100%" />
+            </GridItem>
+
+            <GridItem area="sourceSelect">
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.userSource)}
+                isRequired
+              >
+                <Select<
+                  { value: string | null; label: string } & OptionBase,
+                  false
+                >
+                  options={[
+                    {
+                      label: "Other",
+                      value: "Other",
+                    },
+                    {
+                      value: "Been to PLISMUN before",
+                      label: "Been to PLISMUN before",
+                    },
+                    {
+                      value: "Delegation leader",
+                      label: "Delegation leader",
+                    },
+                    {
+                      value: "Instagram",
+                      label: "Instagram",
+                    },
+                    {
+                      value: "Website",
+                      label: "Website",
+                    },
+                    {
+                      value: "Friends / Other MUNers",
+                      label: "Friends / Other MUNers",
+                    },
+                    {
+                      value: "MyMUN",
+                      label: "MyMUN",
+                    },
+                  ]}
+                  placeholder=" "
+                  onChange={(option) => {
+                    const val = option?.value ?? null
+                    setFieldValue("userSource", val)
+                    if (val === "Other") setCustomUserSource(true)
+                    else setCustomUserSource(false)
+                  }}
+                  defaultValue={{
+                    label: "Other",
+                    value: "Other",
+                  }}
+                />
+                <FormLabel>Where did you hear about PLISMUN from</FormLabel>
+                <FormErrorMessage>{errors.shirtSize}</FormErrorMessage>
+                <FormHelperText>
+                  Select where you heard about PLISMUN from
+                </FormHelperText>
+              </FormControl>
+            </GridItem>
+
+            <GridItem area="sourceText">
+              <FormControl
+                variant="floating"
+                isInvalid={Boolean(errors.userSource)}
+                isRequired
+                isDisabled={!customUserSource}
+              >
+                <Textarea
+                  onChange={(e) =>
+                    debouncedHandleChange("userSource", e.target.value)
+                  }
+                  placeholder=" "
+                  isInvalid={Boolean(errors.userSource)}
+                  height="100%"
+                  isDisabled={!customUserSource}
+                />
+                <FormLabel>Where did you hear about PLISMUN from</FormLabel>
+                <FormErrorMessage>{errors.userSource}</FormErrorMessage>
+                <FormHelperText>
+                  Type in where you heard about PLISMUN from
+                </FormHelperText>
+              </FormControl>
             </GridItem>
           </Grid>
 

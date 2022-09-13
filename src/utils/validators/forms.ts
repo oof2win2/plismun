@@ -85,6 +85,8 @@ export const DelegateApply = z.object({
   shirtSize: z.enum(["XS", "S", "M", "L", "XL", "XXL"]).nullable(),
 
   diet: DietaryOptions,
+
+  userSource: z.string(),
 })
 export type DelegateApply = z.infer<typeof DelegateApply>
 // we have this extra function for delegate applications so we can get the committees and committee countries from the database or from nextjs,
