@@ -26,7 +26,7 @@ function Home() {
       </Text>
       <br />
       <Text>
-        7 committees in PLISMUN '23 means that first-time MUN debutants and
+        8 committees in PLISMUN '23 means that first-time MUN debutants and
         seasoned debating veterans alike will find their place.
       </Text>
       <Divider margin="1em" />
