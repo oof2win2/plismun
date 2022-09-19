@@ -6,6 +6,28 @@ delegate application to PLISMUN '23 has been accepted.
 Your final committee is: {COMMITTEE}
 Your final country is {COUNTRY}
 
+If you believe that is is the mistake please contact us on this email adress.
+
+Payment details:
+Below you will find the details to which the fee of EUR 47 or CZK 1150 should be paid to within 2 weeks of receiving this email with your name and 'PLISMUN23' included in the payment note. Your presence depends on the payment:
+
+For EUR payments:
+Account name: Park Lane International School, a.s.
+Bank name: UniCredit Bank Czech Republic and Slovakia, a.s.
+EUR Account number: 2109992559/2700
+IBAN: CZ50 2700 0000 0021 0999 2559
+SWIFT: BACXCZPP
+
+For CZK payments:
+Account name: Park Lane International School, a.s.
+Bank name: UniCredit Bank Czech Republic and Slovakia, a.s.
+CZK Account number: 2107914717/2700
+
+The variable code for both is 0219
+Please ensure the payments are net of bank charges
+
+Using Internet banking, you must select either international wire transfer (non-domestic; you are paying with a foreign currency to a CZK account) or domestic payment (paying CZK to CZK account).
+
 Sincerely,
 The PLISMUN '23 Team
 
