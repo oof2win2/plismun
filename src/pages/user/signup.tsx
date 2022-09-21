@@ -256,41 +256,24 @@ function Signup() {
                   </GridItem>
 
                   {/* Birthdate */}
-                  <GridItem
-                    rowSpan={1}
-                    colSpan={3}
-                    css={`
-                      --rdp-cell-size: 2rem;
-                      --rdp-accent-color: var(--chakra-colors-blue-500);
-                      --rdp-background-color: var(--chakra-colors-blue-200);
-                    `}
-                  >
+                  <GridItem rowSpan={1} colSpan={3}>
                     <FormControl
                       variant="floating"
                       isRequired
                       isInvalid={Boolean(errors.birthdate)}
                     >
-                      <Popover>
-                        <PopoverTrigger>
-                          <Input
-                            readOnly
-                            value={format(values.birthdate, "PP")}
-                            isInvalid={Boolean(errors.birthdate)}
-                            placeholder=""
-                          />
-                        </PopoverTrigger>
-                        <FormLabel>Birthdate</FormLabel>
-                        <PopoverContent>
-                          <DayPicker
-                            mode="single"
-                            selected={values.birthdate}
-                            onSelect={(date = new Date()) => {
-                              setFieldValue("birthdate", date)
-                            }}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      <FormHelperText>{errors.birthdate}</FormHelperText>
+                      <Input
+                        type="date"
+                        isInvalid={Boolean(errors.birthdate)}
+                        onChange={(e) =>
+                          debouncedHandleChange(
+                            "birthdate",
+                            new Date(e.target.value || "")
+                          )
+                        }
+                      />
+                      <FormLabel>Birthdate</FormLabel>
+                      <FormErrorMessage>{errors.birthdate}</FormErrorMessage>
                     </FormControl>
                   </GridItem>
 
