@@ -191,6 +191,8 @@ const DelegateApplication = (props: {
           Birthdate: {format(user.birthdate, "PP")} ({userAge} years old)
         </GridItem>
         <GridItem>Nationality: {user.nationality}</GridItem>
+        <GridItem colSpan={2}>Email: {user.email}</GridItem>
+        <GridItem colSpan={1}>Phone: {user.phone ?? "None"}</GridItem>
 
         <GridItem colSpan={3} my="1.5em">
           <Divider />
