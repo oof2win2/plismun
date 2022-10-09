@@ -42,8 +42,8 @@ function ApplyIndex() {
 
         <Heading>CHAIR APPLICATIONS</Heading>
         {/* some basic info here */}
-        <Link href="/user/apply/chair">Apply to be a chair here</Link>
-        {/* <Text>Chair applications are currently closed</Text> */}
+        {/* <Link href="/user/apply/chair">Apply to be a chair here</Link> */}
+        <Text>Chair applications have been closed</Text>
 
         <br />
         <br />
