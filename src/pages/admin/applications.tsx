@@ -199,22 +199,64 @@ const DelegateApplication = (props: {
         </GridItem>
 
         <GridItem>
-          Committee 1: {com1.displayname} ({getDifficulty(com1)})
+          Committee 1:{" "}
+          {com1 ? (
+            <>
+              {com1.displayname} ({getDifficulty(com1)})
+            </>
+          ) : (
+            "Committee not available"
+          )}
         </GridItem>
         <GridItem>
-          Committee 2: {com2.displayname} ({getDifficulty(com2)})
+          Committee 2:{" "}
+          {com2 ? (
+            <>
+              {com2.displayname} ({getDifficulty(com2)})
+            </>
+          ) : (
+            "Committee not available"
+          )}
         </GridItem>
         <GridItem>
-          Committee 3: {com3.displayname} ({getDifficulty(com3)})
+          Committee 3:{" "}
+          {com3 ? (
+            <>
+              {com3.displayname} ({getDifficulty(com3)})
+            </>
+          ) : (
+            "Committee not available"
+          )}
         </GridItem>
         <GridItem>
-          Country 1: {delegate.choice1country} ({getDifficulty(cou1)})
+          Country 1:{" "}
+          {cou1 ? (
+            <>
+              {delegate.choice1country} ({getDifficulty(cou1)})
+            </>
+          ) : (
+            "Country not available"
+          )}
         </GridItem>
         <GridItem>
-          Country 2: {delegate.choice2country} ({getDifficulty(cou2)})
+          Country 2:{" "}
+          {cou2 ? (
+            <>
+              {delegate.choice2country} ({getDifficulty(cou2)})
+            </>
+          ) : (
+            "Country not available"
+          )}
         </GridItem>
         <GridItem>
-          Country 3: {delegate.choice3country} ({getDifficulty(cou3)})
+          Country 3:{" "}
+          {cou3 ? (
+            <>
+              {delegate.choice3country} ({getDifficulty(cou3)})
+            </>
+          ) : (
+            "Country not available"
+          )}
         </GridItem>
       </Grid>
 
