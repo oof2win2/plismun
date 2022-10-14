@@ -67,6 +67,11 @@ const pages: (Page | Category)[] = [
   },
   {
     type: "page",
+    title: "Partners",
+    href: "/partners",
+  },
+  {
+    type: "page",
     title: "Contact",
     href: "/contact",
   },
