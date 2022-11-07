@@ -33,15 +33,13 @@ function ApplyIndex() {
     return (
       <Container maxW="110ch">
         <Heading>DELEGATE APPLICATIONS</Heading>
-        {/* some basic info here */}
-        <Link href="/user/apply/delegate">Apply to be a delegate here</Link>
-        {/* <Text>Delegate applications are currently closed</Text> */}
+        {/* <Link href="/user/apply/delegate">Apply to be a delegate here</Link> */}
+        <Text>Delegate applications are currently closed</Text>
 
         <br />
         <br />
 
         <Heading>CHAIR APPLICATIONS</Heading>
-        {/* some basic info here */}
         {/* <Link href="/user/apply/chair">Apply to be a chair here</Link> */}
         <Text>Chair applications have been closed</Text>
 
@@ -49,11 +47,10 @@ function ApplyIndex() {
         <br />
 
         <Heading>DELEGATION LEADER APPLICATIONS</Heading>
-        {/* some basic info here */}
-        <Link href="/user/apply/delegation">
+        {/* <Link href="/user/apply/delegation">
           Apply to be a delegation leader here
-        </Link>
-        {/* <Text>Delegation leader applications are currently closed</Text> */}
+        </Link> */}
+        <Text>Delegation leader applications are currently closed</Text>
       </Container>
     )
 
