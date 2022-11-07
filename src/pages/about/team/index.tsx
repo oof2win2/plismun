@@ -32,20 +32,11 @@ type AboutUsProps = {
 
 function AboutUsPage({ people }: AboutUsProps) {
   return (
-    <Container maxW="110ch">
-      <Flex justify="center">
-        <Grid
-          templateRows="repeat(1, 1fr)"
-          templateColumns="repeat(3, 1fr)"
-          gap={4}
-          justifyContent="center"
-          flexWrap="wrap"
-          display="flex"
-        >
+    <Container maxW="160ch">
+      <Flex justify="center" wrap="wrap" gap="8px">
           {people.map((person, i) => (
             <StaffMember key={i} {...person} />
           ))}
-        </Grid>
       </Flex>
     </Container>
   )
