@@ -84,6 +84,7 @@ export const Committee = z.object({
   topic2: z.string().nullable(),
   para1: z.string().nullable(),
   para2: z.string().nullable(),
+	dataFolder: z.string().nullable(),
 })
 export type CommiteeType = z.infer<typeof Committee>
 

@@ -112,6 +112,7 @@ model Committee {
   topic2      String?
   para1       String?
   para2       String?
+  dataFolder  String?
 }
 
 // the available countries in committees

@@ -11,7 +11,7 @@ import { GetStaticPaths, GetStaticProps } from "next"
 import React from "react"
 import superjson from "superjson"
 import { Center, Flex, Heading, Text } from "@chakra-ui/react"
-import {AtSignIcon} from "@chakra-ui/icons"
+import {AtSignIcon, AttachmentIcon} from "@chakra-ui/icons"
 
 interface CommitteeProps {
   committee: Committee
@@ -41,11 +41,11 @@ const CommitteePage = ({ stringified }: { stringified: string }) => {
 			chairElements.push(
 				<Center flexDir="column" margin="8px">
 					<Heading size="sm">Chair {i + 1}</Heading>
-					<Text>
-						{committeeChairs[i].firstname} {committeeChairs[i].lastname}
-					</Text>
 					<a href={committeeChairs[i].userLink ?? undefined}>
-					<AtSignIcon />
+						<AtSignIcon display="inline" />
+						<Text display="inline">
+							{committeeChairs[i].firstname} {committeeChairs[i].lastname}
+						</Text>
 					</a>
 				</Center>
 			)
@@ -93,6 +93,14 @@ const CommitteePage = ({ stringified }: { stringified: string }) => {
 						{chairElements}
           </Flex>
         </Center>
+
+				<br />
+
+				<a href={committee.dataFolder ?? undefined}>
+					<AttachmentIcon display="inline" boxSize="2em" />
+					<Heading size="lg" display="inline"> Committee study guides</Heading>
+				</a>
+
         <br />
 
         <Heading size="lg">Country matrix</Heading>
