@@ -30,6 +30,7 @@ export const User = z.object({
   dietary: z.string().nullable(),
 
   otherInfo: z.string().nullable(),
+	userLink: z.string().nullable(),
 
   createdAt: z.union([
     z
@@ -78,8 +79,7 @@ export const Committee = z.object({
   id: z.number(),
   displayname: z.string(),
   difficulty: z.enum(["beginner", "intermediate", "advanced"]),
-  chair1: z.number().nullable(),
-  chair2: z.number().nullable(),
+  hasChairs: z.boolean(),
   topic1: z.string().nullable(),
   topic2: z.string().nullable(),
   para1: z.string().nullable(),

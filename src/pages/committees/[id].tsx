@@ -11,6 +11,7 @@ import { GetStaticPaths, GetStaticProps } from "next"
 import React from "react"
 import superjson from "superjson"
 import { Center, Flex, Heading, Text } from "@chakra-ui/react"
+import {AtSignIcon} from "@chakra-ui/icons"
 
 interface CommitteeProps {
   committee: Committee
@@ -30,6 +31,34 @@ const CommitteePage = ({ stringified }: { stringified: string }) => {
   const advancedCountries = committeeCountries.filter(
     (c) => c.difficulty === "advanced"
   )
+
+	const amountOfChairs = committee.hasChairs ? committeeChairs.length : 2
+
+	const chairElements: JSX.Element[] = []
+	for (let i = 0; i < amountOfChairs; i++) {
+		if (committeeChairs[i]) {
+			console.log(committeeChairs[i].userLink)
+			chairElements.push(
+				<Center flexDir="column" margin="8px">
+					<Heading size="sm">Chair {i + 1}</Heading>
+					<Text>
+						{committeeChairs[i].firstname} {committeeChairs[i].lastname}
+					</Text>
+					<a href={committeeChairs[i].userLink ?? undefined}>
+					<AtSignIcon />
+					</a>
+				</Center>
+			)
+		} else {
+			chairElements.push(
+				<Center flexDir="column" margin="8px">
+					<Heading size="sm">Chair {i + 1}</Heading>
+					<Text>No determined chair yet</Text>
+				</Center>
+			)
+		}
+	}
+
 
   return (
     <div className="container">
@@ -61,26 +90,7 @@ const CommitteePage = ({ stringified }: { stringified: string }) => {
         <Heading size="lg">Chairs</Heading>
         <Center>
           <Flex>
-            <Center flexDir="column" margin="8px">
-              <Heading size="sm">Chair 1</Heading>
-              {committeeChairs[0] ? (
-                <Text>
-                  {committeeChairs[0].firstname} {committeeChairs[0].lastname}
-                </Text>
-              ) : (
-                <Text>No determined chair yet</Text>
-              )}
-            </Center>
-            <Center flexDir="column" margin="8px">
-              <Heading size="sm">Chair 2</Heading>
-              {committeeChairs[1] ? (
-                <Text>
-                  {committeeChairs[1].firstname} {committeeChairs[1].lastname}
-                </Text>
-              ) : (
-                <Text>No determined chair yet</Text>
-              )}
-            </Center>
+						{chairElements}
           </Flex>
         </Center>
         <br />

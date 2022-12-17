@@ -30,6 +30,7 @@ model User {
   createdAt DateTime @default(now())
 
   otherInfo String? // other info about the user
+  userLink  String? // link to the user's website
 
   @@map("users")
 }
@@ -106,8 +107,7 @@ model Committee {
   id          Int     @id @default(autoincrement())
   displayname String
   difficulty  String
-  chair1      Int?
-  chair2      Int?
+  hasChairs   Boolean @default(false)
   topic1      String?
   topic2      String?
   para1       String?
