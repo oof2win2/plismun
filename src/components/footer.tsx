@@ -12,64 +12,62 @@ const Footer = () => {
     <footer className="footer">
       <Container centerContent>
         {/* sponsors */}
-        <Box>
-          <Box
-            className="row"
-            padding="20px 10px 20px 10px"
-            listStyleType="none"
+        <Box
+          className="row"
+          padding="20px 10px 20px 10px"
+          listStyleType="none"
+          justifyContent="center"
+          width="80vw"
+        >
+          <Flex
+            minW="128"
+            alignItems="center"
             justifyContent="center"
-            width="80vw"
+            flexDir="column"
+            padding="6"
           >
-            <Flex
-              minW="128"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-              padding="6"
-            >
-              <Image height="90" width="128" src={ASPIRONIX} />
-            </Flex>
+            <Image height="90" width="128" src={ASPIRONIX} />
+          </Flex>
 
-            <Flex
-              minW="128"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-              padding="6"
-            >
-              <Image height="90" width="128" src={MONDI} />
-            </Flex>
+          <Flex
+            minW="128"
+            alignItems="center"
+            justifyContent="center"
+            flexDir="column"
+            padding="6"
+          >
+            <Image height="90" width="128" src={MONDI} />
+          </Flex>
 
-            <Flex
-              minW="128"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-              padding="6"
-            >
-              <Image height="54.8" width="128" src={FRUITISMO} />
-            </Flex>
+          <Flex
+            minW="128"
+            alignItems="center"
+            justifyContent="center"
+            flexDir="column"
+            padding="6"
+          >
+            <Image height="54.8" width="128" src={FRUITISMO} />
+          </Flex>
 
-            <Flex
-              minW="128"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-              padding="6"
-            >
-              <Image height="34" width="128" src={FRESHTASTY} />
-            </Flex>
+          <Flex
+            minW="128"
+            alignItems="center"
+            justifyContent="center"
+            flexDir="column"
+            padding="6"
+          >
+            <Image height="34" width="128" src={FRESHTASTY} />
+          </Flex>
 
-            <Flex
-              minW="128"
-              alignItems="center"
-              justifyContent="center"
-              flexDir="column"
-              padding="6"
-            >
-              <Image height="128" width="128" src={EDN} />
-            </Flex>
-          </Box>
+          <Flex
+            minW="128"
+            alignItems="center"
+            justifyContent="center"
+            flexDir="column"
+            padding="6"
+          >
+            <Image height="128" width="128" src={EDN} />
+          </Flex>
         </Box>
 
         {/* social buttons */}

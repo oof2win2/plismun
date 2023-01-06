@@ -6,12 +6,78 @@ import {
   GridItem,
   Grid,
   Flex,
+  Box,
 } from "@chakra-ui/react"
 import React from "react"
+import Image from "next/image"
+import ASPIRONIX from "../../public/images/sponsors/large/aspironix.png"
+import EDN from "../../public/images/sponsors/large/EDN.png"
+import MONDI from "../../public/images/sponsors/large/mondi.png"
+import FRUITISMO from "../../public/images/sponsors/large/fruitisimo.png"
+import FRESHTASTY from "../../public/images/sponsors/large/freshtasty.png"
 
 function Partners() {
   return (
     <Container maxW="110ch">
+      <Heading>Our PLISMUN '23 partners are:</Heading>
+      <Box
+        className="row"
+        padding="20px 10px 20px 10px"
+        listStyleType="none"
+        justifyContent="center"
+        width="80vw"
+      >
+        <Flex
+          minW="128"
+          alignItems="center"
+          justifyContent="center"
+          flexDir="column"
+          padding="6"
+        >
+          <Image height="180" width="256" src={ASPIRONIX} />
+        </Flex>
+
+        <Flex
+          minW="128"
+          alignItems="center"
+          justifyContent="center"
+          flexDir="column"
+          padding="6"
+        >
+          <Image height="180" width="256" src={MONDI} />
+        </Flex>
+
+        <Flex
+          minW="128"
+          alignItems="center"
+          justifyContent="center"
+          flexDir="column"
+          padding="6"
+        >
+          <Image height="110" width="256" src={FRUITISMO} />
+        </Flex>
+
+        <Flex
+          minW="128"
+          alignItems="center"
+          justifyContent="center"
+          flexDir="column"
+          padding="6"
+        >
+          <Image height="68" width="256" src={FRESHTASTY} />
+        </Flex>
+
+        <Flex
+          minW="128"
+          alignItems="center"
+          justifyContent="center"
+          flexDir="column"
+          padding="6"
+        >
+          <Image height="256" width="256" src={EDN} />
+        </Flex>
+      </Box>
+
       <Heading>What is PLISMUN '23 looking for?</Heading>
 
       <br />
