@@ -1,12 +1,77 @@
 import { Box, Center, Container, Flex, Text } from "@chakra-ui/react"
 import { useRouter } from "next/router"
+import Image from "next/image"
+import ASPIRONIX from "../../public/images/sponsors/large/aspironix.png"
+import EDN from "../../public/images/sponsors/large/EDN.png"
+import MONDI from "../../public/images/sponsors/large/mondi.png"
+import FRUITISMO from "../../public/images/sponsors/large/fruitisimo.png"
+import FRESHTASTY from "../../public/images/sponsors/large/freshtasty.png"
 
 const Footer = () => {
   return (
     <footer className="footer">
-      {/* <Flex direction="row" justifyContent="center">
-        <Flex w="100vw" direction="column"> */}
       <Container centerContent>
+        {/* sponsors */}
+        <Box>
+          <Box
+            className="row"
+            padding="20px 10px 20px 10px"
+            listStyleType="none"
+            justifyContent="center"
+            width="80vw"
+          >
+            <Flex
+              minW="128"
+              alignItems="center"
+              justifyContent="center"
+              flexDir="column"
+              padding="6"
+            >
+              <Image height="90" width="128" src={ASPIRONIX} />
+            </Flex>
+
+            <Flex
+              minW="128"
+              alignItems="center"
+              justifyContent="center"
+              flexDir="column"
+              padding="6"
+            >
+              <Image height="90" width="128" src={MONDI} />
+            </Flex>
+
+            <Flex
+              minW="128"
+              alignItems="center"
+              justifyContent="center"
+              flexDir="column"
+              padding="6"
+            >
+              <Image height="54.8" width="128" src={FRUITISMO} />
+            </Flex>
+
+            <Flex
+              minW="128"
+              alignItems="center"
+              justifyContent="center"
+              flexDir="column"
+              padding="6"
+            >
+              <Image height="34" width="128" src={FRESHTASTY} />
+            </Flex>
+
+            <Flex
+              minW="128"
+              alignItems="center"
+              justifyContent="center"
+              flexDir="column"
+              padding="6"
+            >
+              <Image height="128" width="128" src={EDN} />
+            </Flex>
+          </Box>
+        </Box>
+
         {/* social buttons */}
         <Box>
           <div className="social">

@@ -35,7 +35,7 @@ function Home() {
         <br />
       </Center>
       <Container maxW="l" centerContent>
-        <Heading>CHAIR APPLICATIONS OPEN</Heading>
+        <Heading>CHAIR APPLICATIONS OPEN!</Heading>
         <Text>
           Chair applications have been opened on the 9th of August, 2022
         </Text>
