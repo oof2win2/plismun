@@ -7,7 +7,7 @@ import React from "react"
 import ENV from "@/utils/env"
 import Link from "next/link"
 import Image from "next/image"
-import { Heading, Text } from "@chakra-ui/react"
+import { Flex, Heading, Text } from "@chakra-ui/react"
 
 interface CommitteesProps {
   committees: Committee[]
@@ -18,6 +18,7 @@ interface SingleCommitteeProps {
 }
 
 const Committee = ({ committee }: SingleCommitteeProps) => {
+  console.log(committee.presentedBy)
   return (
     <article className="c-project-card col col-4 col-d-6 col-t-12">
       <div className="c-project-card__content">
@@ -29,6 +30,21 @@ const Committee = ({ committee }: SingleCommitteeProps) => {
             />
           </a>
         </Link>
+        {committee.presentedBy && (
+          <Flex
+            width="128"
+            height="128"
+            float="right"
+            position="absolute"
+            alignItems="center"
+            justifyContent="center"
+            right="2"
+            top="2"
+          >
+            <Text color="whitesmoke">Presented by: </Text>
+            <Image src={committee.presentedBy} width="128" height="128" />
+          </Flex>
+        )}
         <div className="c-project-card__info">
           <div className="c-project-card__info-wrap">
             <Heading size="lg" className="c-project-card__title-shown">

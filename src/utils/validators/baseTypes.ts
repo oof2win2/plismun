@@ -30,7 +30,7 @@ export const User = z.object({
   dietary: z.string().nullable(),
 
   otherInfo: z.string().nullable(),
-	userLink: z.string().nullable(),
+  userLink: z.string().nullable(),
 
   createdAt: z.union([
     z
@@ -84,7 +84,8 @@ export const Committee = z.object({
   topic2: z.string().nullable(),
   para1: z.string().nullable(),
   para2: z.string().nullable(),
-	dataFolder: z.string().nullable(),
+  dataFolder: z.string().nullable(),
+  presentedBy: z.string().nullable(),
 })
 export type CommiteeType = z.infer<typeof Committee>
 

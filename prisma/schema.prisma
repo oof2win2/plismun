@@ -113,6 +113,7 @@ model Committee {
   para1       String?
   para2       String?
   dataFolder  String?
+  presentedBy String?
 }
 
 // the available countries in committees
