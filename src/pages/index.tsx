@@ -7,6 +7,7 @@ import {
   Heading,
   Text,
 } from "@chakra-ui/react"
+import Image from "next/image"
 
 function Home() {
   return (
@@ -29,6 +30,11 @@ function Home() {
         8 committees in PLISMUN '23 means that first-time MUN debutants and
         seasoned debating veterans alike will find their place.
       </Text>
+      <Divider margin="1em" />
+      <Center flexDir="column">
+        <Text>Conference Schedule</Text>
+        <img src={"/images/schedule.png"} />
+      </Center>
       <Divider margin="1em" />
       <Center>
         <Text>Latest news relating to the conference:</Text>
