@@ -34,7 +34,9 @@ function Partners() {
           flexDir="column"
           padding="6"
         >
-          <Image height="180" width="256" src={ASPIRONIX} />
+          <a href="http://www.aspironix.com" style={{ border: "0" }}>
+            <Image height="180" width="256" src={ASPIRONIX} />
+          </a>
         </Flex>
 
         <Flex
@@ -44,7 +46,9 @@ function Partners() {
           flexDir="column"
           padding="6"
         >
-          <Image height="180" width="256" src={MONDI} />
+          <a href="https://www.mondigroup.com" style={{ border: "0" }}>
+            <Image height="180" width="256" src={MONDI} />
+          </a>
         </Flex>
 
         <Flex
@@ -54,7 +58,9 @@ function Partners() {
           flexDir="column"
           padding="6"
         >
-          <Image height="110" width="256" src={FRUITISMO} />
+          <a href="https://fruitisimo.cz/" style={{ border: "0" }}>
+            <Image height="110" width="256" src={FRUITISMO} />
+          </a>
         </Flex>
 
         <Flex
@@ -64,7 +70,9 @@ function Partners() {
           flexDir="column"
           padding="6"
         >
-          <Image height="68" width="256" src={FRESHTASTY} />
+          <a href="https://www.freshandtasty.cz" style={{ border: "0" }}>
+            <Image height="68" width="256" src={FRESHTASTY} />
+          </a>
         </Flex>
 
         <Flex
@@ -74,7 +82,9 @@ function Partners() {
           flexDir="column"
           padding="6"
         >
-          <Image height="256" width="256" src={EDN} />
+          <a href="https://www.edn.cz/" style={{ border: "0" }}>
+            <Image height="256" width="256" src={EDN} />
+          </a>
         </Flex>
       </Box>
 

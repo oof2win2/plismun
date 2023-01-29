@@ -26,7 +26,9 @@ const Footer = () => {
             flexDir="column"
             padding="6"
           >
-            <Image height="90" width="128" src={ASPIRONIX} />
+            <a href="http://www.aspironix.com" style={{ border: "0" }}>
+              <Image height="90" width="128" src={ASPIRONIX} />
+            </a>
           </Flex>
 
           <Flex
@@ -36,7 +38,9 @@ const Footer = () => {
             flexDir="column"
             padding="6"
           >
-            <Image height="90" width="128" src={MONDI} />
+            <a href="https://www.mondigroup.com" style={{ border: "0" }}>
+              <Image height="90" width="128" src={MONDI} />
+            </a>
           </Flex>
 
           <Flex
@@ -46,7 +50,9 @@ const Footer = () => {
             flexDir="column"
             padding="6"
           >
-            <Image height="54.8" width="128" src={FRUITISMO} />
+            <a href="https://fruitisimo.cz/" style={{ border: "0" }}>
+              <Image height="54.8" width="128" src={FRUITISMO} />
+            </a>
           </Flex>
 
           <Flex
@@ -56,7 +62,9 @@ const Footer = () => {
             flexDir="column"
             padding="6"
           >
-            <Image height="34" width="128" src={FRESHTASTY} />
+            <a href="https://freshtasty.cz/" style={{ border: "0" }}>
+              <Image height="34" width="128" src={FRESHTASTY} />
+            </a>
           </Flex>
 
           <Flex
@@ -66,7 +74,9 @@ const Footer = () => {
             flexDir="column"
             padding="6"
           >
-            <Image height="128" width="128" src={EDN} />
+            <a href="https://www.edn.cz/" style={{ border: "0" }}>
+              <Image height="128" width="128" src={EDN} />
+            </a>
           </Flex>
         </Box>
 
